@@ -8,7 +8,8 @@
 #   Enable and disable low power sleep functionality
 
 #TODO
-#   Add data polling and attenuation settings for magnetometer
+#   Add data polling and attenuation settings for magnetometeri
+#   Clean up communication state code
 
 import smbus
 
@@ -38,6 +39,24 @@ u_mode = True  #True = 100Hz, False = 50Hz
 d_mode = True  #True = +-8G FSD, False = +-2G FSD
 
 accel_state = True #accelerometer communication state
+comp_state = False #compass communication state
+
+def busa_read_byte_data(addr, command) #accelerometer read command
+    data = 0
+    try:
+        data = bus.read_byte_data(addr, command)
+        accel_state = True
+    except IOError, errL
+        accel_state = False
+    return data
+def busc_read_byte_data(addr, command) #compass read command
+    data = 0
+    try:
+        data = bus.read_byte_data(addr, command)
+        comp_state = True
+    except IOError, errL
+        comp_state = False
+    return data
 
 def init(power, update, deflection):
     global bus
@@ -48,6 +67,7 @@ def init(power, update, deflection):
         accel_state = True
     except IOError, err:
         accel_state = False
+        comp_state = False
 
 def getState():
     global accel_state
@@ -61,6 +81,8 @@ def getUpdate():
 def getDefl():
     global d_mode
     return d_mode
+def getState():
+    return accel_state
 
 def setAccelCal(xs, ys, zs, xo, yo, zo):
     global accel_x_scale
@@ -91,6 +113,7 @@ def setCompCall(xs, ys, zs, xo, yo, zo)
     comp_y_offset = yo
     comp_z_offset = zo
 def setParam(power, update, deflection):
+    global accel_addr
     #setting local variables
     global p_mode
     global u_mode
@@ -118,26 +141,32 @@ def mergeInts(low, high):
     return (low >> 8) | high
 
 def readAccelX():
-    low = bus.read_byte_data(accel_addr, 0x28)
-    high = bus.read_byte_data(accel_addr, 0x29)
+    global accel_addr
+    low = busa_read_byte_data(accel_addr, 0x28)
+    high = busa_read_byte_data(accel_addr, 0x29)
     return applyCal(mergeInts(low, high), accel_x_scale, accel_x_offset)
 def readAccelY():
-    low = bus.read_byte_data(accel_addr, 0x2A)
-    high = bus.read_byte_data(accel_addr, 0x2B)
+    global accel_addr
+    low = busa_read_byte_data(accel_addr, 0x2A)
+    high = busa_read_byte_data(accel_addr, 0x2B)
     return applyCal(mergeInts(low, high), accel_y_scale, accel_y_offset)
 def readAccelZ():
-    low = bus.read_byte_data(accel_addr, 0x2C)
-    high = bus.read_byte_data(accel_addr, 0x2D)
+    global accel_addr
+    low = busa_read_byte_data(accel_addr, 0x2C)
+    high = busa_read_byte_data(accel_addr, 0x2D)
     return applyCal(mergeInts(low, high), accel_z_scale, accel_z_offset)
 def readCompX():
-    low = bus.read_byte_data(comp_addr, 0x03)
-    high = bus.read_byte_data(comp_addr, 0x04)
+    global comp_addr
+    low = busc_read_byte_data(comp_addr, 0x03)
+    high = busc_read_byte_data(comp_addr, 0x04)
     return applyCal(mergeInts(low, high), comp_x_scale, comp_x_offset)
 def readCompY():
-    low = bus.read_byte_data(comp_addr, 0x04)
-    high = bus.read_byte_data(comp_addr, 0x05)
+    global comp_addr
+    low = busc_read_byte_data(comp_addr, 0x04)
+    high = busc_read_byte_data(comp_addr, 0x05)
     return applyCal(mergeInts(low, high), comp_y_scale, comp_y_offset)
 def readCompX():
-    low = bus.read_byte_data(comp_addr, 0x07)
-    high = bus.read_byte_data(comp_addr, 0x08)
+    global comp_addr
+    low = busc_read_byte_data(comp_addr, 0x07)
+    high = busc_read_byte_data(comp_addr, 0x08)
     return applyCal(mergeInts(low, high), comp_z_scale, comp_z_offset)
