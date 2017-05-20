@@ -1,0 +1,9 @@
+Sensor driver files must include utilities for:
+
+1. Check communication status
+2. Get current value (for each sensor type)
+3. Conversion methods to convert from sensor output to "useful" data (ex. changing units)
+4. Calibration methods
+
+
+
