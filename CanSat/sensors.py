@@ -1,3 +1,47 @@
+class I2C_Sensor: #OR read()
+    #Provides a "base" class for 1d sensors to build on
+    #override read()
+    import smbus
+
+   def __init__(self, addr):
+        self.scale = 1
+        self.offset = 0
+        self.dev_addr = addr
+        self.dev_state = True #True if no comms error, false if comms error
+
+        try:
+            #smbus declaration
+            bus = smBus.SMBus(1) #smbus declared on CHIP I2C bus 1
+            self.dev_state = True
+        except IOError, err:
+            self.dev_state = False
+
+    def read_byte_data(self, command):
+        data = 0
+        try:
+            data = bus.read_bute_data(self.dev_addr, command)
+            self.dev_state = True
+        except IOError, err:
+            self.dev_state = False 
+        return data
+
+    def write_byte_data(self, command, value)
+       try:
+            bus.write_byte_data(self,dev_addr, command, value)
+            self.dev_state = True
+        except IOError, err
+            self.dev_state = False 
+
+    def applyCal(val):
+        return double(val)*double(self.scale)+double(self.offset)
+    def getState(self):
+        return self.dev_state
+    def setCal(self, s, o):
+        self.scale = s
+        self.offset = o 
+    def read():
+        return None    
+
 class I2C_3axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
     #provides a simple "base" class for sensors drivers to be built on
     #classes extending I2C_Sensor must override methods:
@@ -14,9 +58,9 @@ class I2C_3axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
         self.x_scale = 1
         self.y_scale = 1
         self.z_scale = 1
-        self.x_offset = 1
-        self.y_offset = 1
-        self.z_offset = 1
+        self.x_offset = 0
+        self.y_offset = 0
+        self.z_offset = 0
         #i2c device adress
         self.dev_addr = addr
         #Device parameters
@@ -54,13 +98,13 @@ class I2C_3axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
         except IOError, err:
             self.dev_state = False
 
-    def getState():
+    def getState(self):
         return self.dev_state
-    def getPower():
+    def getPower(self):
         return self.p_mode
-    def getUpdate():
+    def getUpdate(self):
         return self.u_mode
-    def getDefl():
+    def getDefl(self):
         return self.d_mode
 
     def setParam(self, power, update, deflection):
@@ -130,4 +174,6 @@ class LSM303_Mag(I2C_3Axis_Sensor):
         high = read_byte_data(0x08)
         return applyCal(mergeInts(low, high), self.z_scale, self.z_offset)
 
-class L3GD20(I2C_3Axis_Sensor):
+class L3GD20_gyro(I2C_3Axis_Sensor):
+
+class L3GD20_temp(I2C_Sensor):
