@@ -17,3 +17,11 @@ z_offset = 0
 #device address
 l3gd20_addr = 0x6B
 
+#device parameters
+p_mode = True #True for normal mode, False for power-down mode
+u_mode = True #True for 760Hz update rate, False for 95Hz
+
+#device_state
+l3dg20_state = True #true if working communication, false if communication error
+
+

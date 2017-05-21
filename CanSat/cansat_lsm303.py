@@ -46,7 +46,7 @@ def busa_read_byte_data(addr, command) #accelerometer read command
     try:
         data = bus.read_byte_data(addr, command)
         accel_state = True
-    except IOError, errL
+    except IOError, err:
         accel_state = False
     return data
 def busc_read_byte_data(addr, command) #compass read command
