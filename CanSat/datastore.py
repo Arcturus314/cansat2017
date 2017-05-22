@@ -27,8 +27,10 @@ import i2c_sensors
 #File information:
 #All sensor data and timestamps will be logged in "sensor_data.txt"
 #All sensor errors and timestamps will be logged in "sensor_error.txt"
+#All temperature matrix data will be logged in "temp_data.txt"
 data_fileName  = "sensor_data.txt"
 error_fileName = "error_data.txt"
+temp_fileName  = "temp_data.txt"
 
 #Sensor data lists
 accel_data      = [] #{[X1, Y1, Z1, Time1], [X2, Y2, Z2, Time2] ...}
@@ -61,6 +63,7 @@ temp_camera   = i2c_sensors.D6T_Temp_Array(D6T_addr)
 #File instantiation
 data_file_error  = False #True when file cannot be opened
 error_file_error = False #True when file cannot be opened
+temp_file_error  = False #True when file cannot be opened
 try:
     file = open(data_fileName, "a")
     file.close()
@@ -75,14 +78,63 @@ try:
 except IOError, err:
     error_file_error = True
 
+try:
+    file = open(temp_fileName, "a")
+    file.close()
+    temp_file_error = False
+except IOError, err:
+    temp_file_error = True
+
 #general file handling methods
 def report_error(sensor):
-    file = open(error_fileName, "a")
-    file.write(sensor)
-    file.write(str(time.time()))
-    file.write('\n')
-    file.close()
-
+    try:
+        file = open(error_fileName, "a")
+        file.write(sensor)
+        file.write(",")
+        file.write(str(time.time()))
+        file.write('\n')
+        file.close()
+        error_file_error = False
+    except IOError, err:
+        error_file_error = True 
+def add_data(sensor, data):
+    try:
+        file = open(data_fileName, "a")
+        file.write(sensor)
+        file.write(",")
+        file.write(str(data))
+        file.write(",")
+        file.write(str(time.time()))
+        file.write('\n')
+        file.close()
+    except IOError, err:
+        data_file_error = True
+def add_data(sensor, dataX, dataY, dataZ):
+    try:
+        file = open(data_fileName, "a")
+        file.write(sensor)
+        file.write(",")
+        file.write(str(dataX))
+        file.write(",")
+        file.write(str(dataY))
+        file.write(",")
+        file.write(str(dataZ))
+        file.write(",")
+        file.write(str(time.time()))
+        file.write('\n')
+        file.close()
+    except IOError, err:
+        data_file_error = True
+def add_temp_matrix(data):
+    try:
+        file = open(temp_fileName, "a")
+        for i in xrange(15):
+            file.write(str(data[i]))
+            file.write(",")
+        file.write(str(time.time()))
+        file.write('\n')
+        file.close()
+        
 #general get methods
 def get_data_file_status():
     global data_file_error
@@ -115,15 +167,15 @@ def get_gyroscope_status():
 def get_gyroscope_settings():
     global gyroscope
     return gyroscope.getPower(),gyroscope.getUpdate(),gyroscope.getDefl()
-def get_env_status
+def get_env_status():
     global env_pressure
     status = env_pressure.getState()
     if status = False:
         report_error("BME280")
-def get_temp_camera_status
+def get_temp_camera_status():
     global temp_camera
     status = temp_camera.getStatus()
     if status = False:
         report_error("D6T")
 
-
+#sensor value get methods (TRUE for all data, FALSE for 
