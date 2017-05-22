@@ -207,5 +207,19 @@ class L3GD20_gyro(I2C_3Axis_Sensor):
 class L3GD20_temp(I2C_Sensor):
     def read(self):
         temp = read_byte_data(0x26)
-        return applyCal(temp, self.scale, self.offset)
+        return applyCal(temp, self.scale, self.offset) 
 
+class BME280_pressure(I2C_Sensor):
+    import bme280
+    def read():
+        return getPressure()
+
+class BME280_humidity(I2C_Sensor):
+    import bme280
+    def read():
+        return getHumidity()
+
+class BME280_temp(I2C_Sensor):
+    import bme280
+    def read():
+        return getTemp()
