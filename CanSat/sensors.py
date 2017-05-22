@@ -42,7 +42,7 @@ class I2C_Sensor: #OR read()
     def read():
         return None    
 
-class I2C_3axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
+class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
     #provides a simple "base" class for sensors drivers to be built on
     #classes extending I2C_Sensor must override methods:
     #   setParam
@@ -124,7 +124,7 @@ class I2C_3axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
     def readZ():
         return None
 
-class LSM303_Accel(I2C_3axis_Sensor):
+class LSM303_Accel(I2C_3Axis_Sensor):
 
     def setParam(self, power, update, deflection):
         #setting class variables
@@ -134,12 +134,12 @@ class LSM303_Accel(I2C_3axis_Sensor):
         
         #calculating control register values
         ctrlreg1 = 0b00000111 #pwrmode | datarate | xyz enable
-        if u_mode = True:
+        if self.u_mode = True:
             ctrlreg1 = ctrlreg1 | 0b00001000
-        if p_mode = True:
+        if self.p_mode = True:
             ctrlreg1 = ctrlreg1 | 0b00100000
         ctrlreg4 = 0b00000000 #bdu | ble | fsd | st
-        if d_mode = True:
+        if self.d_mode = True:
             ctrlreg4 = ctrlreg4 | 0b00110000
 
         #Setting device register values
@@ -149,7 +149,7 @@ class LSM303_Accel(I2C_3axis_Sensor):
     def readX(self):
         low  = read_byte_data(0x28)
         high = read_byte_data(0x29)
-        return applYCal(mergeInts(low, high), self.x_scale, self.x_offset)
+        return applyCal(mergeInts(low, high), self.x_scale, self.x_offset)
     def readY(self):
         low  = read_byte_data(0x2A)
         high = read_byte_data(0x2B)
@@ -175,5 +175,37 @@ class LSM303_Mag(I2C_3Axis_Sensor):
         return applyCal(mergeInts(low, high), self.z_scale, self.z_offset)
 
 class L3GD20_gyro(I2C_3Axis_Sensor):
+    def setParam(power, update, deflection):
+        #Setting class variables
+        self.p_mode = power
+        self.u_mode = update
+        self.d_mode = deflection
+        
+        #Calculating control register values
+        ctrlreg1 = 0b00000111
+        if self.u_mode = True:
+            ctrlreg1 = ctrlreg1 | 0b11110111
+        if self.p_mode = True:
+            ctrlreg1 = ctrlreg1 | 0b00001000
 
+        #Setting device register values
+        write_byte_data(0x20, ctrlreg1)
+
+    def readX(self):
+        low  = read_byte_data(0x28)
+        high = read_byte_data(0x29)
+        return applyCal(mergeInts(low, high), self.x_scale, self.x_offset)
+    def readY(self):
+        low  = read_byte_data(0x2A)
+        high = read_byte_data(0x2B)
+        return applyCal(mergeInts(low, high), self.y_scale, self.y_offset)
+    def readZ(self)
+        low  = read_byte_data(0x2C)
+        high = read_byte_data(0x2D)
+        return applyCal(mergeInts(low, high), self.z_scale, self.z_offset)              
+        
 class L3GD20_temp(I2C_Sensor):
+    def read(self):
+        temp = read_byte_data(0x26)
+        return applyCal(temp, self.scale, self.offset)
+
