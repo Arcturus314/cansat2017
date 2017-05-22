@@ -32,6 +32,8 @@ class I2C_Sensor: #OR read()
         except IOError, err
             self.dev_state = False 
 
+    def mergeInts(low, high):
+        return (low>>8) | high
     def applyCal(val):
         return double(val)*double(self.scale)+double(self.offset)
     def getState(self):
@@ -80,7 +82,7 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
 
     def applyCal(val, scale, offset):
         return float(val)*float(scale)+float(offset)
-    def mergeInts(low, high)
+    def mergeInts(low, high):
         return (low>>8) | high
 
     def read_byte_data(self, command):
@@ -174,7 +176,7 @@ class LSM303_Mag(I2C_3Axis_Sensor):
         high = read_byte_data(0x08)
         return applyCal(mergeInts(low, high), self.z_scale, self.z_offset)
 
-class L3GD20_gyro(I2C_3Axis_Sensor):
+class L3GD20_Gyro(I2C_3Axis_Sensor):
     def setParam(power, update, deflection):
         #Setting class variables
         self.p_mode = power
@@ -204,22 +206,45 @@ class L3GD20_gyro(I2C_3Axis_Sensor):
         high = read_byte_data(0x2D)
         return applyCal(mergeInts(low, high), self.z_scale, self.z_offset)              
         
-class L3GD20_temp(I2C_Sensor):
+class L3GD20_Temp(I2C_Sensor):
     def read(self):
         temp = read_byte_data(0x26)
         return applyCal(temp, self.scale, self.offset) 
 
-class BME280_pressure(I2C_Sensor):
+class BME280_Pressure(I2C_Sensor):
     import bme280
     def read():
         return getPressure()
 
-class BME280_humidity(I2C_Sensor):
+class BME280_Humidity(I2C_Sensor):
     import bme280
     def read():
         return getHumidity()
 
-class BME280_temp(I2C_Sensor):
+class BME280_Temp(I2C_Sensor):
     import bme280
     def read():
         return getTemp()
+
+class D6T_Temp_Array(I2C_Sensor):
+    def read():
+        D6T_data = []
+        return_data = []
+        for i in xrange(40):
+            D6T_data.append(0)
+        self.dev_state = True
+        try:
+            D6T_data = bus.read_i2c_block_data(d6t_addr, 0x4C)
+        except IOError,err:
+            self.dev_state = False
+        if self.dev_state = True:
+            sumt = 0 #sum of temperatures for 16th element calc
+            for i in xrange(15):
+                return_data[i] = applyCal((D6T_data[2*i] + 256*D6T_data[2*i+1]/10.0), self.scale, self.offset)
+                if i>0:
+                    sumt = sumt + return_data[i]
+            return_data[16] = sumt / 15.0
+        return return_data[1:16], return_data[0]
+
+
+        
