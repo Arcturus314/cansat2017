@@ -85,6 +85,10 @@ try:
 except IOError, err:
     temp_file_error = True
 
+#general functions
+def getTuple(a,b,c)
+    return a,b,c
+
 #general file handling methods
 def report_error(sensor):
     try:
@@ -178,4 +182,130 @@ def get_temp_camera_status():
     if status = False:
         report_error("D6T")
 
-#sensor value get methods (TRUE for all data, FALSE for 
+#sensor set methods
+def set_accelerometer_settings(power,update,deflection):
+    global accelerometer
+    if getTuple(power,update,deflection) != get_accelerometer_settings():
+        accelerometer.setParam(power,update,deflection)
+def set_magnetometer_settings(power,update,deflection):
+    global magnetometer
+    if getTuple(power,update,deflection != get_magnetometer_settings():
+        magnetometer.setParam(power,update,deflection)
+def set_gyroscope_settings(power,update,deflection):
+    global gyroscope
+    if getTuple(power,update,deflection) != get_gyroscope_settings():
+        gyroscope.setParam(power,update,deflection)
+
+#sensor value get methods (TRUE for all data, FALSE for only last data point)
+def get_accelerometer_data(data):
+    global accel_data
+    global accelerometer
+    xVal = accelerometer.readX()
+    yVal = accelerometer.readY()
+    zVal = accelerometer.readZ()
+    accel_data.append([xVal, yVal, zVal, time.time()])
+    add_data("accelerometer", readX, readY, readZ)
+    if data == True:
+        return accel_data
+    return xVal, yVal, zVal, time.time()
+def get_magnetometer_data(data):
+    global magnetometer
+    global mag_data
+    xVal = magnetometer.readX()
+    yVal = magnetometer.readY()
+    zVal = magnetometer.readZ()
+    mag_data.append([xVal,yVal,zVal,time.time()])
+    add_data("magnetometer", readX, readY, readZ)
+    if data == True:
+        return mag_data
+    return xVal, yVal, zVal, time.time()
+def get_gyroscope_data(data):
+    global gyroscope
+    global gyro_data
+    xVal = gyroscope.readX()
+    yVal = gyroscope.readY()
+    zVal = gyroscope.readZ()
+    gyro_data.append([xVal,yVal,zVal,time.time()])
+    add_data("accelerometer", readX, readY, readZ)
+    if data == True:
+        return gyro_data
+    return xVal, yVal, zVal, time.time()
+def get_imu_temp_data(data):
+    global imu_temp
+    global gyro_temp_data
+    val = imu_temp.read()
+    gyro_temp_data.append([val, time.time()])
+    add_data("imu_temp", val)
+    if data == True:
+        return gyro_temp_data
+    return val, time.time()
+def get_env_pressure_data(data):
+    global env_pressure
+    global pressure_data
+    val = env_pressure.read()
+    pressure_data.append([val, time.time()])
+    add_data("pressure", val)
+    if data == True:
+        return pressure_data
+    return val, time.time()
+def get_env_humidity_data(data):
+    global env_humidity
+    global humidity_data
+    val = env_humidity.read()
+    humidity_data.append([val, time.time()])
+    add_data("humidity", val)
+    if data == True:
+        return humidity_data
+    return val, time.time()
+def get_env_temp_data(data):
+    global env_temp
+    global pres_temp_data
+    val = env_temp.read()
+    pres_temp_data.append([val, time.time()])
+    add_data("env_temp", val)
+    if data == True:
+        return pres_temp_data
+    return val, time.time()
+def get_temp_array_data(data):
+    global temp_camera
+    global temp_array_data
+    val = temp_camera.read()
+    temp_array_data.append([val, time.time()])
+    add_temp_matrix(val)
+    if data == True:
+        return temp_array_data
+    return val,time.time()
+
+#overall control and read methods
+def read_all_active(): #accel, mag, gyro, imu, env, imu_temp, pres, hum, temp, tarr
+    all_val = get_accelerometer_data(False)[0:2],get_magnetometer_data(False)[0:2],get_gyroscope_data(False)[0:2],get_imu_temp_data(False)[0],get_env_pressure_data(False)[0],get_env_humidity_data(False)[0],get_env_temp_data(False),get_temp_array_data(False)[0],time.time()
+    return all_val
+def read_envir_log(): #env_temp, pressure, humidity 
+    env_data = get_env_temp_data(False)[0], get_env_pressure_data(False)[0], get-env_humidity_data(False)[0], time.time()
+    return env_data
+def read_track_pos(): #pressure, accelerometer, magnetometer, gyroscope
+    pos_data = get_env_pressure_data(False)[0],get_accelerometer_data(False)[0:2], get_magnetometer_data(False)[0:2], time.time()
+    return pos_data
+def read_heat_map(): #pressure, accelerometer, magnetometer, gyroscope, tarr
+    heat_map_data = get_env_pressure_data(False)[0],get_accelerometer_data(False)[0:2], get_magnetometer_data(False)[0:2],get_temp_array_data(False)[0],time.time()
+    return heat_map_data
+
+def get_errors(): #accelerometer, magnetometer, gyroscope, env, temp_camera
+    errors = get_accelerometer_status(),get_magnetometer_status(),get_gyroscope_status(),get_env_status(),get_temp_camera_status()
+    return errors
+
+def set_min_power():
+    set_accelerometer_settings(False, False, False)
+    set_gyroscope_settings(False, False, False)
+    set_magnetometer_settings(False, False, False)
+def set_all_active():
+    set_accelerometer_settings(True,True,True)
+    set_gyroscope_settings(True,True,True)
+    set_magnetometer_settings(True,True,True)
+def set_envir_log():
+    set_min_power()
+def set_track_pos():
+    set_all_active()
+def set_heat_map():
+    set_all_active()
+
