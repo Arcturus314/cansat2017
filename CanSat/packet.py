@@ -12,11 +12,11 @@ import datastore
 
 #Packets can also be built via type
 # 1) all current sensor data
-# 2) all stored sensor data
-# 3) all error values
-# 4) current position data
-# 5) current temperature matrix
-# 6) overall temperature map
+# 2) all environmental logging data
+# 3) all position tracking data
+# 4) all heat map data
+# 5) all stored sensor data
+# 6) all error data
 
 #packet settings will be stored in the following set of variables
 
@@ -42,11 +42,12 @@ id_dict = ['AccelI': 0x00, 'MagI': 0x01, 'GyroI': 0x02, 'iTempI': 0x03, 'ePresI'
 
 #Packets will be structured as follows
 # --header--
-# ':,(num messages in body)'
+# ':,(num messages in body),|'
 # ---body---
 # '(identifier),(data1),(data2),...,;'
 # '(identifier),(data1),(data2),...,;' 
 # ...
+# '|'
 # --footer--
 # (checksum)
 
@@ -58,7 +59,6 @@ def init_packet(_inc_data,_inc_all_data,_inc_error,_inc_pos,_inc_mat,_inc_map):
     inc_pos = _inc_pos
     inc_mat = _inc_mat
     inc_map = _inc_map
-
 def init_packet(packet_type):
     global inc_data,inc_all_data,inc_error,inc_pos,inc_mat,inc_map
     if packet_type == 1:
@@ -68,22 +68,22 @@ def init_packet(packet_type):
         inc_pos = False
         inc_map = False
         inc_mat = False
-    if packet_type == 2:
+    if packet_type == 5:
         inc_all_data = [True, True, True, True, True, True, True]
         inc_data = [False, False, False, False, False, False, False]
         inc_error = False
         inc_pos = False
         inc_mat = False
         inc_map = False
-    if packet_type == 3:
+    if packet_type == 6:
         inc_data = [False, False, False, False, False, False, False]
         inc_all_data = [False, False, False, False, False, False, False]
         inc_error = True
         inc_pos = False
         inc_mat = False
         inc_map = False
-    if packet_type == 4:
-        inc_data = [False, False, False, False, False, False, False]
+    if packet_type == 2:
+        inc_data = [False, False, False, True, True, False, False]
         inc_all_data = [False, False, False, False, False, False, False]
         inc_error = False
         inc_pos = True
@@ -126,6 +126,11 @@ def build_header():
     header = header + str(messages)
 
     return header
-        
+def build_body():        
+    body = "" #string to hold body message
     
+    #Now need to add all relevant data in header and message system
+    if inc_data[1] == True:
+    body = body + id_dict['AccelI']
+    body = body +       
     
