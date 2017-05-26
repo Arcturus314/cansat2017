@@ -1,5 +1,6 @@
 #include <Sim800l.h>
 #include <SoftwareSerial.h> //is necesary for the library!! 
+#include <Wire.>
 Sim800l Sim800l;  //to declare the library
 char* text;
 char* number;
@@ -12,6 +13,11 @@ int bme280_err;
 int d6t_err;
 
 void setup(){
+   Wire.begin(x);
+   Wire.onRecieve(recieveEvent);
+   serial.begin(9600);
+	
+}
 	Sim800l.begin(); // initializate the library. 
   if ( xbee_err = 1) {
 	text="1";  //text for the message. 
