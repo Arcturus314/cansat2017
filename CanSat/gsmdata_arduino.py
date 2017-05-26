@@ -1,5 +1,8 @@
 import gsm
+import smbus
 def send_errs_arduino();
+	smbus = SmBus(1)
+	ard_addr = 0x0B
 	bus.write_byte(ard_addr, 0x00)
 	bus.write_byte(ard_addr, 0x00)
 	bus.write_byte(ard_addr, xbee_err)
