@@ -3,6 +3,7 @@ import smbus
 def send_errs_arduino();
 	smbus = SmBus(1)
 	ard_addr = 0x0B
+	try:
 	smbus.write_byte_data(ard_addr, 0x00)
 	smbus.write_byte_data(ard_addr, 0x00)
 	smbus.write_byte_data(ard_addr, xbee_err)
