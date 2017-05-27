@@ -3,7 +3,8 @@ def read_ard():
 	smbus = smbus(1)
 	global gps_data, ard_err, ard_data
 	gps_data = []
-	ard_data[i] = smbus.read_byte_data(ard_addr)
+	try:
+		ard_data[i] = smbus.read_byte_data(ard_addr)
 	except IOError, err:
                 ard_err = True
 	gps_data[0]  = chr(ard_data[6])+chr(ard_data[7])+chr(ard_data[8])+chr(ard_data[9])+chr(ard_data[10])+chr(ard_data[11])+chr(ard_data[12])+chr(ard_data[13]) #longitude
