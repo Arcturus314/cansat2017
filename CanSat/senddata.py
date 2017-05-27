@@ -7,7 +7,7 @@ def send_data();
 	print get_accelerometer_data(False),
 	print 0xff,
 	print ",",
-	prinf 0xff,
+	print 0xff,
 	print ":",
 	print 0x01,
 	print ",",
