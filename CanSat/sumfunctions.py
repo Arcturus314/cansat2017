@@ -6,8 +6,8 @@ global sumt1, sumt2, sumt3, sumt4, sumt5
 	sumt3 = 0
 	sumt4 = 0
 	sumt5 = 0
-	sumt1 = accel_data / 5
-	sumt2 = mag_data / 5
-	sumt3 = gyro_data / 6
-	sumt4 = ( pressure_data + humidity_data + pres_temp_data) / 7
-	sumt5 = temp_array_data / 17
+	sumt1 = get_accelerometer_data(False) / 5
+	sumt2 = get_magnetometer_data(False) / 5
+	sumt3 = get_gyroscope_data(False) / 6
+	sumt4 = ( get_env_pressure_data(False) + get_env_humidity_data(False) + get_env_temp_data(False)) / 7
+	sumt5 = get_temp_array_data(False) / 17
