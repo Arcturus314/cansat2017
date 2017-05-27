@@ -1,6 +1,7 @@
 import gsm
 import smbus
 def send_errs_arduino();
+global ard_err
 	smbus = SmBus(1)
 	ard_addr = 0x0B
 	try:
@@ -30,3 +31,4 @@ def send_errs_arduino();
         	smbus.write_byte_data(ard_addr, 0xff)
         	smbus.write_byte_data(ard_addr, 0xff)	
 	Except IOError, err:
+	ard_err = True
