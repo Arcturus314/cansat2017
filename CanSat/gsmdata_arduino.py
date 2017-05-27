@@ -31,4 +31,4 @@ global ard_err
         	smbus.write_byte_data(ard_addr, 0xff)
         	smbus.write_byte_data(ard_addr, 0xff)	
 	Except IOError, err:
-	ard_err = True
+		ard_err = True
