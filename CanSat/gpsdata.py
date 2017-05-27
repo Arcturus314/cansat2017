@@ -2,6 +2,7 @@ import smbus
 def read_ard():
 	smbus = smbus(1)
 	global gps_data, ard_err, ard_data
+	ard_err = False
 	gps_data = []
 	try:
 		ard_data[i] = smbus.read_byte_data(ard_addr)
