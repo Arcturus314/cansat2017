@@ -158,6 +158,7 @@ def get_accelerometer_status():
     status = accelerometer.getState()
     if status == False:
         report_error("accelerometer")
+    return status
 def get_accelerometer_settings(): #(power, update, deflection)
     global accelerometer
     return accelerometer.getPower(),accelerometer.getUpdate(),accelerometer.getDefl()
@@ -166,6 +167,7 @@ def get_magnetometer_status():
     status = magnetometer.getState()
     if status == False:
         report_error("magnetometer")
+    return status
 def get_magnetometer_settings():
     global magnetometer
     return magnetometer.getPower(),magnetometer.getUpdate(),magnetometer.getDefl()
@@ -174,6 +176,7 @@ def get_gyroscope_status():
     status = gyroscope.getState()
     if status == False:
         report_error("gyroscope") 
+    return status
 def get_gyroscope_settings():
     global gyroscope
     return gyroscope.getPower(),gyroscope.getUpdate(),gyroscope.getDefl()
@@ -182,11 +185,13 @@ def get_env_status():
     status = env_pressure.getState()
     if status == False:
         report_error("BME280")
+    return status
 def get_temp_camera_status():
     global temp_camera
     status = temp_camera.getState()
     if status == False:
         report_error("D6T")
+    return status
 
 #sensor set methods
 def set_accelerometer_settings(power,update,deflection):
