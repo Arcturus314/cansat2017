@@ -237,7 +237,7 @@ class D6T_Temp_Array(I2C_Sensor):
             D6T_data = bus.read_i2c_block_data(d6t_addr, 0x4C)
         except IOError,err:
             self.dev_state = False
-        if self.dev_state = True:
+        if self.dev_state == True:
             sumt = 0 #sum of temperatures for 16th element calc
             for i in xrange(15):
                 return_data[i] = applyCal((D6T_data[2*i] + 256*D6T_data[2*i+1]/10.0), self.scale, self.offset)
