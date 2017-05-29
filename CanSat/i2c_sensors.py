@@ -136,12 +136,12 @@ class LSM303_Accel(I2C_3Axis_Sensor):
         
         #calculating control register values
         ctrlreg1 = 0b00000111 #pwrmode | datarate | xyz enable
-        if self.u_mode = True:
+        if self.u_mode == True:
             ctrlreg1 = ctrlreg1 | 0b00001000
-        if self.p_mode = True:
+        if self.p_mode == True:
             ctrlreg1 = ctrlreg1 | 0b00100000
         ctrlreg4 = 0b00000000 #bdu | ble | fsd | st
-        if self.d_mode = True:
+        if self.d_mode == True:
             ctrlreg4 = ctrlreg4 | 0b00110000
 
         #Setting device register values
@@ -185,9 +185,9 @@ class L3GD20_Gyro(I2C_3Axis_Sensor):
         
         #Calculating control register values
         ctrlreg1 = 0b00000111
-        if self.u_mode = True:
+        if self.u_mode == True:
             ctrlreg1 = ctrlreg1 | 0b11110111
-        if self.p_mode = True:
+        if self.p_mode == True:
             ctrlreg1 = ctrlreg1 | 0b00001000
 
         #Setting device register values
