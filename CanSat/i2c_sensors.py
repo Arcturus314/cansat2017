@@ -238,7 +238,7 @@ class D6T_Temp_Array(I2C_Sensor):
             D6T_data.append(0)
         self.dev_state = True
         try:
-            D6T_data = bus.read_i2c_block_data(d6t_addr, 0x4C)
+            D6T_data = bus.read_i2c_block_data(dev_addr, 0x4C)
         except IOError,err:
             self.dev_state = False
         if self.dev_state == True:
