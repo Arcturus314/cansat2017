@@ -1,6 +1,6 @@
 import gsm
 import smbus
-def send_errs_arduino();
+def send_errs_arduino():
 global ard_err
 	smbus = SmBus(1)
 	ard_addr = 0x0B
