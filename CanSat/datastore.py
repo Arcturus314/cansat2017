@@ -137,9 +137,9 @@ def add_temp_matrix(data):
     try:
         file = open(temp_fileName, "a")
         for i in xrange(15):
-            file.write(str(data[i]))
+            file.write(str(data[0][i]))
             file.write(",")
-        file.write(str(time.time()))
+        file.write(str(data[1]))
         file.write('\n')
         file.close()
     except IOError, err:
