@@ -1,9 +1,11 @@
 import smbus
+bus = smbus.SMBus(1) #smbus declared on CHIP I2C bus 1
 
 class I2C_Sensor: #OR read()
     #Provides a "base" class for 1d sensors to build on
     #override read()
     global smbus
+    global bus
 
     def __init__(self, addr):
         self.scale = 1
@@ -122,7 +124,6 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
 
         try:
             #smbus declaration
-            bus = smbus.SMBus(1) #smbus declared on CHIP I2C bus 1
             self.setParam(power, update, deflection)
             self.dev_state = True
         except IOError, err:
