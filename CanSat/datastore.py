@@ -210,7 +210,7 @@ def get_accelerometer_data(data):
     yVal = accelerometer.readY()
     zVal = accelerometer.readZ()
     accel_data.append([xVal, yVal, zVal, time.time()])
-    add_data("accelerometer", readX, readY, readZ)
+    add_data("accelerometer", xVal, yVal, zVal)
     if data == True:
         return accel_data
     return xVal, yVal, zVal, time.time()
@@ -221,7 +221,7 @@ def get_magnetometer_data(data):
     yVal = magnetometer.readY()
     zVal = magnetometer.readZ()
     mag_data.append([xVal,yVal,zVal,time.time()])
-    add_data("magnetometer", readX, readY, readZ)
+    add_data("magnetometer", xVal, yVal, zVal)
     if data == True:
         return mag_data
     return xVal, yVal, zVal, time.time()
@@ -232,7 +232,7 @@ def get_gyroscope_data(data):
     yVal = gyroscope.readY()
     zVal = gyroscope.readZ()
     gyro_data.append([xVal,yVal,zVal,time.time()])
-    add_data("accelerometer", readX, readY, readZ)
+    add_data("accelerometer", xVal, yVal, zVal)
     if data == True:
         return gyro_data
     return xVal, yVal, zVal, time.time()
