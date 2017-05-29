@@ -232,8 +232,6 @@ class BME280_Temp(I2C_Sensor):
 
 class D6T_Temp_Array(I2C_Sensor):
     def read(self):
-        global dev_addr
-        global 
         D6T_data = []
         return_data = []
         for i in xrange(40):
