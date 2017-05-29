@@ -1,5 +1,5 @@
 import datastore
-def send_data();
+def send_data():
 	print ":",
 	print 0x00,
 	print ",",
