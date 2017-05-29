@@ -86,11 +86,12 @@ except IOError, err:
     temp_file_error = True
 
 #general functions
-def getTuple(a,b,c)
+def getTuple(a,b,c):
     return a,b,c
 
 #general file handling methods
 def report_error(sensor):
+    global error_file_error, error_fileName
     try:
         file = open(error_fileName, "a")
         file.write(sensor)
@@ -102,6 +103,7 @@ def report_error(sensor):
     except IOError, err:
         error_file_error = True 
 def add_data(sensor, data):
+    global data_file_error, data_fileName
     try:
         file = open(data_fileName, "a")
         file.write(sensor)
@@ -114,6 +116,7 @@ def add_data(sensor, data):
     except IOError, err:
         data_file_error = True
 def add_data(sensor, dataX, dataY, dataZ):
+    global data_file_error, data_fileName
     try:
         file = open(data_fileName, "a")
         file.write(sensor)
@@ -130,6 +133,7 @@ def add_data(sensor, dataX, dataY, dataZ):
     except IOError, err:
         data_file_error = True
 def add_temp_matrix(data):
+    global temp_file_error, temp_fileName
     try:
         file = open(temp_fileName, "a")
         for i in xrange(15):
@@ -138,6 +142,8 @@ def add_temp_matrix(data):
         file.write(str(time.time()))
         file.write('\n')
         file.close()
+    except IOError, err:
+        temp_file_error = True
         
 #general get methods
 def get_data_file_status():
@@ -150,7 +156,7 @@ def get_error_file_status():
 def get_accelerometer_status():
     global accelerometer
     status = accelerometer.getState()
-    if status = False:
+    if status == False:
         report_error("accelerometer")
 def get_accelerometer_settings(): #(power, update, deflection)
     global accelerometer
@@ -158,7 +164,7 @@ def get_accelerometer_settings(): #(power, update, deflection)
 def get_magnetometer_status():
     global magnetometer
     status = magnetometer.getState()
-    if status = False:
+    if status == False:
         report_error("magnetometer")
 def get_magnetometer_settings():
     global magnetometer
@@ -166,7 +172,7 @@ def get_magnetometer_settings():
 def get_gyroscope_status():
     global gyroscope
     status = gyroscope.getState()
-    if status = False:
+    if status == False:
         report_error("gyroscope") 
 def get_gyroscope_settings():
     global gyroscope
@@ -174,12 +180,12 @@ def get_gyroscope_settings():
 def get_env_status():
     global env_pressure
     status = env_pressure.getState()
-    if status = False:
+    if status == False:
         report_error("BME280")
 def get_temp_camera_status():
     global temp_camera
     status = temp_camera.getStatus()
-    if status = False:
+    if status == False:
         report_error("D6T")
 
 #sensor set methods
@@ -189,7 +195,7 @@ def set_accelerometer_settings(power,update,deflection):
         accelerometer.setParam(power,update,deflection)
 def set_magnetometer_settings(power,update,deflection):
     global magnetometer
-    if getTuple(power,update,deflection != get_magnetometer_settings():
+    if getTuple(power,update,deflection) != get_magnetometer_settings():
         magnetometer.setParam(power,update,deflection)
 def set_gyroscope_settings(power,update,deflection):
     global gyroscope
