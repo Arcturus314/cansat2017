@@ -123,7 +123,7 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
         try:
             #smbus declaration
             bus = smbus.SMBus(1) #smbus declared on CHIP I2C bus 1
-            setParam(power, update, deflection)
+            self.setParam(power, update, deflection)
             self.dev_state = True
         except IOError, err:
             self.dev_state = False
@@ -193,20 +193,20 @@ class L3GD20_Gyro(I2C_3Axis_Sensor):
             ctrlreg1 = ctrlreg1 | 0b00001000
 
         #Setting device register values
-        write_byte_data(0x20, ctrlreg1)
+        self.write_byte_data(0x20, ctrlreg1)
 
     def readX(self):
-        low  = read_byte_data(0x28)
-        high = read_byte_data(0x29)
-        return applyCal(mergeInts(low, high), self.x_scale, self.x_offset)
+        low  = self.read_byte_data(0x28)
+        high = self.read_byte_data(0x29)
+        return self.applyCal(mergeInts(low, high), self.x_scale, self.x_offset)
     def readY(self):
-        low  = read_byte_data(0x2A)
-        high = read_byte_data(0x2B)
-        return applyCal(mergeInts(low, high), self.y_scale, self.y_offset)
+        low  = self.read_byte_data(0x2A)
+        high = self.read_byte_data(0x2B)
+        return self.applyCal(mergeInts(low, high), self.y_scale, self.y_offset)
     def readZ(self):
-        low  = read_byte_data(0x2C)
-        high = read_byte_data(0x2D)
-        return applyCal(mergeInts(low, high), self.z_scale, self.z_offset)              
+        low  = self.read_byte_data(0x2C)
+        high = self.read_byte_data(0x2D)
+        return self.applyCal(mergeInts(low, high), self.z_scale, self.z_offset)              
         
 class L3GD20_Temp(I2C_Sensor):
     def read(self):
