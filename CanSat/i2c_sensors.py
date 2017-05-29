@@ -22,7 +22,7 @@ class I2C_Sensor: #OR read()
     def read_byte_data(self, command):
         data = 0
         try:
-            data = bus.read_bute_data(self.dev_addr, command)
+            data = bus.read_byte_data(self.dev_addr, command)
             self.dev_state = True
         except IOError, err:
             self.dev_state = False 
