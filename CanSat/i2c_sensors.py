@@ -236,7 +236,7 @@ class D6T_Temp_Array(I2C_Sensor):
         return_data = []
         for i in xrange(40):
             D6T_data.append(0)
-        for i in xrange(16)
+        for i in xrange(16):
             return_data.append(0)
         self.dev_state = True
         try:
