@@ -180,7 +180,7 @@ class LSM303_Mag(I2C_3Axis_Sensor):
         return self.applyCal(mergeInts(low, high), self.z_scale, self.z_offset)
 
 class L3GD20_Gyro(I2C_3Axis_Sensor):
-    def setParam(power, update, deflection):
+    def setParam(self, power, update, deflection):
         #Setting class variables
         self.p_mode = power
         self.u_mode = update
