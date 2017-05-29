@@ -55,7 +55,7 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
     #   readZ
 
     global smbus
-
+    global bus
     def applyCal(val, scale, offset):
         return float(val)*float(scale)+float(offset)
     def mergeInts(low, high):
