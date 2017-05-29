@@ -165,15 +165,15 @@ class LSM303_Accel(I2C_3Axis_Sensor):
 
 class LSM303_Mag(I2C_3Axis_Sensor):
     #TODO: override setParam(power, update, displacement)        
-    def readCompX(self):
+    def readX(self):
         low  = self.read_byte_data(0x03)
         high = self.read_byte_data(0x04)
         return self.applyCal(self.mergeInts(low, high), self.x_scale, self.x_offset)
-    def readCompY(self):
+    def readY(self):
         low  = self.read_byte_data(0x05)
         high = self.read_byte_data(0x06)
         return self.applyCal(self.mergeInts(low, high), self.y_scale, self.y_offset)
-    def readCompZ(self):
+    def readZ(self):
         low  = self.read_byte_data(0x07)
         high = self.read_byte_data(0x08)
         return self.applyCal(self.mergeInts(low, high), self.z_scale, self.z_offset)
