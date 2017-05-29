@@ -35,9 +35,9 @@ class I2C_Sensor: #OR read()
        except IOError, err:
             self.dev_state = False 
 
-    def mergeInts(low, high):
+    def mergeInts(self, low, high):
         return (low>>8) | high
-    def applyCal(val):
+    def applyCal(self, val):
         return double(val)*double(self.scale)+double(self.offset)
     def getState(self):
         return self.dev_state
@@ -57,9 +57,9 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
 
     global smbus
     global bus
-    def applyCal(val, scale, offset):
+    def applyCal(self, val, scale, offset):
         return float(val)*float(scale)+float(offset)
-    def mergeInts(low, high):
+    def mergeInts(self, low, high):
         return (low>>8) | high
 
     def read_byte_data(self, command):
