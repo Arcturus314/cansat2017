@@ -13,7 +13,7 @@ def send_data():
 	print ",",
 	print 0x01,
 	print ",",
-	print datastore.get_magnemometer_data(False),
+	print datastore.magnetometer(False),
 	print 0xff,
 	print ",",
 	print 0xff,
