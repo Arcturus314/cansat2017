@@ -163,7 +163,7 @@ def getPressure():
     readBME280All()
     return pressure
 
-def getHumidity()
+def getHumidity():
     readBME280All()
     return humidity
 
