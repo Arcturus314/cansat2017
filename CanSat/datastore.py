@@ -277,7 +277,7 @@ def get_temp_array_data(data):
     return val,time.time()
 
 #overall control and read methods
-def read_all_active(): #accel, mag, gyro, imu, env, imu_temp, pres, hum, temp, tarr
+def read_all_active(): #accel, mag, gyro, imu_temp, pres, hum, temp, tarr
     all_val = get_accelerometer_data(False)[0:2],get_magnetometer_data(False)[0:2],get_gyroscope_data(False)[0:2],get_imu_temp_data(False)[0],get_env_pressure_data(False)[0],get_env_humidity_data(False)[0],get_env_temp_data(False),get_temp_array_data(False)[0],time.time()
     return all_val
 def read_envir_log(): #env_temp, pressure, humidity 

@@ -3,7 +3,7 @@ class I2C_Sensor: #OR read()
     #override read()
     import smbus
 
-   def __init__(self, addr):
+    def __init__(self, addr):
         self.scale = 1
         self.offset = 0
         self.dev_addr = addr
