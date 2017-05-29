@@ -74,7 +74,7 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
 
         try:
             #smbus declaration
-            bus = smBus.SMBus(1) #smbus declared on CHIP I2C bus 1
+            bus = smbus.SMBus(1) #smbus declared on CHIP I2C bus 1
             setParam(power, update, deflection)
             self.dev_state = True
         except IOError, err:
