@@ -231,7 +231,7 @@ class BME280_Temp(I2C_Sensor):
         return bme280.getTemp()
 
 class D6T_Temp_Array(I2C_Sensor):
-    def read():
+    def read(self):
         D6T_data = []
         return_data = []
         for i in xrange(40):
