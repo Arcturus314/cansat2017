@@ -232,13 +232,15 @@ class BME280_Temp(I2C_Sensor):
 
 class D6T_Temp_Array(I2C_Sensor):
     def read(self):
+        global dev_addr
+        global 
         D6T_data = []
         return_data = []
         for i in xrange(40):
             D6T_data.append(0)
         self.dev_state = True
         try:
-            D6T_data = bus.read_i2c_block_data(dev_addr, 0x4C)
+            D6T_data = bus.read_i2c_block_data(self.dev_addr, 0x4C)
         except IOError,err:
             self.dev_state = False
         if self.dev_state == True:
