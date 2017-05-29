@@ -29,7 +29,7 @@ class I2C_Sensor: #OR read()
        try:
             bus.write_byte_data(self,dev_addr, command, value)
             self.dev_state = True
-        except IOError, err
+       except IOError, err:
             self.dev_state = False 
 
     def mergeInts(low, high):
