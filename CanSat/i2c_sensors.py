@@ -38,7 +38,7 @@ class I2C_Sensor: #OR read()
     def mergeInts(self, low, high):
         return (low>>8) | high
     def applyCal(self, val):
-        return double(val)*double(self.scale)+double(self.offset)
+        return float(val)*float(self.scale)+float(self.offset)
     def getState(self):
         return self.dev_state
     def setCal(self, s, o):
