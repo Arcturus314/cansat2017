@@ -1,4 +1,5 @@
 import smbus
+import bme280
 bus = smbus.SMBus(1) #smbus declared on CHIP I2C bus 1
 
 class I2C_Sensor: #OR read()
@@ -215,19 +216,16 @@ class L3GD20_Temp(I2C_Sensor):
         print self.read_byte_data(0x26)
 
 class BME280_Pressure(I2C_Sensor):
-    import bme280
     def read(self):
         global bme280
         return bme280.getPressure()
 
 class BME280_Humidity(I2C_Sensor):
-    import bme280
     def read(self):
         global bme280
         return bme280.getHumidity()
 
 class BME280_Temp(I2C_Sensor):
-    import bme280
     def read(self):
         global bme280
         return bme280.getTemp()
