@@ -156,7 +156,7 @@ class LSM303_Accel(I2C_3Axis_Sensor):
         low  = read_byte_data(0x2A)
         high = read_byte_data(0x2B)
         return applyCal(mergeInts(low, high), self.y_scale, self.y_offset)
-    def readZ(self)
+    def readZ(self):
         low  = read_byte_data(0x2C)
         high = read_byte_data(0x2D)
         return applyCal(mergeInts(low, high), self.z_scale, self.z_offset)
@@ -171,7 +171,7 @@ class LSM303_Mag(I2C_3Axis_Sensor):
         low  = read_byte_data(0x05)
         high = read_byte_data(0x06)
         return applyCal(mergeInts(low, high), self.y_scale, self.y_offset)
-    def readCompZ(self):A
+    def readCompZ(self):
         low  = read_byte_data(0x07)
         high = read_byte_data(0x08)
         return applyCal(mergeInts(low, high), self.z_scale, self.z_offset)
@@ -201,7 +201,7 @@ class L3GD20_Gyro(I2C_3Axis_Sensor):
         low  = read_byte_data(0x2A)
         high = read_byte_data(0x2B)
         return applyCal(mergeInts(low, high), self.y_scale, self.y_offset)
-    def readZ(self)
+    def readZ(self):
         low  = read_byte_data(0x2C)
         high = read_byte_data(0x2D)
         return applyCal(mergeInts(low, high), self.z_scale, self.z_offset)              
