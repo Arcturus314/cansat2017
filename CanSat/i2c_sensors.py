@@ -1,7 +1,9 @@
+import smbus
+
 class I2C_Sensor: #OR read()
     #Provides a "base" class for 1d sensors to build on
     #override read()
-    import smbus
+    global smbus
 
     def __init__(self, addr):
         self.scale = 1
@@ -52,7 +54,7 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
     #   readY
     #   readZ
 
-    import smbus
+    global smbus
 
     def __init__(self, addr, power, update, deflection):
         #Linear calibration factor
