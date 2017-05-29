@@ -56,32 +56,6 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
 
     global smbus
 
-    def __init__(self, addr, power, update, deflection):
-        #Linear calibration factor
-        #Of form val_new = scale*val_old + offset
-        self.x_scale = 1
-        self.y_scale = 1
-        self.z_scale = 1
-        self.x_offset = 0
-        self.y_offset = 0
-        self.z_offset = 0
-        #i2c device adress
-        self.dev_addr = addr
-        #Device parameters
-        self.p_mode = True #Power mode; True = high power, False = low power
-        self.u_mode = True #Update mode; True = fast update, False = slow update
-        self.d_mode = True #fsd mode; True = high max fsd, False = low max fsd
-        #Device State
-        self.dev_state = True #True if no comms error, false if comms error
-
-        try:
-            #smbus declaration
-            bus = smbus.SMBus(1) #smbus declared on CHIP I2C bus 1
-            setParam(power, update, deflection)
-            self.dev_state = True
-        except IOError, err:
-            self.dev_state = False
-
     def applyCal(val, scale, offset):
         return float(val)*float(scale)+float(offset)
     def mergeInts(low, high):
@@ -127,6 +101,32 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
         return None
     def readZ():
         return None
+
+    def __init__(self, addr, power, update, deflection):
+        #Linear calibration factor
+        #Of form val_new = scale*val_old + offset
+        self.x_scale = 1
+        self.y_scale = 1
+        self.z_scale = 1
+        self.x_offset = 0
+        self.y_offset = 0
+        self.z_offset = 0
+        #i2c device adress
+        self.dev_addr = addr
+        #Device parameters
+        self.p_mode = True #Power mode; True = high power, False = low power
+        self.u_mode = True #Update mode; True = fast update, False = slow update
+        self.d_mode = True #fsd mode; True = high max fsd, False = low max fsd
+        #Device State
+        self.dev_state = True #True if no comms error, false if comms error
+
+        try:
+            #smbus declaration
+            bus = smbus.SMBus(1) #smbus declared on CHIP I2C bus 1
+            setParam(power, update, deflection)
+            self.dev_state = True
+        except IOError, err:
+            self.dev_state = False
 
 class LSM303_Accel(I2C_3Axis_Sensor):
 
