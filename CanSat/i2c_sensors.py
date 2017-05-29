@@ -147,36 +147,36 @@ class LSM303_Accel(I2C_3Axis_Sensor):
             ctrlreg4 = ctrlreg4 | 0b00110000
 
         #Setting device register values
-        write_byte_data(0x20, ctrlreg1)
-        write_byte_data(0x23, ctrlreg4)     
+        self.write_byte_data(0x20, ctrlreg1)
+        self.write_byte_data(0x23, ctrlreg4)     
    
     def readX(self):
-        low  = read_byte_data(0x28)
-        high = read_byte_data(0x29)
-        return applyCal(mergeInts(low, high), self.x_scale, self.x_offset)
+        low  = self.read_byte_data(0x28)
+        high = self.read_byte_data(0x29)
+        return self.applyCal(mergeInts(low, high), self.x_scale, self.x_offset)
     def readY(self):
-        low  = read_byte_data(0x2A)
-        high = read_byte_data(0x2B)
-        return applyCal(mergeInts(low, high), self.y_scale, self.y_offset)
+        low  = self.read_byte_data(0x2A)
+        high = self.read_byte_data(0x2B)
+        return self.applyCal(mergeInts(low, high), self.y_scale, self.y_offset)
     def readZ(self):
-        low  = read_byte_data(0x2C)
-        high = read_byte_data(0x2D)
-        return applyCal(mergeInts(low, high), self.z_scale, self.z_offset)
+        low  = self.read_byte_data(0x2C)
+        high = self.read_byte_data(0x2D)
+        return self.applyCal(mergeInts(low, high), self.z_scale, self.z_offset)
 
 class LSM303_Mag(I2C_3Axis_Sensor):
     #TODO: override setParam(power, update, displacement)        
     def readCompX(self):
-        low  = read_byte_data(0x03)
-        high = read_byte_data(0x04)
-        return applyCal(mergeInts(low, high), self.x_scale, self.x_offset)
+        low  = self.read_byte_data(0x03)
+        high = self.read_byte_data(0x04)
+        return self.applyCal(mergeInts(low, high), self.x_scale, self.x_offset)
     def readCompY(self):
-        low  = read_byte_data(0x05)
-        high = read_byte_data(0x06)
-        return applyCal(mergeInts(low, high), self.y_scale, self.y_offset)
+        low  = self.read_byte_data(0x05)
+        high = self.read_byte_data(0x06)
+        return self.applyCal(mergeInts(low, high), self.y_scale, self.y_offset)
     def readCompZ(self):
-        low  = read_byte_data(0x07)
-        high = read_byte_data(0x08)
-        return applyCal(mergeInts(low, high), self.z_scale, self.z_offset)
+        low  = self.read_byte_data(0x07)
+        high = self.read_byte_data(0x08)
+        return self.applyCal(mergeInts(low, high), self.z_scale, self.z_offset)
 
 class L3GD20_Gyro(I2C_3Axis_Sensor):
     def setParam(power, update, deflection):
@@ -210,8 +210,8 @@ class L3GD20_Gyro(I2C_3Axis_Sensor):
         
 class L3GD20_Temp(I2C_Sensor):
     def read(self):
-        temp = read_byte_data(0x26)
-        return applyCal(temp, self.scale, self.offset) 
+        temp = self.read_byte_data(0x26)
+        return self.applyCal(temp, self.scale, self.offset) 
 
 class BME280_Pressure(I2C_Sensor):
     import bme280
