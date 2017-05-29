@@ -25,7 +25,7 @@ class I2C_Sensor: #OR read()
             self.dev_state = False 
         return data
 
-    def write_byte_data(self, command, value)
+    def write_byte_data(self, command, value):
        try:
             bus.write_byte_data(self,dev_addr, command, value)
             self.dev_state = True
