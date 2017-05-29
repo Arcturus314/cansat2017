@@ -15,7 +15,6 @@ class I2C_Sensor: #OR read()
 
         try:
             #smbus declaration
-            bus = smBus.SMBus(1) #smbus declared on CHIP I2C bus 1
             self.dev_state = True
         except IOError, err:
             self.dev_state = False
