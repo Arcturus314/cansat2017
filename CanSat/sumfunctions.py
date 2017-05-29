@@ -1,5 +1,5 @@
 import datastore
-def checksum_function();
+def checksum_function():
 global sumt1, sumt2, sumt3, sumt4, sumt5	
 	sumt1 = 0
 	sumt2 = 0
