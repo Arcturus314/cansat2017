@@ -156,16 +156,13 @@ def readBME280All(addr=DEVICE):
   return temperature/100.0,pressure/100.0,humidity
 
 def getTemp():
-    readBME280All()
-    return temperature
+    return readBME280All()[0]
 
 def getPressure():
-    readBME280All()
-    return pressure
+    return readBME280All()[1]
 
 def getHumidity():
-    readBME280All()
-    return humidity
+    return readBME280All()[2]
 
 def main():
 
