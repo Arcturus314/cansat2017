@@ -184,7 +184,7 @@ def get_env_status():
         report_error("BME280")
 def get_temp_camera_status():
     global temp_camera
-    status = temp_camera.getStatus()
+    status = temp_camera.getState()
     if status == False:
         report_error("D6T")
 
