@@ -514,7 +514,7 @@ boolean Adafruit_GPS::wakeup(void) {
 void setup(){
    Wire.begin(x);
    Wire.onRecieve(recieveEvent);
-   serial.begin(9600);
+  
 	
 }
 	Sim800l.begin(); // initializate the library. 
