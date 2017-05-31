@@ -20,7 +20,7 @@ products from Adafruit!
 Written by Limor Fried/Ladyada for Adafruit Industries.
 BSD license, check license.txt for more information
 All text above must be included in any redistribution
-****************************************/
+****************************************
 #if defined(__AVR__) && defined(USE_SW_SERIAL)
   // Only include software serial on AVR platforms (i.e. not on Due).
   #include <SoftwareSerial.h>
