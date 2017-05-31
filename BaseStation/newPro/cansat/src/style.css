@@ -1,0 +1,21 @@
+.root{
+	-fx-background-color: #D4D4D4;
+	
+}
+
+.openGraph{
+	-fx-background-color: #262626;
+	-fx-text-fill: #ffffff;
+}
+
+.openGraph:hover{
+	-fx-background-color: #000000;
+}
+
+.topMenu{
+       -fx-background-color: red;
+}
+
+.leftMenu{
+       -fx-background-color: #ffffff;
+}
