@@ -199,21 +199,21 @@ class L3GD20_Gyro(I2C_3Axis_Sensor):
     def readX(self):
         low  = self.read_byte_data(0x28)
         high = self.read_byte_data(0x29)
-        val = self.mergeints(low,high)
+        val = self.mergeInts(low,high)
         if val > 2047: val = val - 4096
         val = float(val)*0.00875
         return self.applyCal(val, self.x_scale, self.x_offset)
     def readY(self):
         low  = self.read_byte_data(0x2A)
         high = self.read_byte_data(0x2B)
-        val = self.mergeints(low,high)
+        val = self.mergeInts(low,high)
         if val > 2047: val = val - 4096
         val = float(val)*0.00875
         return self.applyCal(val, self.y_scale, self.y_offset)
     def readZ(self):
         low  = self.read_byte_data(0x2C)
         high = self.read_byte_data(0x2D)
-        val = self.mergeints(low,high)
+        val = self.mergeInts(low,high)
         if val > 2047: val = val - 4096
         val = float(val)*0.00875
         return self.applyCal(val, self.z_scale, self.z_offset)
