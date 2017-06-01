@@ -13,7 +13,7 @@
 
 #include <Adafruit_GPS.h>
 #include <SoftwareSerial.h>
-
+#include <Wire.h>
 // If you're using a GPS module:
 // Connect the GPS Power pin to 5V
 // Connect the GPS Ground pin to ground
@@ -52,8 +52,12 @@ boolean usingInterrupt = false;
 void useInterrupt(boolean); // Func prototype keeps Arduino 0023 happy
 
 void setup()  
+ 
+Wire.begin();
+Wire.onRecieve(recieveEvent);
+ 
 {
-    
+ 
   // connect at 115200 so we can read the GPS fast enough and echo without dropping chars
   // also spit it out
   Serial.begin(115200);
