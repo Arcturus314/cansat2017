@@ -37,7 +37,7 @@ class I2C_Sensor: #OR read()
             self.dev_state = False 
 
     def mergeInts(self, low, high):
-        return (low>>8) | high
+        return (high << 8) | low
     def applyCal(self, val):
         return float(val)*float(self.scale)+float(self.offset)
     def getState(self):
@@ -61,7 +61,7 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
     def applyCal(self, val, scale, offset):
         return float(val)*float(scale)+float(offset)
     def mergeInts(self, low, high):
-        return (low>>8) | high
+        return (high << 8) | low
 
     def read_byte_data(self, command):
         data = 0
@@ -199,16 +199,25 @@ class L3GD20_Gyro(I2C_3Axis_Sensor):
     def readX(self):
         low  = self.read_byte_data(0x28)
         high = self.read_byte_data(0x29)
-        return self.applyCal(self.mergeInts(low, high), self.x_scale, self.x_offset)
+        val = self.mergeints(low,high)
+        if val > 2047: val = val - 4096
+        val = float(val)*0.00875
+        return self.applyCal(val, self.x_scale, self.x_offset)
     def readY(self):
         low  = self.read_byte_data(0x2A)
         high = self.read_byte_data(0x2B)
-        return self.applyCal(self.mergeInts(low, high), self.y_scale, self.y_offset)
+        val = self.mergeints(low,high)
+        if val > 2047: val = val - 4096
+        val = float(val)*0.00875
+        return self.applyCal(val, self.y_scale, self.y_offset)
     def readZ(self):
         low  = self.read_byte_data(0x2C)
         high = self.read_byte_data(0x2D)
-        return self.applyCal(self.mergeInts(low, high), self.z_scale, self.z_offset)              
-        
+        val = self.mergeints(low,high)
+        if val > 2047: val = val - 4096
+        val = float(val)*0.00875
+        return self.applyCal(val, self.z_scale, self.z_offset)
+
 class L3GD20_Temp(I2C_Sensor):
     def read(self):
         temp = self.read_byte_data(0x26)
