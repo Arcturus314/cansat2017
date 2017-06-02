@@ -1,7 +1,7 @@
 import datastore
 
-scale_sum
-num
+scale_sum = 0
+num = 0 
 
 def find_accel_scale(power, update, deflection):
     global scale_sum,num
