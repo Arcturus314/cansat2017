@@ -13,7 +13,7 @@ def find_accel_scale(power, update, deflection):
     num = num + 1
     return vsum,scale
 
-def find_mean_scale()
+def find_mean_scale():
     global scale_sum,num
     return scale_sum/float(num)
 
