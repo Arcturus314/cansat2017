@@ -182,7 +182,7 @@ class LSM303_Accel(I2C_3Axis_Sensor):
         return self.applyCal(scale*self.mergeInts(low, high)/16, self.z_scale, self.z_offset)
 
 class LSM303_Mag(I2C_3Axis_Sensor):
-    def setParam(power, update, deflection):  
+    def setParam(self, power, update, deflection):  
         reg1 = 0b00010000 #data update rate
         reg2 = 0b00100000 #fsd
         reg3 = 0b00000011 #sleep mode
