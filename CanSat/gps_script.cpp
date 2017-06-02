@@ -147,7 +147,7 @@ void loop()                     // run over and over again
   String gpsspeed = String(GPS.speed)
   String gpsaltitude = String(GPS.altitude)
   String gpsvalidity = String(GPS.fix)
-  int gps_data[6] = {GPS.latitudeDegrees, GPS.longitudeDegrees, GPS.speed, GPS.altitude, GPS.fix}
+  int gps_data[6] = {gpslatdeg, gpslongdeg, gpsspeed, gpsaltitude, gpsvalidity}
  
   // if millis() or timer wraps around, we'll just reset it
   if (timer > millis())  timer = millis();
