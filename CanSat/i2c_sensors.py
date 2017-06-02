@@ -160,32 +160,63 @@ class LSM303_Accel(I2C_3Axis_Sensor):
         self.write_byte_data(0x23, ctrlreg4)     
    
     def readX(self):
+        scale = 0.1217612729
+        if self.getDefl() == False:
+            scale = 0.0097113970
         low  = self.read_byte_data(0x28)
         high = self.read_byte_data(0x29)
-        return self.applyCal(self.mergeInts(low, high)/16, self.x_scale, self.x_offset)
+        return self.applyCal(scale*self.mergeInts(low, high)/16, self.x_scale, self.x_offset)
     def readY(self):
+        scale = 0.1217612729
+        if self.getDefl() == False:
+            scale = 0.0097113970
         low  = self.read_byte_data(0x2A)
         high = self.read_byte_data(0x2B)
-        return self.applyCal(self.mergeInts(low, high)/16, self.y_scale, self.y_offset)
+        return self.applyCal(scale*self.mergeInts(low, high)/16, self.y_scale, self.y_offset)
     def readZ(self):
+        scale = 0.1217612729
+        if self.getDefl() == False:
+            scale = 0.0097113970
         low  = self.read_byte_data(0x2C)
         high = self.read_byte_data(0x2D)
-        return self.applyCal(self.mergeInts(low, high)/16, self.z_scale, self.z_offset)
+        return self.applyCal(scale*self.mergeInts(low, high)/16, self.z_scale, self.z_offset)
 
 class LSM303_Mag(I2C_3Axis_Sensor):
-    #TODO: override setParam(power, update, displacement)        
+    def setParam(power, update, deflection):  
+        reg1 = 0b00010000 #data update rate
+        reg2 = 0b00100000 #fsd
+        reg3 = 0b00000011 #sleep mode
+        if power == True:
+            reg3 = 0b00000000
+        if update == True:
+            reg1 = 0b00011000
+        if deflection == True:
+            reg2 = 0b11100000
+        self.write_byte_data(0x02,reg3)
+        self.write_byte_data(0x00,reg1)
+        self.write_byte_data(0x01,reg2)
+        
     def readX(self):
+        scale = 1.0/1055.0
+        if deflection == True:
+            scale = 1.0/230.0
         low  = self.read_byte_data(0x03)
         high = self.read_byte_data(0x04)
-        return self.applyCal(self.mergeInts(low, high), self.x_scale, self.x_offset)
+        return self.applyCal(scale*self.mergeInts(low, high)/16, self.x_scale, self.x_offset)
     def readY(self):
+        scale = 1.0/1055.0
+        if deflection == True:
+            scale = 1.0/230.0
         low  = self.read_byte_data(0x05)
         high = self.read_byte_data(0x06)
-        return self.applyCal(self.mergeInts(low, high), self.y_scale, self.y_offset)
+        return self.applyCal(scale*self.mergeInts(low, high)/16, self.y_scale, self.y_offset)
     def readZ(self):
+        scale = 1.0/1055.0
+        if deflection == True:
+            scale = 1.0/230.0
         low  = self.read_byte_data(0x07)
         high = self.read_byte_data(0x08)
-        return self.applyCal(self.mergeInts(low, high), self.z_scale, self.z_offset)
+        return self.applyCal(scale*self.mergeInts(low, high)/16, self.z_scale, self.z_offset)
 
 class L3GD20_Gyro(I2C_3Axis_Sensor):
     def setParam(self, power, update, deflection):

@@ -51,9 +51,9 @@ BME280_addr       = 0x77      #Can be 0x77 OR 0x76 depending on wiring
 D6T_addr          = 0x0A
 
 #Sensor class imports with power mode 1
-accelerometer = i2c_sensors.LSM303_Accel(LSM303_accel_addr, True, True, True)
-magnetometer  = i2c_sensors.LSM303_Mag(LSM303_mag_addr, True, True, True)
-gyroscope     = i2c_sensors.L3GD20_Gyro(L3GD20_addr, True, True, True)
+accelerometer = i2c_sensors.LSM303_Accel(LSM303_accel_addr, True, True, False)
+magnetometer  = i2c_sensors.LSM303_Mag(LSM303_mag_addr, True, True, False)
+gyroscope     = i2c_sensors.L3GD20_Gyro(L3GD20_addr, True, True, False)
 imu_temp      = i2c_sensors.L3GD20_Temp(L3GD20_addr)
 env_pressure  = i2c_sensors.BME280_Pressure(BME280_addr)
 env_humidity  = i2c_sensors.BME280_Humidity(BME280_addr)
