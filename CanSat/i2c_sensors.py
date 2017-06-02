@@ -39,7 +39,7 @@ class I2C_Sensor: #OR read()
     def mergeInts(self, low, high):
         val = (high << 8) | low
         if val >= 2**15:
-            val = -1*(2**16 - (val >> 1))
+            val = -1*(2**16 - val)
         return val
 
     def applyCal(self, val):
@@ -68,7 +68,7 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
     def mergeInts(self, low, high):
         val = (high << 8) | low
         if val >= 2**15:
-            val = -1*(2**16 - (val >> 1))
+            val = -1*(2**16 - (val))
         return val
 
     def read_byte_data(self, command):
