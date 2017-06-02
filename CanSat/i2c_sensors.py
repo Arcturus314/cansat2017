@@ -37,9 +37,11 @@ class I2C_Sensor: #OR read()
             self.dev_state = False 
 
     def mergeInts(self, low, high):
-        val (high << 8) | low
+        val = (high << 8) | low
         if val >= 2**15:
             val = -1*(2**16 - (val >> 1))
+        return val
+
     def applyCal(self, val):
         return float(val)*float(self.scale)+float(self.offset)
     def getState(self):
@@ -64,9 +66,10 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
         return float(val)*float(scale)+float(offset)
         return (high << 8) | low
     def mergeInts(self, low, high):
-        val (high << 8) | low
+        val = (high << 8) | low
         if val >= 2**15:
             val = -1*(2**16 - (val >> 1))
+        return val
 
     def read_byte_data(self, command):
         data = 0
