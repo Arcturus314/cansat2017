@@ -198,14 +198,14 @@ class LSM303_Mag(I2C_3Axis_Sensor):
         
     def readX(self):
         scale = 1.0/1055.0
-        if deflection == True:
+        if self.getDefl() == True:
             scale = 1.0/230.0
         low  = self.read_byte_data(0x03)
         high = self.read_byte_data(0x04)
         return self.applyCal(scale*self.mergeInts(low, high)/16, self.x_scale, self.x_offset)
     def readY(self):
         scale = 1.0/1055.0
-        if deflection == True:
+        if self.getDefl() == True:
             scale = 1.0/230.0
         low  = self.read_byte_data(0x05)
         high = self.read_byte_data(0x06)
