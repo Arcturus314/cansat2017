@@ -180,7 +180,7 @@ void loop()                     // run over and over again
   gpslondata[12] = 0xFF
   gpslondata[13] = 0xFF
  
-  int gpsalt[11];
+  int gpsalt[14];
   gpsalt[0] = 0x00
   gpsalt[1] = 0x00
   gpsalt[2] = gpsaltitude.charAt(0);
@@ -190,8 +190,11 @@ void loop()                     // run over and over again
   gpsalt[6] = gpsaltitude.charAt(4);
   gpsalt[7] = gpsaltitude.charAt(5);
   gpsalt[8] = gpsaltitude.charAt(6);
-  gpsalt[9] = 0xFF
-  gpsalt[10] = 0xFF
+  gpsalt[9] = gpsaltitude.charAt(7);
+  gpsalt[10] = gpsaltitude.charAt(8);
+  gpsalt[11] = gpsaltitude.charAt(9);
+  gpsalt[12] = 0xFF
+  gpsalt[13] = 0xFF
  
    
 void requestEvent() {
