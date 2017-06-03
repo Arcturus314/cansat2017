@@ -180,7 +180,34 @@ void loop()                     // run over and over again
   gpslondata[12] = 0xFF
   gpslondata[13] = 0xFF
  
+  int gpsalt[11];
+  gpsalt[0] = 0x00
+  gpsalt[1] = 0x00
+  gpsalt[2] = gpsaltitude.charAt(0);
+  gpsalt[3] = gpsaltitude.charAt(1);
+  gpsalt[4] = gpsaltitude.charAt(2);
+  gpsalt[5] = gpsaltitude.charAt(3);
+  gpsalt[6] = gpsaltitude.charAt(4);
+  gpsalt[7] = gpsaltitude.charAt(5);
+  gpsalt[8] = gpsaltitude.charAt(6);
+  gpsalt[9] = 0xFF
+  gpsalt[10] = 0xFF
  
+   void requestEvent() {
+
+  for (int i = 0; i < 15; i++) {
+
+    Wire.write(gpslatdeg[i]);
+
+  for (int i = 0; i < 15; i++) {
+
+    Wire.write(gpslondata[i]);
+   
+  for (int i = 0; i < 12; i++) {
+
+    Wire.write(gpsalt[i]);
+
+}
  
   // if millis() or timer wraps around, we'll just reset it
   if (timer > millis())  timer = millis();
