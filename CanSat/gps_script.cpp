@@ -142,12 +142,36 @@ void loop()                     // run over and over again
       return;  // we can fail to parse a sentence in which case we should just wait for another
   }
   
-  String gpslatdeg = String(GPS.latitudeDegrees)
-  String gpslongdeg = String(GPS.longitudeDegrees)
-  String gpsspeed = String(GPS.speed)
-  String gpsaltitude = String(GPS.altitude)
-  String gpsvalidity = String(GPS.fix)
-  int gps_data[6] = {gpslatdeg, gpslongdeg, gpsspeed, gpsaltitude, gpsvalidity}
+  String gpslatdeg = String(GPS.latitudeDegrees);
+  String gpslongdeg = String(GPS.longitudeDegrees);
+  String gpsspeed = String(GPS.speed);
+  String gpsaltitude = String(GPS.altitude);
+  String gpsvalidity = String(GPS.fix);
+ 
+  int gpslondata[10];
+  gpslatdeg[0] = gpslatdeg.charAt(0);
+  gpslatdeg[1] = gpslatdeg.charAt(1);
+  gpslatdeg[2] = gpslatdeg.charAt(2);
+  gpslatdeg[3] = gpslatdeg.charAt(3);
+  gpslatdeg[4] = gpslatdeg.charAt(4);
+  gpslatdeg[5] = gpslatdeg.charAt(5);
+  gpslatdeg[6] = gpslatdeg.charAt(6);
+  gpslatdeg[7] = gpslatdeg.charAt(7);
+  gpslatdeg[8] = gpslatdeg.charAt(8);
+  gpslatdeg[9] = gpslatdeg.charAt(9); 
+  
+  int gpslondata[10];
+  gpslondata[0] = gpslongdeg.charAt(0);
+  gpslondata[1] = gpslongdeg.charAt(1);
+  gpslondata[2] = gpslongdeg.charAt(2);
+  gpslondata[3] = gpslongdeg.charAt(3);
+  gpslondata[4] = gpslongdeg.charAt(4);
+  gpslondata[5] = gpslongdeg.charAt(5);
+  gpslondata[6] = gpslongdeg.charAt(6);
+  gpslondata[7] = gpslongdeg.charAt(7);
+  gpslondata[8] = gpslongdeg.charAt(8);
+  gpslondata[9] = gpslongdeg.charAt(9);
+ 
  
   // if millis() or timer wraps around, we'll just reset it
   if (timer > millis())  timer = millis();
