@@ -195,7 +195,10 @@ void loop()                     // run over and over again
  
    
 void requestEvent() {
-
+  Wire.write(gpsspeed);
+   
+  Wire.write(gpsvalidity);
+   
   for (int i = 0; i < 15; i++) {
 
     Wire.write(gpslatdeg[i]);
