@@ -193,7 +193,8 @@ void loop()                     // run over and over again
   gpsalt[9] = 0xFF
   gpsalt[10] = 0xFF
  
-   void requestEvent() {
+   
+void requestEvent() {
 
   for (int i = 0; i < 15; i++) {
 
