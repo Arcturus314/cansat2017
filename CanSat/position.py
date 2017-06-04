@@ -15,6 +15,10 @@ or_pos    = [(0,0,0,0)] #orientational position, composed of tuples (tilt, x-y, 
 accel_data = ((0,0,0,0),(0,0,0,0))#two accelerometer data points ((xVal, yVal, zVal, time), (...))
 mag_data = ((0,0,0,0),(0,0,0,0))#two magnetometer data points
 
+def init_data():
+    datastore.get_accelerometer_data(False)    
+    datastore.get_magnetometer_data(False)
+
 def get_current_trans_pos():
     return trans_pos(len(trans_pos)-1)
 def get_current_or_pos():
