@@ -16,9 +16,9 @@ accel_data = ((0,0,0,0),(0,0,0,0))#two accelerometer data points ((xVal, yVal, z
 mag_data = ((0,0,0,0),(0,0,0,0))#two magnetometer data points
 
 def get_current_trans_pos():
-    return trans_pos(trans_pos.len()-1)
+    return trans_pos(len(trans_pos)-1)
 def get_current_or_pos():
-    return or_pos(or_pos.len()-1)
+    return or_pos(len(or_pos)-1)
 
 def update_raw_data():
     global accel_data,mag_data

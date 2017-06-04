@@ -290,12 +290,11 @@ def get_temp_array_data(data):
 #position tracking methods that allow integration via trapezoidal method
 def get_accelerometer_diff():
     global accel_data
-    data = accel_data[accel_data.len()-1],get_accelerometer_data(False)
+    data = accel_data[len(accel_data)-1],get_accelerometer_data(False)
     return data
-
 def get_magnetometer_diff():
     global mag_data
-    data = mag_data[mag_data.len()-1],get_magnetometer_data(False)
+    data = mag_data[len(mag_data)-1],get_magnetometer_data(False)
     return data
 
 #overall control and read methods
