@@ -20,9 +20,9 @@ def init_data():
     datastore.get_magnetometer_data(False)
 
 def get_current_trans_pos():
-    return trans_pos(len(trans_pos)-1)
+    return trans_pos[len(trans_pos)-1]
 def get_current_or_pos():
-    return or_pos(len(or_pos)-1)
+    return or_pos[len(or_pos)-1]
 
 def update_raw_data():
     global accel_data,mag_data
