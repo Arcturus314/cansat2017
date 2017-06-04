@@ -54,7 +54,10 @@ def calc_trans_pos():
  
     trans_pos.append( (newX, newY, newZ, newTime) )
 
-
 def return_current_trans_pos():
     calc_trans_pos()
     return get_current_trans_pos()
+
+def testx():
+    while True:
+        return return_current_trans_pos()[0],return_current_trans_pos()[3]
