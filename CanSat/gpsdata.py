@@ -23,10 +23,23 @@ def read_ard():
 	return none 
 	if (ard_data[10] = == 0x00 && ard_data[11] == 0x00 && ard_data[22] = 0xFF && ard_data[23] = 0xFF):
       		try:
-			gps_data[2] = 
+			gps_data[2] = char()
 	except ValueError, err:
 		ard_err = True
 	return none
 
-	if 
+	(ard_data[24] = == 0x00 && ard_data[25] == 0x00 && ard_data[36] = 0xFF && ard_data[37] = 0xFF):
+      		try:
+			gps_data[3] = char()
+	except ValueError, err:
+		ard_err = True
+	return none
+ 
+	(ard_data[38] = == 0x00 && ard_data[39] == 0x00 && ard_data[50] = 0xFF && ard_data[51] = 0xFF):
+      		try:
+			gps_data[4] = int(
+	except ValueError, err:
+		ard_err = True
+	return none
+
 
