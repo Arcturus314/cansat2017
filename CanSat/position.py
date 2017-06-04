@@ -45,7 +45,7 @@ def calc_trans_pos():
     newY = get_current_trans_pos()[1]+yDiff
     newZ = get_current_trans_pos()[2]+zDiff
     
-    trans_pos.append(newX, newY, newZ, newTime)
+    trans_pos.append( (newX, newY, newZ, newTime) )
 
 
 def return_current_trans_pos():
