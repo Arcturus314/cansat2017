@@ -1,5 +1,8 @@
 import datastore
 import gpsdata
+import threading
+import time
+
 def send_data():
 	print ":",
 	print 0x00,
@@ -75,3 +78,6 @@ def send_data():
 	print ",",
 	print 0xff
 	
+t1 = treading.Thread(name ='send_data', target=send_data)
+t1.start()
+
