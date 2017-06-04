@@ -50,7 +50,7 @@ def get_speed():
 	global speed
 	speed = gps_data[1]
 
-def get_altitude():
+def get_latitude():
 	global latitude
 	latitude = gps_data[2]
 
