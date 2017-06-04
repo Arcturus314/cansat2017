@@ -78,6 +78,6 @@ def send_data():
 	print ",",
 	print 0xff
 	
-t1 = treading.Thread(name ='send_data', target=send_data)
-t1.start()
+t2 = treading.Thread(name ='send_data', target=send_data)
+t2.start()
 
