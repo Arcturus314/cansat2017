@@ -1,4 +1,5 @@
 import datastore
+import gpsdata
 def send_data():
 	print ":",
 	print 0x00,
@@ -68,7 +69,7 @@ def send_data():
 	print ",",
 	print 0x07,
 	for i in xrange(5):
-		print gps_data,
+		print gpsdata.gps_data,
 		print ",",
 	print 0xff,
 	print ",",
