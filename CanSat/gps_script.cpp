@@ -209,7 +209,7 @@ void loop()                     // run over and over again
   gpsvaliditydata[2] = gpsspeed
   gpsvaliditydata[3] = 0xFF
   gpsvaliditydata[4] = 0xFF
-void requestEvent() {
+void recieveEvent() {
   
   for (int i = 0; i < 6; i++) {
   Wire.write(gpsvaliditydata);
