@@ -43,23 +43,23 @@ def read_ard():
 	return none
 
 def get_altitude():
-	global altitude
+	global altitude, gps_data
 	altitude = gps_data[4]
 	
 def get_speed():
-	global speed
+	global speed, gps_data
 	speed = gps_data[1]
 
 def get_latitude():
-	global latitude
+	global latitude, gps_data
 	latitude = gps_data[2]
 
 def get_longitude():
-	global longitude
+	global longitude, gps_data
 	longitude = gps_data[3]
 
 def get_validity():
-	global validity
+	global validity, gps_data
 	validity = gps_data[0]
 
 
