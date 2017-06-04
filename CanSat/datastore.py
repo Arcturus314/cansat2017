@@ -287,6 +287,17 @@ def get_temp_array_data(data):
         return temp_array_data
     return val,time.time()
 
+#position tracking methods that allow integration via trapezoidal method
+def get_accelerometer_diff():
+    global accel_data
+    data = accel_data[accel_data.len()-1],get_accelerometer_data(False)
+    return data
+
+def get_magnetometer_diff():
+    global mag_data
+    data = mag_data[mag_data.len()-1],get_magnetometer_data(False)
+    return data
+
 #overall control and read methods
 def read_all_active(): #accel, mag, gyro, imu_temp, pres, hum, temp, tarr
     all_val = get_accelerometer_data(False)[0:2],get_magnetometer_data(False)[0:2],get_gyroscope_data(False)[0:2],get_imu_temp_data(False)[0],get_env_pressure_data(False)[0],get_env_humidity_data(False)[0],get_env_temp_data(False),get_temp_array_data(False)[0],time.time()
