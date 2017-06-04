@@ -42,4 +42,24 @@ def read_ard():
 		ard_err = True
 	return none
 
+def get_altitude():
+	global altitude
+	altitude = gps_data[4]
+	
+def get_speed():
+	global speed
+	speed = gps_data[1]
+
+def get_altitude():
+	global latitude
+	latitude = gps_data[2]
+
+def get_longitude():
+	global longitude
+	longitude = gps_data[3]
+
+def get_validity():
+	global validity
+	validity = gps_data[0]
+
 
