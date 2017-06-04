@@ -63,13 +63,14 @@ def send_data():
         print 0xff,
         print ",",
         print 0xff,
-	#print ":"
-	##print 0x07,
-	###print ",",
-	####print 0x07,
-	#print gps_data,
-	#####print ",",
-	#print 0xff,
-	#print ",",
-	#print 0xff
+	print ":"
+	print 0x07,
+	print ",",
+	print 0x07,
+	for i in xrange(5):
+		print gps_data,
+		print ",",
+	print 0xff,
+	print ",",
+	print 0xff
 	
