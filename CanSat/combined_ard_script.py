@@ -1,5 +1,6 @@
 import datastore
 import smbus
+import senddata
 
 def error_status():
 global xbee_err, l3gd20_err, lsm303_err, bme280_err, d6t_err
