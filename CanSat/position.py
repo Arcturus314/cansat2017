@@ -1,4 +1,5 @@
 import datastore
+import math
 
 #In order to track position, we need to find differences in time and position over short periods of time
 #To accomodate this we need to create lists which store cansat position and orientation over time
@@ -14,10 +15,12 @@ or_pos    = [(0,0,0,0)] #orientational position, composed of tuples (tilt, x-y, 
 
 accel_data = [[0,0,0,0],[0,0,0,0]]#two accelerometer data points ((xVal, yVal, zVal, time), (...))
 mag_data = [[0,0,0,0],[0,0,0,0]]#two magnetometer data points
+gyro_data = [[0,0,0,0],[0,0,0,0]]#two gyroscope data points
 
 def init_data():
     datastore.get_accelerometer_data(False)    
     datastore.get_magnetometer_data(False)
+    datastore.get_gyroscope_data(False)
 
 def get_current_trans_pos():
     return trans_pos[len(trans_pos)-1]
@@ -48,7 +51,7 @@ def update_raw_data():
 
 def trap_int(timenew, timeold, valnew, valold):
     #Trapezoidal integration method
-    return (timenew-timeold)*(valold)+0.5*(timenew-timeold)*(valnew-valold)
+     return (timenew-timeold)*(valold)+0.5*(timenew-timeold)*(valnew-valold)
 
 def calc_trans_pos():
     update_raw_data()
@@ -66,19 +69,32 @@ def calc_trans_pos():
     newY = get_current_trans_pos()[1]+yDiff
     newZ = get_current_trans_pos()[2]+zDiff
     
-#    print "xdiff: ",
-#    print xDiff,
-#    print "ydiff: ",
-#    print yDiff,
-#    print "zdiff: ",
-#    print zDiff
- 
     trans_pos.append( (newX, newY, newZ, newTime) )
+def calc_gyro_or():
+    update_raw_data()
+    global gyro_data
+    #This calculation can be done via a similar method
+    #to accelerometer translational position calc
+    xDiff = trap_int(gyro_data[1][3],gyro_data[0][3],gyro_data[1][0],gyro_data[0][0])
+    yDiff = trap_int(gyro_data[1][3],gyro_data[0][3],gyro_data[1][1],gyro_data[0][1])
+    zDiff = trap_int(gyro_data[1][3],gyro_data[0][3],gyro_data[1][2],gyro_data[0][2])
+    
+    newTime = gyro_data[0][3]
+
+    newX = get_current_or_pos()[0]+xDiff
+    newY = get_current_or_pos()[1]+yDiff
+    newZ = get_current_or_pos()[2]+zDiff
+    
+    or_pos.append( (newX, newY, newZ, newTime) )
+def calc_accel_or():
+    update_raw_data
+    pitch = math.atan((accel_data[0])/(accel_data[0]**2+accel_data[2]**2))
+    roll  = math.atan((accel_data[1])/(accel_data[1]**2+accel_data[2]**2))
+    return pitch,roll
 
 def return_current_trans_pos():
     calc_trans_pos()
     return get_current_trans_pos()
-
 def testx():
     while True:
         return return_current_trans_pos()[0],return_current_trans_pos()[3]
