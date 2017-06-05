@@ -12,505 +12,276 @@ int l3gd20_err;
 int bme280_err;
 int d6t_err;
 
-***********************************
-This is our GPS library
-Adafruit invests time and resources providing this open source code,
-please support Adafruit and open-source hardware by purchasing
-products from Adafruit!
-Written by Limor Fried/Ladyada for Adafruit Industries.
-BSD license, check license.txt for more information
-All text above must be included in any redistribution
-****************************************
-#if defined(__AVR__) && defined(USE_SW_SERIAL)
-  // Only include software serial on AVR platforms (i.e. not on Due).
-  #include <SoftwareSerial.h>
-#endif
+// Test code for Adafruit GPS modules using MTK3329/MTK3339 driver
+//
+// This code shows how to listen to the GPS module in an interrupt
+// which allows the program to have more 'freedom' - just parse
+// when a new NMEA sentence is available! Then access data when
+// desired.
+//
+// Tested and works great with the Adafruit Ultimate GPS module
+// using MTK33x9 chipset
+//    ------> http://www.adafruit.com/products/746
+// Pick one up today at the Adafruit electronics shop 
+// and help support open source hardware & software! -ada
+
 #include <Adafruit_GPS.h>
+#include <SoftwareSerial.h>
+#include <Wire.h>
+// If you're using a GPS module:
+// Connect the GPS Power pin to 5V
+// Connect the GPS Ground pin to ground
+// If using software serial (sketch example default):
+//   Connect the GPS TX (transmit) pin to Digital 3
+//   Connect the GPS RX (receive) pin to Digital 2
+// If using hardware serial (e.g. Arduino Mega):
+//   Connect the GPS TX (transmit) pin to Arduino RX1, RX2 or RX3
+//   Connect the GPS RX (receive) pin to matching TX1, TX2 or TX3
 
-// how long are max NMEA lines to parse?
-#define MAXLINELENGTH 120
+// If you're using the Adafruit GPS shield, change 
+// SoftwareSerial mySerial(3, 2); -> SoftwareSerial mySerial(8, 7);
+// and make sure the switch is set to SoftSerial
 
-// we double buffer: read one line in and leave one for the main program
-volatile char line1[MAXLINELENGTH];
-volatile char line2[MAXLINELENGTH];
-// our index into filling the current line
-volatile uint8_t lineidx=0;
-// pointers to the double buffers
-volatile char *currentline;
-volatile char *lastline;
-volatile boolean recvdflag;
-volatile boolean inStandbyMode;
+// If using software serial, keep this line enabled
+// (you can change the pin numbers to match your wiring):
+SoftwareSerial mySerial(4, 3);
+
+// If using hardware serial (e.g. Arduino Mega), comment out the
+// above SoftwareSerial line, and enable this line instead
+// (you can change the Serial number to match your wiring):
+
+//HardwareSerial mySerial = Serial1;
 
 
-boolean Adafruit_GPS::parse(char *nmea) {
-  // do checksum check
+Adafruit_GPS GPS(&mySerial);
 
-  // first look if we even have one
-  if (nmea[strlen(nmea)-4] == '*') {
-    uint16_t sum = parseHex(nmea[strlen(nmea)-3]) * 16;
-    sum += parseHex(nmea[strlen(nmea)-2]);
-    
-    // check checksum 
-    for (uint8_t i=2; i < (strlen(nmea)-4); i++) {
-      sum ^= nmea[i];
-    }
-    if (sum != 0) {
-      // bad checksum :(
-      return false;
-    }
-  }
-  int32_t degree;
-  long minutes;
-  char degreebuff[10];
-  // look for a few common sentences
-  if (strstr(nmea, "$GPGGA")) {
-    // found GGA
-    char *p = nmea;
-    // get time
-    p = strchr(p, ',')+1;
-    float timef = atof(p);
-    uint32_t time = timef;
-    hour = time / 10000;
-    minute = (time % 10000) / 100;
-    seconds = (time % 100);
 
-    milliseconds = fmod(timef, 1.0) * 1000;
+// Set GPSECHO to 'false' to turn off echoing the GPS data to the Serial console
+// Set to 'true' if you want to debug and listen to the raw GPS sentences. 
+#define GPSECHO  false
 
-    // parse out latitude
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      strncpy(degreebuff, p, 2);
-      p += 2;
-      degreebuff[2] = '\0';
-      degree = atol(degreebuff) * 10000000;
-      strncpy(degreebuff, p, 2); // minutes
-      p += 3; // skip decimal point
-      strncpy(degreebuff + 2, p, 4);
-      degreebuff[6] = '\0';
-      minutes = 50 * atol(degreebuff) / 3;
-      latitude_fixed = degree + minutes;
-      latitude = degree / 100000 + minutes * 0.000006F;
-      latitudeDegrees = (latitude-100*int(latitude/100))/60.0;
-      latitudeDegrees += int(latitude/100);
-    }
-    
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      if (p[0] == 'S') latitudeDegrees *= -1.0;
-      if (p[0] == 'N') lat = 'N';
-      else if (p[0] == 'S') lat = 'S';
-      else if (p[0] == ',') lat = 0;
-      else return false;
-    }
-    
-    // parse out longitude
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      strncpy(degreebuff, p, 3);
-      p += 3;
-      degreebuff[3] = '\0';
-      degree = atol(degreebuff) * 10000000;
-      strncpy(degreebuff, p, 2); // minutes
-      p += 3; // skip decimal point
-      strncpy(degreebuff + 2, p, 4);
-      degreebuff[6] = '\0';
-      minutes = 50 * atol(degreebuff) / 3;
-      longitude_fixed = degree + minutes;
-      longitude = degree / 100000 + minutes * 0.000006F;
-      longitudeDegrees = (longitude-100*int(longitude/100))/60.0;
-      longitudeDegrees += int(longitude/100);
-    }
-    
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      if (p[0] == 'W') longitudeDegrees *= -1.0;
-      if (p[0] == 'W') lon = 'W';
-      else if (p[0] == 'E') lon = 'E';
-      else if (p[0] == ',') lon = 0;
-      else return false;
-    }
-    
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      fixquality = atoi(p);
-    }
-    
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      satellites = atoi(p);
-    }
-    
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      HDOP = atof(p);
-    }
-    
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      altitude = atof(p);
-    }
-    
-    p = strchr(p, ',')+1;
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      geoidheight = atof(p);
-    }
-    return true;
-  }
-  if (strstr(nmea, "$GPRMC")) {
-   // found RMC
-    char *p = nmea;
+// this keeps track of whether we're using the interrupt
+// off by default!
+boolean usingInterrupt = false;
+void useInterrupt(boolean); // Func prototype keeps Arduino 0023 happy
 
-    // get time
-    p = strchr(p, ',')+1;
-    float timef = atof(p);
-    uint32_t time = timef;
-    hour = time / 10000;
-    minute = (time % 10000) / 100;
-    seconds = (time % 100);
-
-    milliseconds = fmod(timef, 1.0) * 1000;
-
-    p = strchr(p, ',')+1;
-    // Serial.println(p);
-    if (p[0] == 'A') 
-      fix = true;
-    else if (p[0] == 'V')
-      fix = false;
-    else
-      return false;
-
-    // parse out latitude
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      strncpy(degreebuff, p, 2);
-      p += 2;
-      degreebuff[2] = '\0';
-      long degree = atol(degreebuff) * 10000000;
-      strncpy(degreebuff, p, 2); // minutes
-      p += 3; // skip decimal point
-      strncpy(degreebuff + 2, p, 4);
-      degreebuff[6] = '\0';
-      long minutes = 50 * atol(degreebuff) / 3;
-      latitude_fixed = degree + minutes;
-      latitude = degree / 100000 + minutes * 0.000006F;
-      latitudeDegrees = (latitude-100*int(latitude/100))/60.0;
-      latitudeDegrees += int(latitude/100);
-    }
-    
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      if (p[0] == 'S') latitudeDegrees *= -1.0;
-      if (p[0] == 'N') lat = 'N';
-      else if (p[0] == 'S') lat = 'S';
-      else if (p[0] == ',') lat = 0;
-      else return false;
-    }
-    
-    // parse out longitude
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      strncpy(degreebuff, p, 3);
-      p += 3;
-      degreebuff[3] = '\0';
-      degree = atol(degreebuff) * 10000000;
-      strncpy(degreebuff, p, 2); // minutes
-      p += 3; // skip decimal point
-      strncpy(degreebuff + 2, p, 4);
-      degreebuff[6] = '\0';
-      minutes = 50 * atol(degreebuff) / 3;
-      longitude_fixed = degree + minutes;
-      longitude = degree / 100000 + minutes * 0.000006F;
-      longitudeDegrees = (longitude-100*int(longitude/100))/60.0;
-      longitudeDegrees += int(longitude/100);
-    }
-    
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      if (p[0] == 'W') longitudeDegrees *= -1.0;
-      if (p[0] == 'W') lon = 'W';
-      else if (p[0] == 'E') lon = 'E';
-      else if (p[0] == ',') lon = 0;
-      else return false;
-    }
-    // speed
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      speed = atof(p);
-    }
-    
-    // angle
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      angle = atof(p);
-    }
-    
-    p = strchr(p, ',')+1;
-    if (',' != *p)
-    {
-      uint32_t fulldate = atof(p);
-      day = fulldate / 10000;
-      month = (fulldate % 10000) / 100;
-      year = (fulldate % 100);
-    }
-    // we dont parse the remaining, yet!
-    return true;
-  }
-
-  return false;
-}
-
-char Adafruit_GPS::read(void) {
-  char c = 0;
-  
-  if (paused) return c;
-
-#if defined(__AVR__) && defined(USE_SW_SERIAL)
-  if(gpsSwSerial) {
-    if(!gpsSwSerial->available()) return c;
-    c = gpsSwSerial->read();
-  } else 
-#endif
-  {
-    if(!gpsHwSerial->available()) return c;
-    c = gpsHwSerial->read();
-  }
-
-  //Serial.print(c);
-
-//  if (c == '$') {         //please don't eat the dollar sign - rdl 9/15/14
-//    currentline[lineidx] = 0;
-//    lineidx = 0;
-//  }
-  if (c == '\n') {
-    currentline[lineidx] = 0;
-
-    if (currentline == line1) {
-      currentline = line2;
-      lastline = line1;
-    } else {
-      currentline = line1;
-      lastline = line2;
-    }
-
-    //Serial.println("----");
-    //Serial.println((char *)lastline);
-    //Serial.println("----");
-    lineidx = 0;
-    recvdflag = true;
-  }
-
-  currentline[lineidx++] = c;
-  if (lineidx >= MAXLINELENGTH)
-    lineidx = MAXLINELENGTH-1;
-
-  return c;
-}
-
-#if defined(__AVR__) && defined(USE_SW_SERIAL)
-// Constructor when using SoftwareSerial or NewSoftSerial
-#if ARDUINO >= 100
-Adafruit_GPS::Adafruit_GPS(SoftwareSerial *ser)
-#else
-Adafruit_GPS::Adafruit_GPS(NewSoftSerial *ser) 
-#endif
+void setup()  
+ 
+Wire.begin();
+Wire.onRecieve(recieveEvent);
+ 
 {
-  common_init();     // Set everything to common state, then...
-  gpsSwSerial = ser; // ...override gpsSwSerial with value passed.
+ 
+  // connect at 115200 so we can read the GPS fast enough and echo without dropping chars
+  // also spit it out
+  Serial.begin(115200);
+  Serial.println("Adafruit GPS library basic test!");
+
+  // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
+  GPS.begin(9600);
+  
+  // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
+  //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  // uncomment this line to turn on only the "minimum recommended" data
+  //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
+  // For parsing data, we don't suggest using anything but either RMC only or RMC+GGA since
+  // the parser doesn't care about other sentences at this time
+  
+  // Set the update rate
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);   // 1 Hz update rate
+  // For the parsing code to work nicely and have time to sort thru the data, and
+  // print it out we don't suggest using anything higher than 1 Hz
+
+  // Request updates on antenna status, comment out to keep quiet
+  GPS.sendCommand(PGCMD_ANTENNA);
+
+  // the nice thing about this code is you can have a timer0 interrupt go off
+  // every 1 millisecond, and read data from the GPS for you. that makes the
+  // loop code a heck of a lot easier!
+  useInterrupt(true);
+
+  delay(1000);
+  // Ask for firmware version
+  mySerial.println(PMTK_Q_RELEASE);
 }
+
+
+// Interrupt is called once a millisecond, looks for any new GPS data, and stores it
+SIGNAL(TIMER0_COMPA_vect) {
+  char c = GPS.read();
+  // if you want to debug, this is a good time to do it!
+#ifdef UDR0
+  if (GPSECHO)
+    if (c) UDR0 = c;  
+    // writing direct to UDR0 is much much faster than Serial.print 
+    // but only one character can be written at a time. 
 #endif
-
-// Constructor when using HardwareSerial
-Adafruit_GPS::Adafruit_GPS(HardwareSerial *ser) {
-  common_init();  // Set everything to common state, then...
-  gpsHwSerial = ser; // ...override gpsHwSerial with value passed.
 }
 
-// Initialization code used by all constructor types
-void Adafruit_GPS::common_init(void) {
-#if defined(__AVR__) && defined(USE_SW_SERIAL)
-  gpsSwSerial = NULL; // Set both to NULL, then override correct
-#endif
-  gpsHwSerial = NULL; // port pointer in corresponding constructor
-  recvdflag   = false;
-  paused      = false;
-  lineidx     = 0;
-  currentline = line1;
-  lastline    = line2;
-
-  hour = minute = seconds = year = month = day =
-    fixquality = satellites = 0; // uint8_t
-  lat = lon = mag = 0; // char
-  fix = false; // boolean
-  milliseconds = 0; // uint16_t
-  latitude = longitude = geoidheight = altitude =
-    speed = angle = magvariation = HDOP = 0.0; // float
+void useInterrupt(boolean v) {
+  if (v) {
+    // Timer0 is already used for millis() - we'll just interrupt somewhere
+    // in the middle and call the "Compare A" function above
+    OCR0A = 0xAF;
+    TIMSK0 |= _BV(OCIE0A);
+    usingInterrupt = true;
+  } else {
+    // do not call the interrupt function COMPA anymore
+    TIMSK0 &= ~_BV(OCIE0A);
+    usingInterrupt = false;
+  }
 }
 
-void Adafruit_GPS::begin(uint32_t baud)
+uint32_t timer = millis();
+void loop()                     // run over and over again
 {
-#if defined(__AVR__) && defined(USE_SW_SERIAL)
-  if(gpsSwSerial) 
-    gpsSwSerial->begin(baud);
-  else 
-#endif
-    gpsHwSerial->begin(baud);
+  // in case you are not using the interrupt above, you'll
+  // need to 'hand query' the GPS, not suggested :(
+  if (! usingInterrupt) {
+    // read data from the GPS in the 'main loop'
+    char c = GPS.read();
+    // if you want to debug, this is a good time to do it!
+    if (GPSECHO)
+      if (c) Serial.print(c);
+  }
+  
+  // if a sentence is received, we can check the checksum, parse it...
+  if (GPS.newNMEAreceived()) {
+    // a tricky thing here is if we print the NMEA sentence, or data
+    // we end up not listening and catching other sentences! 
+    // so be very wary if using OUTPUT_ALLDATA and trytng to print out data
+    //Serial.println(GPS.lastNMEA());   // this also sets the newNMEAreceived() flag to false
+  
+    if (!GPS.parse(GPS.lastNMEA()))   // this also sets the newNMEAreceived() flag to false
+      return;  // we can fail to parse a sentence in which case we should just wait for another
+  }
+  
+  String gpslatdeg = String(GPS.latitudeDegrees);
+  String gpslongdeg = String(GPS.longitudeDegrees);
+  String gpsspeed = String(GPS.speed);
+  String gpsaltitude = String(GPS.altitude);
+  String gpsvalidity = String(GPS.fix);
+ 
+  int gpslatdeg[14];
+  gpslatdeg[0] = 0x00
+  gpslatdeg[1] = 0x00
+  gpslatdeg[2] = gpslatdeg.charAt(0);
+  gpslatdeg[3] = gpslatdeg.charAt(1);
+  gpslatdeg[4] = gpslatdeg.charAt(2);
+  gpslatdeg[5] = gpslatdeg.charAt(3);
+  gpslatdeg[6] = gpslatdeg.charAt(4);
+  gpslatdeg[7] = gpslatdeg.charAt(5);
+  gpslatdeg[8] = gpslatdeg.charAt(6);
+  gpslatdeg[9] = gpslatdeg.charAt(7);
+  gpslatdeg[10] = gpslatdeg.charAt(8);
+  gpslatdeg[11] = gpslatdeg.charAt(9); 
+  gpslatdeg[12] = 0xFF
+  gpslatdeg[13] = 0xFF
+ 
+  int gpslondata[14];
+  gpslondata[0] = 0x00
+  gpslondata[1] = 0x00
+  gpslondata[2] = gpslongdeg.charAt(0);
+  gpslondata[3] = gpslongdeg.charAt(1);
+  gpslondata[4] = gpslongdeg.charAt(2);
+  gpslondata[5] = gpslongdeg.charAt(3);
+  gpslondata[6] = gpslongdeg.charAt(4);
+  gpslondata[7] = gpslongdeg.charAt(5);
+  gpslondata[8] = gpslongdeg.charAt(6);
+  gpslondata[9] = gpslongdeg.charAt(7);
+  gpslondata[10] = gpslongdeg.charAt(8);
+  gpslondata[11] = gpslongdeg.charAt(9);
+  gpslondata[12] = 0xFF
+  gpslondata[13] = 0xFF
+ 
+  int gpsalt[14];
+  gpsalt[0] = 0x00
+  gpsalt[1] = 0x00
+  gpsalt[2] = gpsaltitude.charAt(0);
+  gpsalt[3] = gpsaltitude.charAt(1);
+  gpsalt[4] = gpsaltitude.charAt(2);
+  gpsalt[5] = gpsaltitude.charAt(3);
+  gpsalt[6] = gpsaltitude.charAt(4);
+  gpsalt[7] = gpsaltitude.charAt(5);
+  gpsalt[8] = gpsaltitude.charAt(6);
+  gpsalt[9] = gpsaltitude.charAt(7);
+  gpsalt[10] = gpsaltitude.charAt(8);
+  gpsalt[11] = gpsaltitude.charAt(9);
+  gpsalt[12] = 0xFF
+  gpsalt[13] = 0xFF
+ 
+  int gpsvaliditydata[5]; 
+  gpsvaliditydata[0] = 0x00
+  gpsvaliditydata[1] = 0x00
+  gpsvaliditydata[2] = gpsvalidity
+  gpsvaliditydata[3] = 0xFF
+  gpsvaliditydata[4] = 0xFF
+   
+  int gpsspeeddata[5]; 
+  gpsvaliditydata[0] = 0x00
+  gpsvaliditydata[1] = 0x00
+  gpsvaliditydata[2] = gpsspeed
+  gpsvaliditydata[3] = 0xFF
+  gpsvaliditydata[4] = 0xFF
+	  
+void requestEvent() {
+  
+  for (int i = 0; i < 6; i++) {
+  Wire.write(gpsvaliditydata);
+   
+  for (int i = 0; i < 6; i++) {
+  Wire.write(gpsspeeddata);
+   
+  for (int i = 0; i < 15; i++) {
 
-  delay(10);
+    Wire.write(gpslatdeg[i]);
+
+  for (int i = 0; i < 15; i++) {
+
+    Wire.write(gpslondata[i]);
+   
+  for (int i = 0; i < 12; i++) {
+
+    Wire.write(gpsalt[i]);
+
 }
+ 
+  // if millis() or timer wraps around, we'll just reset it
+  if (timer > millis())  timer = millis();
 
-void Adafruit_GPS::sendCommand(const char *str) {
-#if defined(__AVR__) && defined(USE_SW_SERIAL)
-  if(gpsSwSerial) 
-    gpsSwSerial->println(str);
-  else    
-#endif
-    gpsHwSerial->println(str);
-}
-
-boolean Adafruit_GPS::newNMEAreceived(void) {
-  return recvdflag;
-}
-
-void Adafruit_GPS::pause(boolean p) {
-  paused = p;
-}
-
-char *Adafruit_GPS::lastNMEA(void) {
-  recvdflag = false;
-  return (char *)lastline;
-}
-
-// read a Hex value and return the decimal equivalent
-uint8_t Adafruit_GPS::parseHex(char c) {
-    if (c < '0')
-      return 0;
-    if (c <= '9')
-      return c - '0';
-    if (c < 'A')
-       return 0;
-    if (c <= 'F')
-       return (c - 'A')+10;
-    // if (c > 'F')
-    return 0;
-}
-
-boolean Adafruit_GPS::waitForSentence(const char *wait4me, uint8_t max) {
-  char str[20];
-
-  uint8_t i=0;
-  while (i < max) {
-    if (newNMEAreceived()) { 
-      char *nmea = lastNMEA();
-      strncpy(str, nmea, 20);
-      str[19] = 0;
-      i++;
-
-      if (strstr(str, wait4me))
-	return true;
+  // approximately every 2 seconds or so, print out the current stats
+  if (millis() - timer > 2000) { 
+    timer = millis(); // reset the timer
+    
+    Serial.print("\nTime: ");
+    Serial.print(GPS.hour, DEC); Serial.print(':');
+    Serial.print(GPS.minute, DEC); Serial.print(':');
+    Serial.print(GPS.seconds, DEC); Serial.print('.');
+    Serial.println(GPS.milliseconds);
+    Serial.print("Date: ");
+    Serial.print(GPS.day, DEC); Serial.print('/');
+    Serial.print(GPS.month, DEC); Serial.print("/20");
+    Serial.println(GPS.year, DEC);
+    Serial.print("Fix: "); Serial.print((int)GPS.fix);
+    Serial.print(" quality: "); Serial.println((int)GPS.fixquality); 
+    if (GPS.fix) {
+    Serial.print("Location: ");
+    Serial.print(GPS.latitude, 4); Serial.print(GPS.lat);
+    Serial.print(", "); 
+    Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
+    Serial.print("Location (in degrees, works with Google Maps): ");
+    Serial.print(GPS.latitudeDegrees, 4);
+    Serial.print(", "); 
+    Serial.println(GPS.longitudeDegrees, 4);
+      
+    Serial.print("Speed (knots): "); Serial.println(GPS.speed);
+    Serial.print("Angle: "); Serial.println(GPS.angle);
+    Serial.print("Altitude: "); Serial.println(GPS.altitude);
+    Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
     }
   }
-
-  return false;
 }
-
-boolean Adafruit_GPS::LOCUS_StartLogger(void) {
-  sendCommand(PMTK_LOCUS_STARTLOG);
-  recvdflag = false;
-  return waitForSentence(PMTK_LOCUS_STARTSTOPACK);
-}
-
-boolean Adafruit_GPS::LOCUS_StopLogger(void) {
-  sendCommand(PMTK_LOCUS_STOPLOG);
-  recvdflag = false;
-  return waitForSentence(PMTK_LOCUS_STARTSTOPACK);
-}
-
-boolean Adafruit_GPS::LOCUS_ReadStatus(void) {
-  sendCommand(PMTK_LOCUS_QUERY_STATUS);
-  
-  if (! waitForSentence("$PMTKLOG"))
-    return false;
-
-  char *response = lastNMEA();
-  uint16_t parsed[10];
-  uint8_t i;
-  
-  for (i=0; i<10; i++) parsed[i] = -1;
-  
-  response = strchr(response, ',');
-  for (i=0; i<10; i++) {
-    if (!response || (response[0] == 0) || (response[0] == '*')) 
-      break;
-    response++;
-    parsed[i]=0;
-    while ((response[0] != ',') && 
-	   (response[0] != '*') && (response[0] != 0)) {
-      parsed[i] *= 10;
-      char c = response[0];
-      if (isDigit(c))
-        parsed[i] += c - '0';
-      else
-        parsed[i] = c;
-      response++;
-    }
-  }
-  LOCUS_serial = parsed[0];
-  LOCUS_type = parsed[1];
-  if (isAlpha(parsed[2])) {
-    parsed[2] = parsed[2] - 'a' + 10; 
-  }
-  LOCUS_mode = parsed[2];
-  LOCUS_config = parsed[3];
-  LOCUS_interval = parsed[4];
-  LOCUS_distance = parsed[5];
-  LOCUS_speed = parsed[6];
-  LOCUS_status = !parsed[7];
-  LOCUS_records = parsed[8];
-  LOCUS_percent = parsed[9];
-
-  return true;
-}
-
-// Standby Mode Switches
-boolean Adafruit_GPS::standby(void) {
-  if (inStandbyMode) {
-    return false;  // Returns false if already in standby mode, so that you do not wake it up by sending commands to GPS
-  }
-  else {
-    inStandbyMode = true;
-    sendCommand(PMTK_STANDBY);
-    //return waitForSentence(PMTK_STANDBY_SUCCESS);  // don't seem to be fast enough to catch the message, or something else just is not working
-    return true;
-  }
-}
-
-boolean Adafruit_GPS::wakeup(void) {
-  if (inStandbyMode) {
-   inStandbyMode = false;
-    sendCommand("");  // send byte to wake it up
-    return waitForSentence(PMTK_AWAKE);
-  }
-  else {
-      return false;  // Returns false if not in standby mode, nothing to wakeup
-  }
-}
-
+	  
 void setup(){
    Wire.begin(x);
    Wire.onRecieve(recieveEvent);
