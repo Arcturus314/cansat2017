@@ -88,8 +88,8 @@ def calc_gyro_or():
     or_pos.append( (newX, newY, newZ, newTime) )
 def calc_accel_or():
     update_raw_data
-    pitch = math.atan((accel_data[0])/(accel_data[0]**2+accel_data[2]**2))
-    roll  = math.atan((accel_data[1])/(accel_data[1]**2+accel_data[2]**2))
+    pitch = math.atan((accel_data[1][0])/(accel_data[1][0]**2+accel_data[1][2]**2))
+    roll  = math.atan((accel_data[1][1])/(accel_data[1][1]**2+accel_data[1][2]**2))
     return pitch,roll
 
 def return_current_trans_pos():
