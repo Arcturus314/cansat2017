@@ -289,7 +289,7 @@ void setup(){
   
 	
 }
-void reciveEvent();
+void recieveEvent();
 	Wire.read()
 	Sim800l.begin(); // initializate the library. 
   if ( xbee_err = 1) {
