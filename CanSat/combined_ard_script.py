@@ -83,5 +83,5 @@ def get_longitude():
 
 def get_validity():
 	global validity, gps_data
-validity = gps_data[0]
+	validity = gps_data[0]
 
