@@ -1,5 +1,6 @@
 import datastore
 import math
+import fusion
 
 #In order to track position, we need to find differences in time and position over short periods of time
 #To accomodate this we need to create lists which store cansat position and orientation over time
@@ -17,10 +18,15 @@ accel_data = [[0,0,0,0],[0,0,0,0]]#two accelerometer data points ((xVal, yVal, z
 mag_data = [[0,0,0,0],[0,0,0,0]]#two magnetometer data points
 gyro_data = [[0,0,0,0],[0,0,0,0]]#two gyroscope data points
 
+motion_track = fusion.Fusion()
+
 def init_data():
     datastore.get_accelerometer_data(False)    
     datastore.get_magnetometer_data(False)
     datastore.get_gyroscope_data(False)
+def make_tuple(in_arr):
+    #returns a tuple from the first three indices of the given array
+    return in_arr[0],in_arr[1],in_arr[2]
 
 def get_current_trans_pos():
     return trans_pos[len(trans_pos)-1]
@@ -53,6 +59,7 @@ def update_raw_data():
         gyro_data[i][2]   = datastore.get_gyroscope_diff()[i][1]
         gyro_data[i][3]   = datastore.get_gyroscope_diff()[i][3]
 
+    motion_track.update(make_tuple(accel_data),make_tuple(gyro_data),make_tuple(mag_data))
     return None
 
 def trap_int(timenew, timeold, valnew, valold):
@@ -104,6 +111,8 @@ def return_current_trans_pos():
 def return_current_or_pos():
     calc_gyro_or()
     return get_current_or_pos()
-def testx():
-    while True:
-        return return_current_trans_pos()[0],return_current_trans_pos()[3]
+
+def get_orientation():
+    update_raw_data()
+    return motion_track.heading, motion_track.pitch, motion_track.roll
+
