@@ -69,6 +69,7 @@ void setup()
  
 Wire.begin();
 Wire.onRecieve(recieveEvent);
+Wire.onRequest(requestEvent);
  
 {
  
