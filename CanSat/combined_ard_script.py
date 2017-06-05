@@ -20,7 +20,7 @@ d6t_err = 0x00
 	if datastore.get_errors()[3] = true:
 		bme280_err= bme280_err|0x05
 	if datastore.get_errors()[4] = true:
-d6t_err = d6t_err|0x06
+		d6t_err = d6t_err|0x06
 
 def read_ard():
 	smbus = smbus(1)
