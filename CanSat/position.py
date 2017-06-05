@@ -12,8 +12,8 @@ import datastore
 trans_pos = [(0,0,0,0)] #translational position, composed of tuples (x,y,time)
 or_pos    = [(0,0,0,0)] #orientational position, composed of tuples (tilt, x-y, x-y t, time)
 
-accel_data = ((0,0,0,0),(0,0,0,0))#two accelerometer data points ((xVal, yVal, zVal, time), (...))
-mag_data = ((0,0,0,0),(0,0,0,0))#two magnetometer data points
+accel_data = [[0,0,0,0],[0,0,0,0]]#two accelerometer data points ((xVal, yVal, zVal, time), (...))
+mag_data = [[0,0,0,0],[0,0,0,0]]#two magnetometer data points
 
 def init_data():
     datastore.get_accelerometer_data(False)    
