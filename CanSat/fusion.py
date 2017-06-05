@@ -58,7 +58,7 @@ class Fusion(object):
         ax, ay, az = accel                  # Units G (but later normalised)
         gx, gy, gz = (radians(x) for x in gyro) # Units deg/s
         if self.start_time is None:
-            self.start_time = time.ticks_us()  # First run
+            self.start_time = ticks_us()  # First run
         q1, q2, q3, q4 = (self.q[x] for x in range(4))   # short name local variable for readability
         # Auxiliary variables to avoid repeated arithmetic
         _2q1 = 2 * q1
@@ -103,7 +103,7 @@ class Fusion(object):
 
         # Integrate to yield quaternion
         deltat = elapsed_micros(self.start_time) / 1000000
-        self.start_time = time.ticks_us()
+        self.start_time = ticks_us()
         q1 += qDot1 * deltat
         q2 += qDot2 * deltat
         q3 += qDot3 * deltat
@@ -120,7 +120,7 @@ class Fusion(object):
         ax, ay, az = accel                  # Units irrelevant (normalised)
         gx, gy, gz = (radians(x) for x in gyro)  # Units deg/s
         if self.start_time is None:
-            self.start_time = time.ticks_us()  # First run
+            self.start_time = ticks_us()  # First run
         q1, q2, q3, q4 = (self.q[x] for x in range(4))   # short name local variable for readability
         # Auxiliary variables to avoid repeated arithmetic
         _2q1 = 2 * q1
@@ -202,7 +202,7 @@ class Fusion(object):
 
         # Integrate to yield quaternion
         deltat = elapsed_micros(self.start_time) / 1000000
-        self.start_time = time.ticks_us()
+        self.start_time = ticks_us()
         q1 += qDot1 * deltat
         q2 += qDot2 * deltat
         q3 += qDot3 * deltat
