@@ -59,7 +59,7 @@ def update_raw_data():
         gyro_data[i][2]   = datastore.get_gyroscope_diff()[i][1]
         gyro_data[i][3]   = datastore.get_gyroscope_diff()[i][3]
 
-    motion_track.update(make_tuple(accel_data),make_tuple(gyro_data),make_tuple(mag_data))
+    motion_track.update(make_tuple(accel_data[1]),make_tuple(gyro_data[1]),make_tuple(mag_data[1]))
     return None
 
 def trap_int(timenew, timeold, valnew, valold):
