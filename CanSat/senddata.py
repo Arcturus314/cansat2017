@@ -2,7 +2,7 @@ import datastore
 import gpsdata
 import threading
 import time
-
+import combined_ard_script
 def send_data():
 	print ":",
 	print 0x00,
