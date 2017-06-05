@@ -289,6 +289,8 @@ void setup(){
   
 	
 }
+void reciveEvent();
+	Wire.read()
 	Sim800l.begin(); // initializate the library. 
   if ( xbee_err = 1) {
 	text="1";  //text for the message. 
