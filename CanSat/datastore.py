@@ -291,13 +291,11 @@ def get_temp_array_data(data):
 def get_accelerometer_diff():
     global accel_data
     data_old = accel_data[len(accel_data)-1]
-    time.sleep(0.01)
     data_new = get_accelerometer_data(False)
     return data_old,data_new
 def get_magnetometer_diff():
     global mag_data
     data = mag_data[len(mag_data)-1],get_magnetometer_data(False)
-    time.sleep(0.01)
     return data
 
 #overall control and read methods
