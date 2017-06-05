@@ -156,7 +156,8 @@ void loop()                     // run over and over again
     if (!GPS.parse(GPS.lastNMEA()))   // this also sets the newNMEAreceived() flag to false
       return;  // we can fail to parse a sentence in which case we should just wait for another
   }
-  
+  if (GPS.fix) {
+	  
   String gpslatdeg = String(GPS.latitudeDegrees);
   String gpslongdeg = String(GPS.longitudeDegrees);
   String gpsspeed = String(GPS.speed);
@@ -225,22 +226,30 @@ void loop()                     // run over and over again
   gpsvaliditydata[3] = 0xFF
   gpsvaliditydata[4] = 0xFF
 	  
+  }
+	
 void requestEvent() {
   
   for (int i = 0; i < 6; i++) {
   Wire.write(gpsvaliditydata);
-   
+	  
+}
+	
   for (int i = 0; i < 6; i++) {
   Wire.write(gpsspeeddata);
-   
+  
+}
   for (int i = 0; i < 15; i++) {
 
     Wire.write(gpslatdeg[i]);
 
+}
+	
   for (int i = 0; i < 15; i++) {
 
     Wire.write(gpslondata[i]);
    
+}
   for (int i = 0; i < 12; i++) {
 
     Wire.write(gpsalt[i]);
@@ -248,47 +257,41 @@ void requestEvent() {
 }
  
   // if millis() or timer wraps around, we'll just reset it
-  if (timer > millis())  timer = millis();
+ // if (timer > millis())  timer = millis();
 
   // approximately every 2 seconds or so, print out the current stats
-  if (millis() - timer > 2000) { 
-    timer = millis(); // reset the timer
+ // if (millis() - timer > 2000) { 
+   // timer = millis(); // reset the timer
     
-    Serial.print("\nTime: ");
-    Serial.print(GPS.hour, DEC); Serial.print(':');
-    Serial.print(GPS.minute, DEC); Serial.print(':');
-    Serial.print(GPS.seconds, DEC); Serial.print('.');
-    Serial.println(GPS.milliseconds);
-    Serial.print("Date: ");
-    Serial.print(GPS.day, DEC); Serial.print('/');
-    Serial.print(GPS.month, DEC); Serial.print("/20");
-    Serial.println(GPS.year, DEC);
-    Serial.print("Fix: "); Serial.print((int)GPS.fix);
-    Serial.print(" quality: "); Serial.println((int)GPS.fixquality); 
-    if (GPS.fix) {
-    Serial.print("Location: ");
-    Serial.print(GPS.latitude, 4); Serial.print(GPS.lat);
-    Serial.print(", "); 
-    Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
-    Serial.print("Location (in degrees, works with Google Maps): ");
-    Serial.print(GPS.latitudeDegrees, 4);
-    Serial.print(", "); 
-    Serial.println(GPS.longitudeDegrees, 4);
+   // Serial.print("\nTime: ");
+    //Serial.print(GPS.hour, DEC); Serial.print(':');
+    //Serial.print(GPS.minute, DEC); Serial.print(':');
+    //Serial.print(GPS.seconds, DEC); Serial.print('.');
+    //Serial.println(GPS.milliseconds);
+    //Serial.print("Date: ");
+    //Serial.print(GPS.day, DEC); Serial.print('/');
+    //Serial.print(GPS.month, DEC); Serial.print("/20");
+    //Serial.println(GPS.year, DEC);
+    //Serial.print("Fix: "); Serial.print((int)GPS.fix);
+    //Serial.print(" quality: "); Serial.println((int)GPS.fixquality); 
+    //if (GPS.fix) {
+    //Serial.print("Location: ");
+    //Serial.print(GPS.latitude, 4); Serial.print(GPS.lat);
+    //Serial.print(", "); 
+    //Serial.print(GPS.longitude, 4); Serial.println(GPS.lon);
+    //Serial.print("Location (in degrees, works with Google Maps): ");
+    //Serial.print(GPS.latitudeDegrees, 4);
+    //Serial.print(", "); 
+   // Serial.println(GPS.longitudeDegrees, 4);
       
-    Serial.print("Speed (knots): "); Serial.println(GPS.speed);
-    Serial.print("Angle: "); Serial.println(GPS.angle);
-    Serial.print("Altitude: "); Serial.println(GPS.altitude);
-    Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
-    }
-  }
-}
+    //Serial.print("Speed (knots): "); Serial.println(GPS.speed);
+    //Serial.print("Angle: "); Serial.println(GPS.angle);
+    //Serial.print("Altitude: "); Serial.println(GPS.altitude);
+    //Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
+  //  }
+ // }
+//}
 	  
-void setup(){
-   Wire.begin(x);
-   Wire.onRecieve(recieveEvent);
-  
-	
-}
 void recieveEvent();
 	Wire.read()
 	Sim800l.begin(); // initializate the library. 
