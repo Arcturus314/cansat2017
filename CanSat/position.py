@@ -31,7 +31,7 @@ def get_current_accel_data():
 def get_current_mag_data():
     return mag_data[1]
 def update_raw_data():
-    global accel_data,mag_data
+    global accel_data,mag_data,gyro_data
     #x-y-z according to the IMU will differ from x-y-z according to the module.
     #Here x-y-z will be converted to module orientation, with:
     #   xpos: towards front of module, viewed from top
@@ -47,6 +47,12 @@ def update_raw_data():
         mag_data[i][1]   = -1*datastore.get_magnetometer_diff()[i][0]
         mag_data[i][2]   = datastore.get_magnetometer_diff()[i][1]
         mag_data[i][3]   = datastore.get_magnetometer_diff()[i][3]
+
+        gyro_data[i][0]   = -1*datastore.get_gyroscope_diff()[i][2]
+        gyro_data[i][1]   = -1*datastore.get_gyroscope_diff()[i][0]
+        gyro_data[i][2]   = datastore.get_gyroscope_diff()[i][1]
+        gyro_data[i][3]   = datastore.get_gyroscope_diff()[i][3]
+
     return None
 
 def trap_int(timenew, timeold, valnew, valold):
