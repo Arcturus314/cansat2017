@@ -95,6 +95,9 @@ def calc_accel_or():
 def return_current_trans_pos():
     calc_trans_pos()
     return get_current_trans_pos()
+def return_current_or_pos():
+    calc_or_pos()
+    return get_current_or_pos()
 def testx():
     while True:
         return return_current_trans_pos()[0],return_current_trans_pos()[3]
