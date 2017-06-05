@@ -18,7 +18,10 @@ import time
 from math import sqrt, atan2, asin, degrees, radians
 
 def elapsed_micros(start_time):
-    return time.ticks_diff(time.ticks_us(), start_time)
+    return time.time()*0.000001-start_time
+
+def ticks_us():
+    return time.time()*0.000001
 
 class Fusion(object):
     '''
