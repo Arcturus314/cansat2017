@@ -54,7 +54,7 @@ D6T_addr          = 0x0A
 accelerometer = i2c_sensors.LSM303_Accel(LSM303_accel_addr, True, True, False)
 magnetometer  = i2c_sensors.LSM303_Mag(LSM303_mag_addr, True, True, False)
 gyroscope     = i2c_sensors.L3GD20_Gyro(L3GD20_addr, True, True, False)
-gyroscope.setCal(1,1,1,1.5321354054054044,-1.2860210810810797,0.054961351351351474)
+gyroscope.setCal(2.1752266,1.7142857,2.745098,1.5321354054054044*2.1752266,-1.2860210810810797*1.7142857,0.054961351351351474*2.745098)
 imu_temp      = i2c_sensors.L3GD20_Temp(L3GD20_addr)
 env_pressure  = i2c_sensors.BME280_Pressure(BME280_addr)
 env_humidity  = i2c_sensors.BME280_Humidity(BME280_addr)

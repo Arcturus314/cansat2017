@@ -35,8 +35,6 @@ def test_gyro():
 def find_gyro_means():
     return x_total/float(num),y_total/float(num),z_total/float(num)
 
-
-
 def find_mag_scale(power, update, deflection):
     global scale_sum,num
     datastore.set_magnetometer_settings(power,update,deflection)
