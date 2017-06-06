@@ -94,9 +94,9 @@ def calc_gyro_or():
     
     newTime = gyro_data[0][3]
 
-    newX = get_current_or_pos()[0]+xDiff
-    newY = get_current_or_pos()[1]+yDiff
-    newZ = get_current_or_pos()[2]+zDiff
+    newX = (get_current_or_pos()[0]+xDiff)%360.0
+    newY = (get_current_or_pos()[1]+yDiff)%360.0
+    newZ = (get_current_or_pos()[2]+zDiff)%360.0
     
     or_pos.append( (newX, newY, newZ, newTime) )
 def calc_accel_or():
