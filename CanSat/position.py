@@ -38,7 +38,6 @@ def get_current_mag_data():
     return mag_data[1]
 def update_raw_data():
     global accel_data,mag_data,gyro_data
-    datastore.set_gyroscope_settings(True, True, False)
     #x-y-z according to the IMU will differ from x-y-z according to the module.
     #Here x-y-z will be converted to module orientation, with:
     #   xpos: towards front of module, viewed from top
