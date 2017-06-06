@@ -18,6 +18,7 @@ def find_mean_scale():
     global scale_sum,num
     return scale_sum/float(num)
 def reset():
+    global scale_sum,num,x_total,y_total,z_total
     scale_sum=0
     num=0
     x_total=0
@@ -25,7 +26,7 @@ def reset():
     z_total=0
 def test_gyro():
     global num,x_total,y_total,z_total
-    gdata = datastore.get_accelerometer_data(False)
+    gdata = datastore.get_gyroscope_data(False)
     x_total = x_total + gdata[0]
     y_total = y_total + gdata[1]
     z_total = z_total + gdata[2]
