@@ -140,23 +140,23 @@ def writeGRY(register,value):
         return -1
 
 def readACCx():
-    return datastore.get_accelerometer_data()[0]
-def readACCy():
-    return datastore.get_accelerometer_data()[1]
+    return datastore.get_accelerometer_data(False)[0]
+def readACCy(): 
+    return datastore.get_accelerometer_data(False)[1]
 def readACCz():
-    return datastore.get_accelerometer_data()[2]
+    return datastore.get_accelerometer_data(False)[2]
 def readMAGx():
-    return datastore.get_magnetometer_data()[0]
+    return datastore.get_magnetometer_data(False)[0]
 def readMAGy():
-    return datastore.get_magnetometer_data()[1]
+    return datastore.get_magnetometer_data(False)[1]
 def readMAGz():
-    return datastore.get_magnetometer_data()[2]
+    return datastore.get_magnetometer_data(False)[2]
 def readGYRx():
-    return datastore.get_gyroscope_data()[0]
+    return datastore.get_gyroscope_data(False)[0]
 def readGYRy():
-    return datastore.get_gyroscope_data()[1]
+    return datastore.get_gyroscope_data(False)[1]
 def readGYRz():
-    return datastore.get_gyroscope_data()[2]
+    return datastore.get_gyroscope_data(False)[2]
 
 #initialise the accelerometer
 #writeACC(CTRL_REG1_XM, 0b01100111) #z,y,x axis enabled, continuos update,  100Hz data rate
