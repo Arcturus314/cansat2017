@@ -159,17 +159,17 @@ def readGYRz():
     return datastore.get_gyroscope_data()[2]
 
 #initialise the accelerometer
-writeACC(CTRL_REG1_XM, 0b01100111) #z,y,x axis enabled, continuos update,  100Hz data rate
-writeACC(CTRL_REG2_XM, 0b00100000) #+/- 16G full scale
+#writeACC(CTRL_REG1_XM, 0b01100111) #z,y,x axis enabled, continuos update,  100Hz data rate
+#writeACC(CTRL_REG2_XM, 0b00100000) #+/- 16G full scale
 
 #initialise the magnetometer
-writeMAG(CTRL_REG5_XM, 0b11110000) #Temp enable, M data rate = 50Hz
-writeMAG(CTRL_REG6_XM, 0b01100000) #+/-12gauss
-writeMAG(CTRL_REG7_XM, 0b00000000) #Continuous-conversion mode
+#writeMAG(CTRL_REG5_XM, 0b11110000) #Temp enable, M data rate = 50Hz
+#writeMAG(CTRL_REG6_XM, 0b01100000) #+/-12gauss
+#writeMAG(CTRL_REG7_XM, 0b00000000) #Continuous-conversion mode
 
 #initialise the gyroscope
-writeGRY(CTRL_REG1_G, 0b00001111) #Normal power mode, all axes enabled
-writeGRY(CTRL_REG4_G, 0b00110000) #Continuos update, 2000 dps full scale
+#writeGRY(CTRL_REG1_G, 0b00001111) #Normal power mode, all axes enabled
+#writeGRY(CTRL_REG4_G, 0b00110000) #Continuos update, 2000 dps full scale
 
 gyroXangle = 0.0
 gyroYangle = 0.0
