@@ -191,7 +191,8 @@ mag_medianTable2Y = [1] * MAG_MEDIANTABLESIZE
 mag_medianTable2Z = [1] * MAG_MEDIANTABLESIZE
 
 def get_orientation(): #heading, x, y
-    global a,b
+    global a,b,RAD_TO_DEG,M_PI,G_GAIN,AA,MAG_LPF_FACTOR,ACC_LPF_FACTOR,ACC_MEDIANTABLESIZE,MAG_MEDIANTABLESIZE,gyroXangle,gyroYangle,gyroZangle,CFangleX,CFangleY,CFangleXFiltered,CFangleYFiltered,kalmanX,kalmanY,oldXMagRawValue,oldYMagRawValue,oldZMagRawValue,oldXAccRawValue,oldYAccRawValue,oldZAccRawValue,acc_medianTable1X,acc_medianTable1Y,acc_medianTable1Z,acc_medianTable2X,acc_medianTable2Y,acc_medianTable2Z,mag_medianTable1X,mag_medianTable1Y,mag_medianTable1Z,mag_medianTable2X,mag_medianTable2Y,mag_medianTable2Z
+
 
     #Read the accelerometer,gyroscope and magnetometer values
     ACCx = readACCx()
