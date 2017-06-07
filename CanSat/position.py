@@ -11,7 +11,7 @@ import time
 #   x-y orientation relative to N
 #   x-y orientation of direction of tilt
 
-dtr = 0.0174532925199
+dtr = 0.0174532925199 #degrees to radians scaling factor
 
 trans_pos = [(0,0,0,0)] #translational position, composed of tuples (x,y,alt,time)
 or_pos    = [(0,0,0,0)] #orientational position, composed of tuples (heading,x,y,time)
@@ -81,7 +81,7 @@ def update_raw_data(): #moves datastore data to raw data lists
  
     return None
 
-def calc_bimu_orientation(): #uses bIMU.py module, appends heading, x, y, time to or_pos, subtracting initial orientation
+def calc_bimu_orientation(): #uses bIMU.py module, appends heading, x, y, time to or_pos, subtracting initial orientation, and compensating for heading- standardizing along x and y vectors
     global init_position
     data = bIMU.get_orientation()[0]-init_position[0],bIMU.get_orientation()[1]-init_position[0],bIMU.get_orientation()[2]-init_position[0],time.time()
     or_pos.append(data)
