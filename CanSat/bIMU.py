@@ -191,6 +191,8 @@ mag_medianTable2Y = [1] * MAG_MEDIANTABLESIZE
 mag_medianTable2Z = [1] * MAG_MEDIANTABLESIZE
 
 def get_orientation(): #heading, x, y
+    global a,b
+
     #Read the accelerometer,gyroscope and magnetometer values
     ACCx = readACCx()
     ACCy = readACCy()
