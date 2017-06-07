@@ -1,6 +1,7 @@
 import datastore
 import math
 import fusion
+import bIMU 
 
 #In order to track position, we need to find differences in time and position over short periods of time
 #To accomodate this we need to create lists which store cansat position and orientation over time
@@ -61,6 +62,8 @@ def update_raw_data():
 
     motion_track.update(make_tuple(accel_data[1]),make_tuple(gyro_data[1]),make_tuple(mag_data[1]))
     return None
+def get_bimu_orientation(): #uses bIMU.py module, returns heading,x,y
+    return bIMU.get_orientation()    
 
 def trap_int(timenew, timeold, valnew, valold):
     #Trapezoidal integration method
@@ -113,6 +116,4 @@ def return_current_or_pos():
     return get_current_or_pos()
 
 def get_orientation():
-    update_raw_data()
-    return motion_track.heading, motion_track.pitch, motion_track.roll
-
+    return get_bimu_orientation()
