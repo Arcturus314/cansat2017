@@ -27,6 +27,9 @@ map_raw = []
 position = [(0,0,0,0),(0,0,0,0)] 
 temp_matrix = []
 
+def init_data():
+    position.init_data()
+
 def get_position():
     global position
     position = position.get_pos_data(False)

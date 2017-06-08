@@ -1,6 +1,6 @@
 import datastore
 import position
-import tempmap
+import temp_map
 
 #this module will serve to facilitate the building of packets for transmission to the base station
 
@@ -52,6 +52,8 @@ method_names = ['get_accelerometer_data','get_magnetometer_data','get_gyroscope_
 packet_type = 0
 checksum_contribution = 0
 
+temp_map.init_data() #initializing data lists
+
 #Packets will be structured as follows
 # --header--
 # ':,(num messages in body),|'
@@ -67,7 +69,7 @@ def create_message(identifier1, identifier2, data):
     global checksum_contribution
     message = id1_dict[identifier1] + ',' + id2_dict[identifier2] + ','
     checksum_contribution = checksum_contribution + int(id1_dict[identifier1]) + int(id2_dict[identifier2])
-    if type(data) = tuple:
+    if type(data) == tuple:
         for i in xrange(data.len()):
             message = message + data[i] + ','
             checksum_contribution = checksum_contribution + int(data[i])
@@ -129,7 +131,7 @@ def init_packet_type(_packet_type):
         inc_pos = False
         inc_mat = False
         inc_map = False
-    if packet_type = 7:
+    if packet_type == 7:
         inc_data = [False, False, False, False, False, False, False]
         inc_all_data = [False, False, False, False, False, False, False]
         inc_error = True
@@ -142,7 +144,7 @@ def build_header():
     header = header + ":"
     messages = 0 #number of messages contained in body
     
-    for i in xrange(6)
+    for i in xrange(6):
         if inc_data[i] == True:
             messages = messages + 1
         if inc_all_data[i] == True:
@@ -173,13 +175,13 @@ def build_body():
         body = body + create_message(id1_dict['Error'],id2_dict['Default'],datastore.get_errors())
         body = body + ';\n'
     if inc_pos == True:
-        body = body + create_message(id1_dict['Pos'],id2_dict['Default'],position.get_pos())
+        body = body + create_message(id1_dict['Pos'],id2_dict['Default'],position.get_pos_data(False))
         body = body + ';\n'
     if inc_mat == True:
         body = body + create_message(id_dict['Mat'],id2_dict['Default'],datastore.get_temp_array_data())
         body = body + ';\n'
     if inc_map == True:
-        body = body + create_message(id_dict['Map'],id2_dict['Default'],tempmat.get_temp_map())
+        body = body + create_message(id_dict['Map'],id2_dict['Default'],temp_mat.return_frame())
         body = body + ';\n'
 
     body = body + '|\n'
