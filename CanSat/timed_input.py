@@ -14,6 +14,6 @@ def nonBlockingRawInput(prompt='', timeout=20):
         signal.alarm(0)
         return text
     except AlarmException:
-        print '\nPrompt timeout. Continuing...'
+        pass
     signal.signal(signal.SIGALRM, signal.SIG_IGN)
-    return ''
+    return None

@@ -4,19 +4,11 @@ import temp_map
 
 #this module will serve to facilitate the building of packets for transmission to the base station
 
-#several packet types are possible, which can be modularly built from:
-# 1) individual sensor data points
-# 2) all sensor data points
-# 3) sensor error values
-# 4) current cansat position
-# 5) current temperature matrix
-# 6) overall temperature map
-
 #Packets can also be built via type
 # 1) all current sensor data
 # 2) all environmental logging data
 # 3) all position tracking data
-# 4) all heat map data
+# 4) all heat mat data
 # 5) current stored heat map
 # 6) all stored sensor data
 # 7) all error data
