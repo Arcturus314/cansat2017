@@ -1,42 +1,43 @@
 package cansat;
 
-import java.awt.Canvas;
-import java.awt.Dimension;
-
-import javax.swing.JFrame;
+import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 public class Window {
-
-	private JFrame frame;
-	private Canvas canvas;
-	
-	private String title;
 	private int width, height;
+	private String title;
+	private Scene scene;
 	
-	public Window(String title, int width, int height){
-		this.title = title;
-		this.width = width;
-		this.height = height;
+	public Window(Stage window) {
 	
-		createDisplay();
-	}
-	
-	private void createDisplay(){
-		frame = new JFrame(title);
-		frame.setSize(width, height);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-	
-		canvas = new Canvas();
-		canvas.setPreferredSize(new Dimension(width, height));
-		canvas.setMaximumSize(new Dimension(width, height));
-		canvas.setMaximumSize(new Dimension(width, height));
-		canvas.setFocusable(false);
+		//Window properties 
+		title = "canSat";
+		width = 800;
+		height = 900;
+		window.setMinWidth(700);
+		window.setMinHeight(740);
+		window.setFullScreen(false);
 		
-		frame.add(canvas);
-		//resize the frame so you can see all of the canvas 
-		frame.pack();
+		//G.u.i. constructor
+		Gui gui = new Gui(width, height);
+		
+		//Loads G.u.i.
+		scene = Gui.getGui();
+		try{
+			scene.getStylesheets().add("/style.css");
+			 } catch (IndexOutOfBoundsException  e) {
+				 System.err.println(e.getMessage());
+			 }
+		
+	    window.setScene(scene);
+	    
+	    //Set window title to window size + title
+	    window.titleProperty().bind(
+			window.widthProperty().asString().concat(" : ").
+				concat(window.heightProperty().asString()).concat(" "+title));
+	    window.show(); 
 	}
+    
 }

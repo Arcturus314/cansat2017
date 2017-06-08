@@ -1,0 +1,58 @@
+.root{
+    -fx-background-color: black;
+}
+
+
+.Btn{
+  -fx-background-color: #ffffff;
+  -fx-text-fill: #000000;
+  -fx-border-radius: 0 0 0 0;
+  -fx-background-radius: 0 0 0 0;
+}
+
+.Btn:hover{
+	-fx-background-color: red;
+}
+
+#btn5{
+      -fx-border-radius: 0 0 0 5;
+      -fx-background-radius: 0 0 0 5;	
+}
+
+#btn9{
+      -fx-border-radius: 0 0 5 0;
+      -fx-background-radius: 0 0 5 0;	
+}
+
+.text-area {
+    -fx-padding: 0px;
+    -fx-border-insets: 0px;
+    -fx-background-insets: 0px;
+    -fx-background-color: white, white, white, white;
+}
+
+.text-area .content {
+    -fx-background-color: white, white, white, white;
+}
+
+.text-area:focused .content {
+    -fx-background-color: white, white, white, white;
+}
+
+.text-area:focused {
+    -fx-highlight-fill: #7ecfff;
+}
+
+.text-area .content {
+    -fx-padding: 10px;
+    -fx-text-fill: gray;
+    -fx-highlight-fill: #7ecfff;
+}
+
+.column{
+    -fx-background-color: transparent;
+}
+
+#hBox2{
+  -fx-background-color: black;	
+}

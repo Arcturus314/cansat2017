@@ -1,10 +1,13 @@
 package cansat;
 
+import javafx.application.Application;
+
 public class Luncher {
 
 	public static void main(String[] args){
-		MainLoop mainLoop = new MainLoop("Title", 400, 400);
-		mainLoop.start();
-	}
+		Application.launch(MainLoop.class, args);
+    }
+	
+	
 }
 
