@@ -3,6 +3,8 @@ import position
 import temp_map
 import timed_input
 import packet
+import datalogger
+import multiprocessing
 
 start_data = False
 input_timeout = 3 #3 seconds to wait for response
@@ -140,6 +142,9 @@ def return_ready():
 
 #Actual code execution
 return_ready() #ready returned on startup
+
+logger = multiprocessing.Process(target=datalogger.add_all_inf(), args=())
+logger.start()
 
 while True:
     in_packet = t_input()
