@@ -173,7 +173,8 @@ def build_body():
         body = body + create_message(id_dict['Mat'],id2_dict['Default'],datastore.get_temp_array_data())
         body = body + ';\n'
     if inc_map == True:
-        body = body + create_message(id_dict['Map'],id2_dict['Default'],temp_mat.return_frame())
+        temp_map.build_frame()
+        body = body + create_message(id_dict['Map'],id2_dict['Default'],temp_map.return_frame())
         body = body + ';\n'
 
     body = body + '|\n'
