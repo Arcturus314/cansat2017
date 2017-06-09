@@ -139,20 +139,24 @@ def send_packet(packet):
     print packet
 def return_ready():
     print "ready"
+def overall_control():
+    while True:
+        in_packet = t_input()
+        if in_packet == -1:
+            send_packet(packet.build_packet())
+        parsed_packet = parse_packet(in_packet)
+        if parsed_packet != -1:
+            build_packet(parsed_packet[0],parsed_packet[1])
+
 
 #Actual code execution
 return_ready() #ready returned on startup
 
-logger = multiprocessing.Process(target=datalogger.add_all_inf(), args=())
-logger.start()
-
-while True:
-    in_packet = t_input()
-    if in_packet == -1:
-        send_packet(packet.build_packet())
-    parsed_packet = parse_packet(in_packet)
-    if parsed_packet != -1:
-        build_packet(parsed_packet[0],parsed_packet[1])
+if __name__ == '__main__':
+    control = multiprocessing.ProcessError(target=overall_control)
+    logger = multiprocessing.Process(target=datalogger.add_all_inf)
+    control.start()
+    logger.start()
 
 
 

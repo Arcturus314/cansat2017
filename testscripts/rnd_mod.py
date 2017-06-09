@@ -1,4 +1,8 @@
+import time
 def return_value_one():
-    return 1
+    while True:
+        print 1
+        time.sleep(0.5)
 def return_value_two():
-    return 2
+    print 2
+    time.sleep(0.5)

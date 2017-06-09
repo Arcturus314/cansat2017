@@ -1,19 +1,12 @@
 import multiprocessing
 import rnd_mod
 
-output = multiprocessing.Queue()
-
-
-def back():
+def bp():
     while True:
-        output.put(rnd_mod.return_value_one())
+        rnd_mod.return_value_two()
 
-back_process = multiprocessing.Process(target=back, args=())
-
-back_process.start()
-back_process.join()
-
-
-while True:
-    print output.get()
-    print rnd_mod.return_value_two()
+if __name__ == '__main__':
+    a=multiprocessing.Process(target=bp)
+    b=multiprocessing.Process(target=rnd_mod.return_value_one)
+    a.start()
+    b.start()
