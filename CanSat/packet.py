@@ -45,6 +45,7 @@ packet_type = 0
 checksum_contribution = 0
 
 temp_map.init_data() #initializing data lists
+position.init_data() #initializing data lists
 
 #Packets will be structured as follows
 # --header--
@@ -56,6 +57,7 @@ temp_map.init_data() #initializing data lists
 # '|'
 # --footer--
 # (checksum)
+
 
 def create_message(identifier1, identifier2, data):
     global checksum_contribution

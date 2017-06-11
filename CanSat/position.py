@@ -2,6 +2,7 @@ import datastore
 import math
 import bIMU 
 import time
+import arduino_interface
 
 #In order to track position, we need to find differences in time and position over short periods of time
 #To accomodate this we need to create lists which store cansat position and orientation over time
@@ -15,12 +16,13 @@ dtr = 0.0174532925199 #degrees to radians scaling factor
 
 trans_pos = [(0,0,0,0)] #translational position, composed of tuples (x,y,alt,time)
 or_pos    = [(0,0,0,0)] #orientational position, composed of tuples (heading,x,y,time)
-
+gps_pos   = [(0,0,0,0,0,0)] #tuples fix,speed,altitude,latitude,longitude,time
 accel_data = [[0,0,0,0],[0,0,0,0]]#two accelerometer data points ((xVal, yVal, zVal, time), (...))
 mag_data = [[0,0,0,0],[0,0,0,0]]#two magnetometer data points
 gyro_data = [[0,0,0,0],[0,0,0,0]]#two gyroscope data points
 
-init_position = (0,0,0,0,0,0,0,0) #(heading,x-or,y-or,x,y,alt,temperature,time)
+init_position = (0,0,0,0,0,0,0) #(heading,x-or,y-or,x,y,alt,temperature,time)
+init_gps_pos  = (0,0,0,0,0,0)       #(fix,altitude,latitude,longitude,x_pos,y_postime)
 
 def init_data(): #writes initial calculated vales to init_position tuple
     datastore.get_accelerometer_data(False)    
@@ -30,8 +32,11 @@ def init_data(): #writes initial calculated vales to init_position tuple
     calc_bimu_orientation()
     calc_bimu_orientation()
     calc_trans_pos()
-
     init_position = make_tuple(get_bimu_orientation()[0],get_current_or_pos()[1],get_current_or_pos()[2],get_current_trans_pos()[0],get_current_trans_pos()[1],get_current_env()[1],get_current_env()[0],time.time())
+
+    gps_data = arduino_interface.get_gps_data()
+    if gps_data[0] == 1:
+        init_gps_pos = gps_data
 
 def make_tuple(in_arr): #returns a tuple of length 3 or 4 with the same data as the given array
     #returns a tuple from the first three indices of the given array
@@ -44,6 +49,8 @@ def get_current_trans_pos(): #returns last element in trans_pos list
     return trans_pos[len(trans_pos)-1]
 def get_current_or_pos(): #returns last element in or_pos list
     return or_pos[len(or_pos)-1]
+def get_current_gps_pos():
+    return gps_pos[len(gps_pos)-1]
 def get_last_or_pos(): #retuns second to last element in or_pos list
     return or_pos[len(or_pos)-2]
 def get_current_accel_data(): #returns second accel_data tuple
@@ -116,7 +123,46 @@ def calc_trans_pos(): #calculates the translational position given accelerometer
     newX = get_current_trans_pos()[0]+xDiff
     newY = get_current_trans_pos()[1]+yDiff
     
+
+    #We still have to consider gps data in order to bound the calculated accelerometer position
+    gps_data = arduino_interface.get_gps_data()
+    gps_pos.append(gps_data)
+    if init_gps_pos[0] == 0 and gps_data[0] == 1:
+        init_gps_pos[0] = gps_data[0]
+        init_gps_pos[1] = gps_data[2]
+        init_gps_pos[2] = gps_data[3]
+        init_gps_pos[3] = newX 
+        init_gps_pos[4] = newY 
+        init_gps_pos[5] = gps_data[4]
+    if init_gps_pos[0] == 1 and gps_data[0] == 1:
+        #This means that we have a valid GPS lock
+        #Now we can calculate Dx and Dy from initial GPS lock 
+        lat_mid = (init_gps_pos[2]+gps_data[3])/2.0
+        m_per_deg_lat = 111132.954 - 559.822 * math.cos( 2 * lat_mid ) + 1.175 * cos( 4 * latMid);
+        m_per_deg_lon = 111132.954 * math.cos ( lat_mid );
+
+        #We need to assume a certain level of precision in our gps readings.
+        #I will assime GPS values are accurate +- 5m along x and y axes
+        new_gps_x_pos = init_gps_pos[3]+m_per_deg_lon*(gps_data[4]-init_gps_pos[3])
+        new_gps_y_pos = init_gps_pos[4]+m_per_deg_lat*(gps_data[3]-init_gps_pos[2])
+
+        gps_x_bounds = [new_gps_x_pos-5.0,new_gps_x_pos+5.0]
+        gps_y_bounds = [new_gps_y_pos-5.0,new_gps_y_pos+5.0]
+
+        if not (newX < gps_x_bounds[1] and newX > gps_x_bounds[0]):
+            if newX > new_gps_x_pos: 
+                newX = gps_x_bounds[1]
+            if newX < new_gps_x_pos:
+                newX = gps_x_bounds[0]
+
+        if not (newY < gps_y_bounds[1] and newY > gps_y_bounds[0]):
+            if newY > new_gps_y_pos: 
+                newY = gps_y_bounds[1]
+            if newY < new_gps_y_pos:
+                newY = gps_y_bounds[0]
+
     trans_pos.append( (newX, newY, get_current_env()[1], newTime) )
+
 def calc_gyro_or(): #calculates the cansat orientation given gyroscope values, appends to or_pos
     update_raw_data()
     global gyro_data
@@ -146,7 +192,7 @@ def calc_position():
 
 def get_pos_data(all_data):
     if all_data == True:
-        return trans_pos,or_pos
+        return trans_pos,or_pos,gps_pos
     if all_data == False:
         calc_position()
-        return get_current_trans_pos(),get_current_or_pos()
+        return get_current_trans_pos(),get_current_or_pos(),get_current_gps_pos()

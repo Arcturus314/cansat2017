@@ -152,6 +152,9 @@ def overall_control():
 #Actual code execution
 return_ready() #ready returned on startup
 
+#Control process manages overall packetization / communicatio with the base station
+#Logger process independently manages data logging and recording to files
+
 if __name__ == '__main__':
     control = multiprocessing.ProcessError(target=overall_control)
     logger = multiprocessing.Process(target=datalogger.add_all_inf)
