@@ -14,10 +14,10 @@ public class Window {
 	
 		//Window properties 
 		title = "canSat";
-		width = 800;
+		width = 900;
 		height = 900;
-		window.setMinWidth(700);
-		window.setMinHeight(740);
+		window.setMinWidth(900);
+		window.setMinHeight(820);
 		window.setFullScreen(false);
 		
 		//G.u.i. constructor

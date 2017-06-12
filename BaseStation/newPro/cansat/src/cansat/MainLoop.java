@@ -43,25 +43,22 @@ public class MainLoop extends Application{
 	private String[] newDocSplit;
 	private int newNumberOfDataSets;
 	private int oldNumberOfDataSets;
-	public static List<DataSet> dataSetArray;
-	
+	private static int tick;
 	
 	@Override
 	public void start(Stage stage) {
+		tick = 0;	
 		
 		//Create window and g.u.i.
-		window = new Window(stage);
-		decodeData = new DecodeData("assets/test.txt");
-		//dataSetArray = new ArrayList<DataSet>();
-		scene = Gui.getGui();
+		window = new Window(stage);		
 		
-		//System.out.println(dataSetArray.get(0).header);
+		scene = Gui.getGui();
 		
 		  //Main Loop 
 	      Timer timer = new Timer();
 	      
 	      timer.scheduleAtFixedRate(new TimerTask() {
-	       int tick = 0;
+	       
 	            @Override
 	            public void run() {
 	                Platform.runLater(() -> {
@@ -69,11 +66,8 @@ public class MainLoop extends Application{
 	                	//Get data
 	                	try{
 	                		
+	                		decodeData = new DecodeData("assets/test.txt");
 	                		
-	                		//if(newNumberOfDataSets > newNumberOfDataSets){
-	                			
-	                		//}
-
 	                		 } catch (IndexOutOfBoundsException  e) {
 	                			 System.err.println(e.getMessage());
 	                	   }
@@ -81,32 +75,27 @@ public class MainLoop extends Application{
 	                	//Update lineCharts
 		                for(int i = 0; i < 7; i++){ 
 		                	try{
-		                		  lineChart = (LineChart) scene.lookup("#Chart" + i);
-		                		  XYChart.Series series1 = (Series) lineChart.getData().get(0);
-			                	  XYChart.Data newData = new XYChart.Data(tick + 1,tick + 1);
-			                	  series1.getData().add(newData);
-			                	  	
+		                	
+		                		Graph.graphs.get(i).update(i);
+		                		
 		                		 } catch (IndexOutOfBoundsException  e) {
 		                			 System.err.println(e.getMessage());
-		                		 }
-		                				 
+		                		 } 
+		                		
+		                		
+		                	
 		                	}
 		                
-		                //Update temperature grid 
-		                Random rand = new Random();
-		    		    Color[] colors = {Color.BLACK, Color.BLUE, Color.GREEN, Color.RED};
-		                
-		                for(int i = 0; i < 144; i++){ 
+		           
 		                	try{
-		                		    rectangle = (Rectangle) scene.lookup("#rec" + i);
-			                		int n = rand.nextInt(4);
-			                		rectangle.setFill(colors[n]);
-			                		
+		                		if(tick == 0){
+		                		TempGrid.update();
+		                		}
 		                		 } catch (IndexOutOfBoundsException  e) {
 		                			 System.err.println(e.getMessage());
 		                		 }
 		                				 
-		                	}
+		                	//}
 		                
 		                //Update map
 		                for(int i = 0; i < 7; i++){ 
@@ -120,7 +109,6 @@ public class MainLoop extends Application{
 		                	}
 		                
 		                //Update console
-		          
 		                	try{
 		                		   TextArea  console = Gui.getTextField();
 		                		   String newLine = "\n";
@@ -130,14 +118,18 @@ public class MainLoop extends Application{
 		                			 System.err.println(e.getMessage());
 		                		}
 
-		       
 		                tick++;
+		                
 	                });
 		        }
 		    }, 100, 1000); 
 		
 	
 	}
-
-
+	
+	
+	//Getters and Setters	
+		public static int getTick(){
+			return tick;
+		}
 }

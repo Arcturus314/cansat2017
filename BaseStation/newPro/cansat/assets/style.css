@@ -56,3 +56,44 @@
 #hBox2{
   -fx-background-color: black;	
 }
+
+.chart {
+  -fx-background-color: transparent;  
+}
+
+.chart-content {
+     -fx-background-color: transparent;     
+}
+
+.chart-title {
+  -fx-text-fill: white;
+  -fx-font-size: 1.6em;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+ 
+.axis-label {
+  -fx-text-fill: white;
+}
+ 
+.chart-legend {
+   -fx-background-color:  transparent;
+   -fx-padding: 20px;
+}
+ 
+.chart-legend-item-symbol{
+   -fx-background-radius: 0;
+}
+ 
+.chart-legend-item{
+    -fx-text-fill: white;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: white;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke: white;
+}
