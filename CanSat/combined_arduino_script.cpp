@@ -213,14 +213,14 @@ void loop()                     // run over and over again
   gpsalt[13] = 0xFF
  
   int gpsvaliditydata[5]; 
-  gpsvaliditydata[0] = 0x00
-  gpsvaliditydata[1] = 0x00
-  gpsvaliditydata[2] = gpsvalidity
-  gpsvaliditydata[3] = 0xFF
-  gpsvaliditydata[4] = 0xFF
+  gpsvaliditydata[0] = 0x00;
+  gpsvaliditydata[1] = 0x00;
+  gpsvaliditydata[2] = gpsvalidity;
+  gpsvaliditydata[3] = 0xFF;
+  gpsvaliditydata[4] = 0xFF;
    
   int gpsspeeddata[5]; 
-  gpsvaliditydata[0] = 0x00
+  gpsvaliditydata[0] = 0x00;
   gpsvaliditydata[1] = 0x00
   gpsvaliditydata[2] = gpsspeed
   gpsvaliditydata[3] = 0xFF
