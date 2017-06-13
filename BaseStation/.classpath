@@ -3,5 +3,7 @@
 	<classpathentry kind="src" path="newPro/cansat/src"/>
 	<classpathentry kind="lib" path="newPro/cansat/lib/RXTXcomm.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="newPro/cansat/assets"/>
+	<classpathentry kind="lib" path="newPro/cansat/lib"/>
 	<classpathentry kind="output" path="newPro/cansat/bin"/>
 </classpath>
