@@ -2,7 +2,7 @@ import datastore
 import math
 import bIMU 
 import time
-import arduino-interface
+import arduino_interface
 
 #In order to track position, we need to find differences in time and position over short periods of time
 #To accomodate this we need to create lists which store cansat position and orientation over time
