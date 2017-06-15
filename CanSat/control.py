@@ -1,6 +1,4 @@
 import datastore
-import position
-import temp_map
 import timed_input
 import packet
 import datalogger
