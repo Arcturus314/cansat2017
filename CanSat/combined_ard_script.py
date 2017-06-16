@@ -38,29 +38,29 @@ def read_ard():
         except ValueError, err:
 		ard_err = True
 	return none 
-	if (ard_data[5] = == 0x00 && ard_data[6] == 0x00 && ard_data[8] = 0xFF && ard_data[9] = 0xFF):
+	if (ard_data[5] = == 0x00 && ard_data[6] == 0x00 && ard_data[12] = 0xFF && ard_data[13] = 0xFF):
       		try:
-			gps_data[1] = ard_data[7]
+			gps_data[1] = char(ard_data[7])+char(ard_data[8])+char(ard_data[9])+char(ard_data[10])+char(ard_data[11])
 	except ValueError, err:
 		ard_err = True
 	return none 
-	if (ard_data[10] = == 0x00 && ard_data[11] == 0x00 && ard_data[22] = 0xFF && ard_data[23] = 0xFF):
+	if (ard_data[14] = == 0x00 && ard_data[15] == 0x00 && ard_data[26] = 0xFF && ard_data[27] = 0xFF):
       		try:
-			gps_data[2] = char(ard_data[12])+char(ard_data[13])+char(ard_data[14])+char(ard_data[15])+char(ard_data[16])+char(ard_data[17])+char(ard_data[18])+char(ard_data[19])+char(ard_data[20])+char(ard_data[21])
+			gps_data[2] = char(ard_data[16])+char(ard_data[17])+char(ard_data[18])+char(ard_data[19])+char(ard_data[20])+char(ard_data[21])+char(ard_data[22])+char(ard_data[23])+char(ard_data[24])+char(ard_data[25])
 	except ValueError, err:
 		ard_err = True
 	return none
 
-	(ard_data[24] = == 0x00 && ard_data[25] == 0x00 && ard_data[36] = 0xFF && ard_data[37] = 0xFF):
+	(ard_data[28] = == 0x00 && ard_data[29] == 0x00 && ard_data[40] = 0xFF && ard_data[41] = 0xFF):
       		try:
-			gps_data[3] = char(ard_data[26])+char(ard_data[27])+char(ard_data[28])+char(ard_data[29])+char(ard_data[30])+char(ard_data[31])+char(ard_data[32])+char(ard_data[33])+char(ard_data[34])+char(ard_data[35])
+			gps_data[3] = char(ard_data[30])+char(ard_data[31])+char(ard_data[32])+char(ard_data[33])+char(ard_data[34])+char(ard_data[35])+char(ard_data[36])+char(ard_data[37])+char(ard_data[38])+char(ard_data[39])
 	except ValueError, err:
 		ard_err = True
 	return none
  
-	(ard_data[38] = == 0x00 && ard_data[39] == 0x00 && ard_data[50] = 0xFF && ard_data[51] = 0xFF):
+	(ard_data[42] = == 0x00 && ard_data[43] == 0x00 && ard_data[54] = 0xFF && ard_data[55] = 0xFF):
       		try:
-			gps_data[4] = char(ard_data[40])+char(ard_data[41])+char(ard_data[42])+char(ard_data[43])+char(ard_data[44])+char(ard_data[45])+char(ard_data[46])+char(ard_data[47])+char(ard_data[48])+char(ard_data[49])
+			gps_data[4] = char(ard_data[44])+char(ard_data[45])+char(ard_data[46])+char(ard_data[47])+char(ard_data[48])+char(ard_data[49])+char(ard_data[50])+char(ard_data[51])+char(ard_data[52])+char(ard_data[53])
 	except ValueError, err:
 		ard_err = True
 	return none
