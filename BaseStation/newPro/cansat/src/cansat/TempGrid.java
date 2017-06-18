@@ -74,8 +74,10 @@ public class TempGrid extends Canvas{
 		yOffset	= TempValue.tempValues.get(i).yOffset;
 		size = TempValue.tempValues.get(i).size;
 		
-		
-	     gc.setFill(Color.RED);
+		Random rn = new Random();
+		int answer = rn.nextInt(10) ;
+		System.out.println(answer);
+	     gc.setFill(Utils.temptoRGB(answer));
 	     gc.fillRect(center + xOffset, center + yOffset, size, size);
 		}
   }

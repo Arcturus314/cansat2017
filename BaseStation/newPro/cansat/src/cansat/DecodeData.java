@@ -2,6 +2,7 @@ package cansat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class DecodeData {
 	private String newFile;
@@ -41,11 +42,13 @@ public class DecodeData {
 		DataSet dataSet2 = new DataSet("header2", "body2", "footer2");
 
 		//add vales
-		TempValue TempValue1 = new TempValue(40.6f, 40.6f, 40.6f, 40.6f);
-		TempValue TempValue2 = new TempValue(60.6f, -60.6f, -60.6f, 60.6f);
-		TempValue TempValue3 = new TempValue(300.6f, 0f, 150f, 100.0f);
-		TempValue TempValue4 = new TempValue(300.6f, 500f, 500f, 100.0f);
-		TempValue TempValue5 = new TempValue(300.6f, 1000f, 500f, 100.0f);
+		for(int i = 0; i < 100000; i++){
+			Random rn = new Random();
+			float answer1 = (float)rn.nextInt(300+300) -300  ;
+			float answer2 = (float)rn.nextInt(300+300) -300  ;
+			float answer3 = (float)rn.nextInt(300+300) -300  ;
+			TempValue TempValue1 = new TempValue(0.0f, answer1, answer2, answer3);
+		}
 		
 		tick = MainLoop.getTick();
 	

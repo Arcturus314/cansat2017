@@ -38,8 +38,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
+import com.lynden.gmapsfx.GoogleMapView;
+import com.lynden.gmapsfx.MapComponentInitializedListener;
+import com.lynden.gmapsfx.javascript.object.GoogleMap;
+import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.MapOptions;
+import com.lynden.gmapsfx.javascript.object.Marker;
+import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 
-public class Gui {
+
+public class Gui implements MapComponentInitializedListener {
 	private int width;
 	private int height;
 	private VBox vBox0;
@@ -57,6 +65,8 @@ public class Gui {
 	private static Button Btn;
 	private static StatusButton statusBtn;
 	private static WebEngine webEngine;
+	private GoogleMapView mapView;
+	private GoogleMap map;
 	
 	public Gui(int width, int height){
 		this.width = width;
@@ -88,11 +98,11 @@ public class Gui {
 		    
 		    tempCol0 = new VBox();
 		    tempCol1 = new VBox();
-		    tempCol0.setPadding(new Insets(10, 0, 40, 0));
+		    tempCol0.setPadding(new Insets(10, 0, 40, 40));
 		    tempCol0.prefWidthProperty().bind(pane.widthProperty());
 		    tempCol0.prefHeightProperty().bind(pane.heightProperty().divide(48));
 		    
-		    tempCol1.setPadding(new Insets(0, 0, 40, 0));
+		    tempCol1.setPadding(new Insets(0, 0, 0, 0));
 		    tempCol1.prefWidthProperty().bind(pane.widthProperty());
 		    tempCol1.prefHeightProperty().bind(pane.heightProperty().divide(48));
 		    
@@ -126,7 +136,7 @@ public class Gui {
 	        final String CSS = Utils.readFile("assets/mapStyles.css");              
 	        
 		    //Map
-		    Map = new WebView();
+		   /* Map = new WebView();
 	        Map.setContextMenuEnabled(false);
 	        Map.prefHeightProperty().bind(pane.heightProperty());
 	        
@@ -145,7 +155,13 @@ public class Gui {
 	                doc.getDocumentElement().getElementsByTagName("head").item(0).appendChild(styleNode);
 	           }
 	        }); 
-	        
+	        */
+	        StackPane stackPane2 = new StackPane();
+	        stackPane2.prefWidthProperty().bind(pane.widthProperty());
+	        stackPane2.prefHeightProperty().bind(pane.heightProperty());
+	        mapView = new GoogleMapView();
+	        mapView.addMapInializedListener(this);
+	        stackPane2.setAlignment(mapView,Pos.CENTER_LEFT);
 	        
 	        //image
 	         StackPane stackPane = new StackPane();
@@ -153,8 +169,8 @@ public class Gui {
 	         stackPane.prefHeightProperty().bind(pane.heightProperty());
 		     
 	         ImageView imageView = new ImageView();
-	         Image logo = new Image("logoFilled2.png");
-	         imageView.fitWidthProperty().bind(pane.heightProperty().divide(5));
+	         Image logo = new Image("test2.jpg");
+	         imageView.fitWidthProperty().bind(pane.widthProperty().divide(3));
 	         imageView.fitHeightProperty().bind(pane.heightProperty().divide(5));
 	         imageView.setImage(logo);
 	         imageView.setPreserveRatio(true);
@@ -166,8 +182,16 @@ public class Gui {
 	        console.prefHeightProperty().bind(pane.heightProperty());
 	        console.setEditable(false);
 	        
+	        String[] buttonName = new String[]{"Searial connection","Data logging","Percent valid packets", "Last packet"};
+	        String[] buttonName2 = new String[]{"True","True","100%", "True", };
+	      
+	        String newLine = "\n";
+	        for(int i = 0; i < buttonName.length; i++){
+      		   console.appendText(String.valueOf(buttonName[i] + " " + buttonName2[i] + newLine));
+	        }
+	        
 	        //Column 2
-		    vBox1.getChildren().addAll(imageView, Map, console); 
+		    vBox1.getChildren().addAll(imageView, stackPane2, console); 
 		  
 		    //Add VBoxs 
 		    for(int i = 0; i < 3; i++){
@@ -179,10 +203,12 @@ public class Gui {
 		    
 		    HBox tempRow = null;
 		    
+		    buttonName = new String[]{"searial connection","data logging","percent valid packets", "last packet", "magnitude of chi^2 location"};
+		    
 		    //Status btn
 		    for(int i = 0; i < 5; i++){
-		    	statusBtn = new StatusButton(false);
-		    	statusBtn.setText("status"+i);
+		    	statusBtn = new StatusButton(true);
+		    	statusBtn.setText(buttonName[i]);
 		    	statusBtn.getStyleClass().add("Btn"); 
 		    	
 		    	
@@ -195,12 +221,13 @@ public class Gui {
 		    }
 		    
 		    
+		    buttonName = new String[]{"Login to chip","Start chip data logging","Clear chip data", "Clear base station data", "Set minimum power", "set all active", "set environmetal logging", "set position tracking", "set heat mapping", "data lists"};
 		    
 		    //Add Buttons 
 		    for(int i = 0; i < 10; i++){
 		        Btn = new Button("Click Me");
 		        Btn.setId("btn"+i);
-		        Btn.setText("btn"+i);
+		        Btn.setText(buttonName[i]);
 		        Btn.getStyleClass().add("Btn"); 
 		        Btn.prefWidthProperty().bind(pane.widthProperty());
 		        
@@ -320,5 +347,36 @@ public class Gui {
 	
 	public static TextArea getTextField(){
 		return console;
+	}
+
+
+
+	@Override
+	public void mapInitialized() {
+		  //Set the initial properties of the map.
+	    MapOptions mapOptions = new MapOptions();
+
+	    mapOptions.center(new LatLong(47.6097, -500.3331))
+	            .overviewMapControl(false)
+	            .panControl(false)
+	            .rotateControl(false)
+	            .scaleControl(false)
+	            .streetViewControl(false)
+	            .zoomControl(false)
+	            .zoom(12);
+
+	    map = mapView.createMap(mapOptions);
+
+	    //Add a marker to the map
+	    MarkerOptions markerOptions = new MarkerOptions();
+
+	    markerOptions.position( new LatLong(47.6097, -500.3331) )
+	                .visible(Boolean.TRUE)
+	                .title("My Marker");
+
+	    Marker marker = new Marker( markerOptions );
+
+	    map.addMarker(marker);
+
 	}
 }
