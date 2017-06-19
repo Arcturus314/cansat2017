@@ -64,8 +64,8 @@ def add_pos():
     try:
         file = open(position_fileName, "a")
         data = position.get_pos_data(False)
-        for i in data:
-            print data
+        #for i in data:
+        #    print data
         data_list = ["translational position", "orientation", "gps_pos"]
         for i in xrange(len(data)):
             file.write(data_list[i])
