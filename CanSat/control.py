@@ -14,6 +14,8 @@ def t_input(message):
     in_data = ""
     try:
         in_data =  str(timed_input.nonBlockingRawInput(message,input_timeout))
+        print "received: ",
+        print in_data
     except EOFError, err:
         pass
     return in_data
