@@ -74,7 +74,7 @@ def create_message(identifier1, identifier2, data):
     message = str(id1_dict[identifier1]) + ',' + str(id2_dict[identifier2]) + ',' + str(data)
     checksum_contribution = checksum_contribution + int(id1_dict[identifier1]) + int(id2_dict[identifier2])
     calc_checksum_contr(data)
-    message = message + ';'
+    message = message + ';' + '\n'
     return message
 
 def init_packet(_inc_data,_inc_all_data,_inc_error,_inc_pos,_inc_mat,_inc_map):
@@ -172,25 +172,19 @@ def build_body():
             body = body + create_message(index_names[i],'Single',getattr(datastore,method_names[i])(False))
             #print "data",
             #print str(getattr(datastore,method_names[i])(False))
-        body = body + ';\n'
     for i in xrange(len(inc_all_data)):
         if inc_all_data[i] == True:
             body = body + create_message(index_names[i],'All',getattr(datastore,method_names[i])(True))
-        body = body + ';\n'
 
     if inc_error == True:
         body = body + create_message('Error','Default',datastore.get_errors())
-        body = body + ';\n'
     if inc_pos == True:
         body = body + create_message('Pos','Default',position.get_pos_data(False))
-        body = body + ';\n'
     if inc_mat == True:
         body = body + create_message('Mat','Default',datastore.get_temp_array_data(False))
-        body = body + ';\n'
     if inc_map == True:
         temp_map.build_frame()
         body = body + create_message('Map','Default',temp_map.return_frame())
-        body = body + ';\n'
 
     body = body + '|\n'
     return body
