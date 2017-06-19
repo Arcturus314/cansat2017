@@ -33,7 +33,7 @@ def init_data(): #writes initial calculated vales to init_position tuple
     calc_bimu_orientation()
     calc_bimu_orientation()
     calc_trans_pos()
-    init_position = make_tuple(get_current_or_pos()[0],get_current_or_pos()[1],get_current_or_pos()[2],get_current_trans_pos()[0],get_current_trans_pos()[1],get_current_env()[1],get_current_env()[0],time.time())
+    init_position = make_tuple([get_current_or_pos()[0],get_current_or_pos()[1],get_current_or_pos()[2],get_current_trans_pos()[0],get_current_trans_pos()[1],get_current_env()[1],get_current_env()[0],time.time()])
 
     gps_data = arduino_interface.get_gps_data()
     if gps_data[0] == 1:
@@ -45,6 +45,8 @@ def make_tuple(in_arr): #returns a tuple of length 3 or 4 with the same data as 
         return in_arr[0],in_arr[1],in_arr[2]
     if len(in_arr) == 4:
         return in_arr[0],in_arr[1],in_arr[2],in_arr[3]
+    if len(in_arr) == 8:
+        return in_arr[0],in_arr[1],in_arr[2],in_arr[3],in_arr[4],in_arr[5],in_arr[6],in_arr[7]
 
 def get_current_trans_pos(): #returns last element in trans_pos list
     return trans_pos[len(trans_pos)-1]
