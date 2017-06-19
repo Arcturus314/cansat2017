@@ -3,6 +3,7 @@ import timed_input
 import packet
 import datalogger
 import multiprocessing
+import time
 
 start_data = False
 input_timeout = 3 #3 seconds to wait for response
@@ -144,6 +145,7 @@ def return_ready():
     print "ready"
 def overall_control():
     while True:
+        time.sleep(1)
         in_packet = t_input("")
         print in_packet
         if in_packet == -1:
