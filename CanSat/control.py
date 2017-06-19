@@ -11,9 +11,9 @@ num_packets = 0
 num_failures = 0
 
 def t_input(message):
-    in_data = 0
+    in_data = ""
     try:
-        in_data =  timed_input.nonBlockingRawInput(message,input_timeout)
+        in_data =  str(timed_input.nonBlockingRawInput(message,input_timeout))
     except EOFError, err:
         pass
     return in_data
