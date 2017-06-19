@@ -10,12 +10,16 @@ input_timeout = 3 #3 seconds to wait for response
 num_packets = 0
 num_failures = 0
 
+in_packet = ("",False)
+
 def t_input(message):
-    in_data = ""
+    global in_packet
     try:
         in_data =  str(timed_input.nonBlockingRawInput(message,input_timeout))
         print "received: ",
         print in_data
+        in_packet = in_data, True
+        return in_packet
     except EOFError, err:
         pass
     return in_data
@@ -146,17 +150,15 @@ def send_packet(packet):
 def return_ready():
     print "ready"
 def overall_control():
-    in_packet = ""
+    global in_packet
     while True:
-        time.sleep(1)
-        in_packet = in_packet + t_input("")
-        print in_packet
-        if '\n' in in_packet:
-            send_packet(packet.build_packet())
-            parsed_packet = parse_packet(in_packet)
-            in_packet = ""
+        if in_packet[1] == False:
+            t_input()
+        if in_packet[1] == True:
+            parsed_packet = parse_packet(in_packet[0])
             if parsed_packet != -1:
                 build_packet(parsed_packet[0],parsed_packet[1])
+        send_packet(packet.build_packet())
 
 
 #Actual code execution
