@@ -156,11 +156,11 @@ def build_header():
     return header
 def build_body():        
     body = "" #string to hold body message
-    for i in xrange(inc_data.len()):
+    for i in xrange(len(inc_data)):
         if inc_data[i] == True:
             body = body + create_message(id1_dict[index_names[i]],'Single',getattr(datastore.method_names[i])(False))
         body = body + ';\n'
-    for i in xrange(inc_all_data.len()):
+    for i in xrange(len(inc_all_data)):
         if inc_all_data[i] == True:
             body = body + create_message(id1_dict[index_names[i]],'All',getattr(datastore.method_names[i])(True))
         body = body + ';\n'

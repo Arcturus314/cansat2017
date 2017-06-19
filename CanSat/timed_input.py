@@ -6,7 +6,7 @@ class AlarmException(Exception):
 def alarmHandler(signum, frame):
     raise AlarmException
 
-def nonBlockingRawInput(prompt='', timeout=20):
+def nonBlockingRawInput(prompt='', timeout=3):
     signal.signal(signal.SIGALRM, alarmHandler)
     signal.alarm(timeout)
     try:
