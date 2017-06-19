@@ -1,6 +1,7 @@
 import datastore
 import position
 import temp_map
+import time
 
 #filenames
 all_data_fileName = "sensor_data_all.txt"
@@ -41,8 +42,8 @@ def add_data():
         file = open(all_data_fileName, "a")
         data = datastore.read_all_active()
         sensor_list = ["accel","mag","gyro","imu_temp","env_pres","env_hum","env_temp","temp_array","temp"]
-        for element in data:
-            print element
+        #for element in data:
+        #    print element
         for i in xrange(len(data)):
             file.write(sensor_list[i])
             file.write(",")
@@ -63,6 +64,8 @@ def add_pos():
     try:
         file = open(position_fileName, "a")
         data = position.get_pos_data(False)
+        for i in data:
+            print data
         data_list = ["translational position", "orientation"]
         for i in xrange(len(data)):
             file.write(data_list[i])
