@@ -10,7 +10,7 @@ num_packets = 0
 num_failures = 0
 
 def t_input(message):
-    return timed_input(message,input_timeout)
+    return timed_input.timed_input(message,input_timeout)
 
 #packet takes form
 #":,(id),|(message)|checksum"
