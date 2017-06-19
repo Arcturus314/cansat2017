@@ -47,7 +47,8 @@ def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
                 if in_char != -1:
                     gps_data[i] = gps_data[i]+read_byte()
         for i in xrange(5):
-            gps_data_ints[i] = int(gps_data[i])
+            if ard_status == True:
+                gps_data_ints[i] = int(gps_data[i])
         ard_status = True
     except IOError, err:
         ard_status = False
