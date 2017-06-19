@@ -165,25 +165,25 @@ def build_body():
             print id1_dict[index_names[i]]
             print index_names[i]
             print i
-            body = body + create_message(id1_dict[index_names[i]],'Single',getattr(datastore,method_names[i])(False))
+            body = body + create_message(index_names[i],'Single',getattr(datastore,method_names[i])(False))
         body = body + ';\n'
     for i in xrange(len(inc_all_data)):
         if inc_all_data[i] == True:
-            body = body + create_message(id1_dict[index_names[i]],'All',getattr(datastore,method_names[i])(True))
+            body = body + create_message(index_names[i],'All',getattr(datastore,method_names[i])(True))
         body = body + ';\n'
 
     if inc_error == True:
-        body = body + create_message(id1_dict['Error'],id2_dict['Default'],datastore.get_errors())
+        body = body + create_message('Error','Default',datastore.get_errors())
         body = body + ';\n'
     if inc_pos == True:
-        body = body + create_message(id1_dict['Pos'],id2_dict['Default'],position.get_pos_data(False))
+        body = body + create_message('Pos','Default',position.get_pos_data(False))
         body = body + ';\n'
     if inc_mat == True:
-        body = body + create_message(id_dict['Mat'],id2_dict['Default'],datastore.get_temp_array_data())
+        body = body + create_message('Mat','Default',datastore.get_temp_array_data())
         body = body + ';\n'
     if inc_map == True:
         temp_map.build_frame()
-        body = body + create_message(id_dict['Map'],id2_dict['Default'],temp_map.return_frame())
+        body = body + create_message('Map','Default',temp_map.return_frame())
         body = body + ';\n'
 
     body = body + '|\n'
