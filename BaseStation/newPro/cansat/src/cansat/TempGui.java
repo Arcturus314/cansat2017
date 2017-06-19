@@ -34,11 +34,13 @@ public class TempGui extends Canvas{
 			gc.setFill(Color.WHITE);
 			gc.fillRect(20, 10, 2, 310);
 			
+			int[] nums = new int[]{25, 20, 15, 10, 5 ,0};
+			
 			for(int i = 0; i < 6; i++){
 				gc.fillRect(22, i * 59 + 10, 10, 2);
 				gc.setFont(Font.font(java.awt.Font.SERIF, 12));
 				gc.setFill(Color.WHITE);
-				gc.fillText(i * 5 + "C", 34 , i * 59 + 15);
+				gc.fillText(nums[i] + "C", 34 , i * 59 + 15);
 				}
 			
 			

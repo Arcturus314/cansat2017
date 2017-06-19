@@ -110,9 +110,9 @@ public class MainLoop extends Application{
 		                
 		                //Update console
 		                	try{
-		                		   TextArea  console = Gui.getTextField();
-		                		   String newLine = "\n";
-		                		   console.appendText(String.valueOf(tick+ newLine));
+		                		  // TextArea  console = Gui.getTextField();
+		                		  //  String newLine = "\n";
+		                		  // console.appendText(String.valueOf(tick+ newLine));
 		                		   
 		                		} catch (IndexOutOfBoundsException  e) {
 		                			 System.err.println(e.getMessage());
