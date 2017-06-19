@@ -72,7 +72,7 @@ def add_pos():
             file.write(",")
             file.write(str(data[i]))
             file.write(",")
-            file.write(time.time())
+            file.write(str(time.time()))
             file.write('/n')
         file.close()
     except IOError, err:
