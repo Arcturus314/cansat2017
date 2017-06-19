@@ -68,7 +68,7 @@ def create_message(identifier1, identifier2, data):
     checksum_contribution = checksum_contribution + int(id1_dict[identifier1]) + int(id2_dict[identifier2])
     if type(data) == tuple:
         for i in xrange(len(data)):
-            message = message + data[i] + ','
+            message = message + str(data[i]) + ','
             checksum_contribution = checksum_contribution + int(data[i])
     message = message + ';'
     return message
