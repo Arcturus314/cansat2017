@@ -23,7 +23,7 @@ def add_data(data):
 
 def read_byte():
     global ard_status
-    data = 0
+    data = -1
     try:
         print "reading ard byte"
         data = bus.read_byte(ard_addr)
@@ -42,9 +42,10 @@ def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
         while in_char != ':' and ard_status == True:
             in_char = read_byte()
         for i in xrange(5):
-            while in_char != ',':
+            while in_char != ',' and in_char != -1:
                 in_char = read_byte()
-                gps_data[i] = gps_data[i]+read_byte()
+                if in_char != -1:
+                    gps_data[i] = gps_data[i]+read_byte()
         for i in xrange(5):
             gps_data_ints[i] = int(gps_data[i])
         ard_status = True
