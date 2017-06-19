@@ -28,7 +28,7 @@ position_data = [(0,0,0,0),(0,0,0,0)]
 temp_matrix = []
 
 def init_data():
-    position_data.init_data()
+    position.init_data()
 
 def get_position():
     global position
