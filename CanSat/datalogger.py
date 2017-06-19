@@ -40,6 +40,7 @@ def add_data():
     try:
         file = open(all_data_fileName, "a")
         data = datastore.read_all_active()
+        print data
         sensor_list = ["accel","mag","gyro","imu_temp","env_pres","env_hum","env_temp","temp_array"]
         for i in xrange(len(data)):
             file.write(sensor_list[i])

@@ -25,7 +25,6 @@ def read_byte():
     global ard_status
     data = -1
     try:
-        print "reading ard byte"
         data = bus.read_byte(ard_addr)
         ard_status = True
     except IOError, err:
@@ -33,7 +32,6 @@ def read_byte():
     return data
 
 def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
-    print "read_arduino"
     global ard_status
     gps_data = ["","","","",""]
     gps_data_ints = [0,0,0,0,0]
@@ -71,6 +69,5 @@ def get_file_status():
     global ard_file_error
     return ard_file_error
 def get_gps_data(): #returns tuple fix, speed, altitude, latitude, longitude, time
-    print "get gps data"
     return convert_arduino_data(read_arduino()),time.time()
 

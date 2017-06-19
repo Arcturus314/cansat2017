@@ -154,9 +154,7 @@ return_ready() #ready returned on startup
 #Logger process independently manages data logging and recording to files
 
 if __name__ == '__main__':
-    print "starting control..."
     control = multiprocessing.Process(target=overall_control)
-    print "starting logger.."
     logger = multiprocessing.Process(target=datalogger.add_all_inf)
     control.start()
     logger.start()
