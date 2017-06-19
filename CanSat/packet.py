@@ -183,7 +183,7 @@ def build_body():
         body = body + create_message('Pos','Default',position.get_pos_data(False))
         body = body + ';\n'
     if inc_mat == True:
-        body = body + create_message('Mat','Default',datastore.get_temp_array_data())
+        body = body + create_message('Mat','Default',datastore.get_temp_array_data(False))
         body = body + ';\n'
     if inc_map == True:
         temp_map.build_frame()
