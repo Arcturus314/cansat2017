@@ -145,6 +145,7 @@ def return_ready():
 def overall_control():
     while True:
         in_packet = t_input("")
+        print in_packet
         if in_packet == -1:
             send_packet(packet.build_packet())
         parsed_packet = parse_packet(in_packet)
