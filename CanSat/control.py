@@ -155,7 +155,7 @@ return_ready() #ready returned on startup
 
 if __name__ == '__main__':
     print "starting control..."
-    control = multiprocessing.ProcessError(target=overall_control)
+    control = multiprocessing.Process(target=overall_control)
     print "starting logger.."
     logger = multiprocessing.Process(target=datalogger.add_all_inf)
     control.start()
