@@ -71,7 +71,7 @@ def create_message(identifier1, identifier2, data):
     #print identifier2
 
     global checksum_contribution
-    message = str(id1_dict[identifier1]) + ',' + str(id2_dict[identifier2]) + ','
+    message = str(id1_dict[identifier1]) + ',' + str(id2_dict[identifier2]) + ',' + str(data)
     checksum_contribution = checksum_contribution + int(id1_dict[identifier1]) + int(id2_dict[identifier2])
     calc_checksum_contr(data)
     message = message + ';'
@@ -170,8 +170,8 @@ def build_body():
             #print index_names[i]
             #print i
             body = body + create_message(index_names[i],'Single',getattr(datastore,method_names[i])(False))
-            print "data",
-            print str(getattr(datastore,method_names[i])(False))
+            #print "data",
+            #print str(getattr(datastore,method_names[i])(False))
         body = body + ';\n'
     for i in xrange(len(inc_all_data)):
         if inc_all_data[i] == True:
