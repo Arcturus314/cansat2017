@@ -106,11 +106,11 @@ def calc_trans_pos(): #calculates the translational position given accelerometer
     accel_data_comp[0][3] = accel_data[0][3]
     accel_data_comp[1][3] = accel_data[1][3]
 
-    accel_data_comp[0][0] = (accel_data[0][1]*math.cos(dtr*get_last_or_pos[0])+accel_data[0][0]*math.cos(dtr*(90-get_last_or_pos[0])))*math.sin(dtr*get_last_or_pos[1])
-    accel_data_comp[0][1] = (accel_data[0][1]*math.sin(dtr*get_last_or_pos[0])+accel_data[0][0]*math.sin(dtr*(90-get_last_or_pos[0])))*math.sin(dtr*get_last_or_pos[2])
+    accel_data_comp[0][0] = (accel_data[0][1]*math.cos(dtr*get_last_or_pos()[0])+accel_data[0][0]*math.cos(dtr*(90-get_last_or_pos()[0])))*math.sin(dtr*get_last_or_pos()[1])
+    accel_data_comp[0][1] = (accel_data[0][1]*math.sin(dtr*get_last_or_pos()[0])+accel_data[0][0]*math.sin(dtr*(90-get_last_or_pos()[0])))*math.sin(dtr*get_last_or_pos()[2])
 
-    accel_data_comp[0][0] = (accel_data[0][1]*math.cos(dtr*get_current_or_pos[0])+accel_data[0][0]*math.cos(dtr*(90-get_current_or_pos[0])))*math.sin(dtr*get_current_or_pos[1])
-    accel_data_comp[0][1] = (accel_data[0][1]*math.sin(dtr*get_current_or_pos[0])+accel_data[0][0]*math.sin(dtr*(90-get_current_or_pos[0])))*math.sin(dtr*get_current_or_pos[2])
+    accel_data_comp[0][0] = (accel_data[0][1]*math.cos(dtr*get_current_or_pos()[0])+accel_data[0][0]*math.cos(dtr*(90-get_current_or_pos()[0])))*math.sin(dtr*get_current_or_pos()[1])
+    accel_data_comp[0][1] = (accel_data[0][1]*math.sin(dtr*get_current_or_pos()[0])+accel_data[0][0]*math.sin(dtr*(90-get_current_or_pos()[0])))*math.sin(dtr*get_current_or_pos()[2])
 
     #now we need to calculate the difference in accelerometer data
     #can be done by considering reimann sums
