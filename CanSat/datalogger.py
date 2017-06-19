@@ -66,7 +66,7 @@ def add_pos():
         data = position.get_pos_data(False)
         for i in data:
             print data
-        data_list = ["translational position", "orientation"]
+        data_list = ["translational position", "orientation", "gps_pos"]
         for i in xrange(len(data)):
             file.write(data_list[i])
             file.write(",")
