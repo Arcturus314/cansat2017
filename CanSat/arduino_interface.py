@@ -44,7 +44,7 @@ def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
         for i in xrange(5):
             while in_char != ',':
                 in_char = read_byte()
-                gps_data[i].append(read_byte())
+                gps_data[i] = gps_data[i]+read_byte()
         for i in xrange(5):
             gps_data_ints[i] = int(gps_data[i])
         ard_status = True
