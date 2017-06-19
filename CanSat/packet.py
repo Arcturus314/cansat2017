@@ -69,7 +69,11 @@ def create_message(identifier1, identifier2, data):
     if type(data) == tuple:
         for i in xrange(len(data)):
             message = message + str(data[i]) + ','
-            checksum_contribution = checksum_contribution + int(data[i])
+            if type(data[i]) == tuple:
+                for element in data[i]:
+                    checksum_contribution = checksum_contribution + int(element)
+            else:
+                checksum_contribution = checksum_contribution + int(data[i])
     message = message + ';'
     return message
 
