@@ -37,7 +37,6 @@ def get_position():
 def get_temp_matrix():
     global temp_matrix
     temp_matrix = datastore.get_temp_array_data(False)[0][0] #will return only the temperature matrix, not time or internal D6T temperature
-    print temp_matrix
 
 def calc_size(height,x_tilt,y_tilt,pixel):
     global offsets
