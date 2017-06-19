@@ -25,6 +25,7 @@ init_position = (0,0,0,0,0,0,0) #(heading,x-or,y-or,x,y,alt,temperature,time)
 init_gps_pos  = (0,0,0,0,0,0)       #(fix,altitude,latitude,longitude,x_pos,y_postime)
 
 def init_data(): #writes initial calculated vales to init_position tuple
+    #initializing data
     datastore.get_accelerometer_data(False)    
     datastore.get_magnetometer_data(False)
     datastore.get_gyroscope_data(False)
