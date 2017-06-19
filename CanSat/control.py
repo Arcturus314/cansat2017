@@ -144,13 +144,15 @@ def send_packet(packet):
 def return_ready():
     print "ready"
 def overall_control():
+    in_packet = ""
     while True:
         time.sleep(1)
-        in_packet = t_input("")
+        in_packet = in_packet + t_input("")
         print in_packet
-        if in_packet == -1:
+        if '\n' in in_packet:
             send_packet(packet.build_packet())
-        parsed_packet = parse_packet(in_packet)
+            parsed_packet = parse_packet(in_packet)
+            in_packet = ""
         if parsed_packet != -1:
             build_packet(parsed_packet[0],parsed_packet[1])
 
