@@ -10,7 +10,11 @@ num_packets = 0
 num_failures = 0
 
 def t_input(message):
-    in_data =  timed_input.nonBlockingRawInput(message,input_timeout)
+    in_data = 0
+    try:
+        in_data =  timed_input.nonBlockingRawInput(message,input_timeout)
+    except EOFError, err:
+        pass
     return in_data
 
 #packet takes form
