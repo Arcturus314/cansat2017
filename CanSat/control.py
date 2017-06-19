@@ -14,6 +14,7 @@ in_packet = ("",False)
 
 def t_input(message):
     global in_packet
+    in_data = ""
     try:
         in_data =  str(timed_input.nonBlockingRawInput(message,input_timeout))
         print "received: ",
