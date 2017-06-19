@@ -102,7 +102,7 @@ def calc_trans_pos(): #calculates the translational position given accelerometer
     global accel_data, mag_data, trans_pos
 
     #We first need to compensate accel_data with current CanSat position
-    accel_data_comp = [(0,0,0,0),(0,0,0,0)]
+    accel_data_comp = [[0,0,0,0],[0,0,0,0]]
     accel_data_comp[0][3] = accel_data[0][3]
     accel_data_comp[1][3] = accel_data[1][3]
 
