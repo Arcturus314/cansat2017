@@ -58,6 +58,13 @@ position.init_data() #initializing data lists
 # --footer--
 # (checksum)
 
+def calc_checksum_contr(data):
+    global checksum_contribution
+    if type(data) != tuple and type(data) != list:
+        checksum_contribution = checksum_contribution + int(data)
+    else:
+        for element in data:
+            calc_checksum_contr(element)
 
 def create_message(identifier1, identifier2, data):
     print identifier1
@@ -66,14 +73,7 @@ def create_message(identifier1, identifier2, data):
     global checksum_contribution
     message = str(id1_dict[identifier1]) + ',' + str(id2_dict[identifier2]) + ','
     checksum_contribution = checksum_contribution + int(id1_dict[identifier1]) + int(id2_dict[identifier2])
-    if type(data) == tuple:
-        for i in xrange(len(data)):
-            message = message + str(data[i]) + ','
-            if type(data[i]) == tuple or type(data[i]) == list:
-                for element in data[i]:
-                    checksum_contribution = checksum_contribution + int(element)
-            else:
-                checksum_contribution = checksum_contribution + int(data[i])
+    calc_checksum_contr(data)
     message = message + ';'
     return message
 
