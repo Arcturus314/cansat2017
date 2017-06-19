@@ -45,8 +45,8 @@ def calc_size(height,x_tilt,y_tilt,pixel):
 
 def calc_coordinate(height,x_pos,y_pos,x_tilt,y_tilt,heading,pixel):
     global offsets,position_data
-    x = height*tan(dtr*(y_tilt*math.cos(dtr*heading)+x_tilt*math.cos(dtr*(90-heading))+offsets[pixel][0]*math.cos(dtr*heading)-offsets[pixel][1]*math.sin(dtr*heading))) + x_pos
-    y = height*tan(dtr*(y_tilt*math.sin(dtr*heading)+x_tilt*math.sin(dtr*(90-heading))+offsets[pixel][0]*math.sin(dtr*heading)+offsets[pixel][1]*math.cos(dtr*heading))) + y_pos
+    x = height*math.tan(dtr*(y_tilt*math.cos(dtr*heading)+x_tilt*math.cos(dtr*(90-heading))+offsets[pixel][0]*math.cos(dtr*heading)-offsets[pixel][1]*math.sin(dtr*heading))) + x_pos
+    y = height*math.tan(dtr*(y_tilt*math.sin(dtr*heading)+x_tilt*math.sin(dtr*(90-heading))+offsets[pixel][0]*math.sin(dtr*heading)+offsets[pixel][1]*math.cos(dtr*heading))) + y_pos
     return x,y
 
 def build_frame():
