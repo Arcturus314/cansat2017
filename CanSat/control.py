@@ -153,8 +153,8 @@ def overall_control():
             send_packet(packet.build_packet())
             parsed_packet = parse_packet(in_packet)
             in_packet = ""
-        if parsed_packet != -1:
-            build_packet(parsed_packet[0],parsed_packet[1])
+            if parsed_packet != -1:
+                build_packet(parsed_packet[0],parsed_packet[1])
 
 
 #Actual code execution
