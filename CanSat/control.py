@@ -153,7 +153,7 @@ def overall_control():
     global in_packet
     while True:
         if in_packet[1] == False:
-            t_input()
+            t_input("")
         if in_packet[1] == True:
             parsed_packet = parse_packet(in_packet[0])
             if parsed_packet != -1:
