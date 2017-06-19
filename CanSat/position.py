@@ -128,7 +128,6 @@ def calc_trans_pos(): #calculates the translational position given accelerometer
     
 
     #We still have to consider gps data in order to bound the calculated accelerometer position
-    print "calc trans pos"
     gps_data = arduino_interface.get_gps_data()
     gps_pos.append(gps_data)
     if init_gps_pos[0] == 0 and gps_data[0] == 1:
