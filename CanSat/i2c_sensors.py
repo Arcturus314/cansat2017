@@ -293,6 +293,7 @@ class D6T_Temp_Array(I2C_Sensor):
         self.dev_state = True
         try:
             D6T_data = bus.read_i2c_block_data(self.dev_addr, 0x4C)
+            print D6T_data
         except IOError,err:
             self.dev_state = False
         if self.dev_state == True:
@@ -301,8 +302,6 @@ class D6T_Temp_Array(I2C_Sensor):
                 return_data[i] = self.applyCal((D6T_data[2*i] + 256*D6T_data[2*i+1]/10.0))
                 if i>0:
                     sumt = sumt + return_data[i]
-            for i in return_data:
-                print return_data
             return_data[16] = sumt / 15.0
         return return_data[1:16], return_data[0]
 
