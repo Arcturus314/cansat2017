@@ -171,7 +171,7 @@ def build_body():
             #print i
             body = body + create_message(index_names[i],'Single',getattr(datastore,method_names[i])(False))
             print "data",
-            print gettattr(datastore,method_names[i])(False)
+            print getattr(datastore,method_names[i])(False)
         body = body + ';\n'
     for i in xrange(len(inc_all_data)):
         if inc_all_data[i] == True:
