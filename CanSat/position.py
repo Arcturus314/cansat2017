@@ -33,7 +33,7 @@ def init_data(): #writes initial calculated vales to init_position tuple
     calc_bimu_orientation()
     calc_bimu_orientation()
     calc_trans_pos()
-    init_position = make_tuple(get_bimu_orientation()[0],get_current_or_pos()[1],get_current_or_pos()[2],get_current_trans_pos()[0],get_current_trans_pos()[1],get_current_env()[1],get_current_env()[0],time.time())
+    init_position = make_tuple(get_current_or_pos()[0],get_current_or_pos()[1],get_current_or_pos()[2],get_current_trans_pos()[0],get_current_trans_pos()[1],get_current_env()[1],get_current_env()[0],time.time())
 
     gps_data = arduino_interface.get_gps_data()
     if gps_data[0] == 1:
