@@ -302,7 +302,7 @@ class D6T_Temp_Array(I2C_Sensor):
                 if i>0:
                     sumt = sumt + return_data[i]
             return_data[16] = sumt / 15.0
-            #print return_data
+            print return_data[1:16]
         return return_data[1:16], return_data[0]
 
 

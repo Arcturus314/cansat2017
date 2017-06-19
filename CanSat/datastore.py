@@ -282,7 +282,6 @@ def get_temp_array_data(data):
     global temp_camera
     global temp_array_data
     val = temp_camera.read()
-    print val
     temp_array_data.append([val, time.time()])
     add_temp_matrix(val)
     if data == True:
