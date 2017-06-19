@@ -40,7 +40,7 @@ def get_temp_matrix():
 
 def calc_size(height,x_tilt,y_tilt,pixel):
     global offsets
-    size = height*math.sqrt((math.tan(dtr*(x_tilt+offsets[pixel][0])))**2 + math.tan((math.tan(dtr*(x_tilt+offsets[pixel][1])))))
+    size = height*math.sqrt(abs((math.tan(dtr*(x_tilt+offsets[pixel][0])))**2 + math.tan((math.tan(dtr*(x_tilt+offsets[pixel][1]))))))
     return size
 
 def calc_coordinate(height,x_pos,y_pos,x_tilt,y_tilt,heading,pixel):
