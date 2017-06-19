@@ -67,8 +67,8 @@ def calc_checksum_contr(data):
             calc_checksum_contr(element)
 
 def create_message(identifier1, identifier2, data):
-    print identifier1
-    print identifier2
+    #print identifier1
+    #print identifier2
 
     global checksum_contribution
     message = str(id1_dict[identifier1]) + ',' + str(id2_dict[identifier2]) + ','
