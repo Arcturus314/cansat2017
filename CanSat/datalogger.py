@@ -82,7 +82,7 @@ def add_temp_map():
     try:
         file = open(temp_map_fileName, "a")
         temp_map.build_frame()
-        file.write(str(temp_map.return_frame()))
+        file.write(str(temp_map.return_frame(False)))
         file.write('\n')
         file.close()
     except IOError, err:

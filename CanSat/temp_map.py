@@ -65,6 +65,9 @@ def build_frame():
         temp = temp_matrix[i]
         map_raw.append((temp,coordinates[0],coordinates[1],size))
 
-def return_frame():
-    return map_raw
+def return_frame(type):
+    if type == True:
+        return map_raw
+    else:
+        return map_raw[len(map_raw)-1]
 

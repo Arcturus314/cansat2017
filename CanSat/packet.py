@@ -184,7 +184,7 @@ def build_body():
         body = body + create_message('Mat','Default',datastore.get_temp_array_data(False))
     if inc_map == True:
         temp_map.build_frame()
-        body = body + create_message('Map','Default',temp_map.return_frame())
+        body = body + create_message('Map','Default',temp_map.return_frame(False))
 
     body = body + '|\n'
     return body
