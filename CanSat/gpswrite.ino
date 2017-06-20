@@ -89,8 +89,41 @@ if (GPS.fix) {
   gpsvaliditydata[3] = 0xFF
   gpsvaliditydata[4] = 0xFF
 	
-  int gpsdata[52]
-  gpsdata[2] = gpsvaliditydata[2]
-  gpsdata[7] = gpsspeeddata[2]
-     
+  int gpsdata[54];
+  gpsdata[2] = gpsvaliditydata[2];
+  gpsdata[7] = gpsspeeddata[2];
+  gpsdata[8] = gpsspeeddata[3];
+  gpsdata[9] = gpsspeeddata[4];
+  gpsdata[10] = gpsspeeddata[5]; 
+  gpsdata[11] = gpsspeeddata[6];
+  gpsdata[16] = gpslatdegdata[2];
+  gpsdata[17] = gpslatdegdata[3];
+  gpsdata[18] = gpslatdegdata[4];
+  gpsdata[19] = gpslatdegdata[5];
+  gpsdata[20] = gpslatdegdata[6];
+  gpsdata[21] = gpslatdegdata[7];
+  gpsdata[22] = gpslatdegdata[8];
+  gpsdata[23] = gpslatdegdata[9];
+  gpsdata[24] = gpslatdegdata[10];
+  gpsdata[25] = gpslatdegdata[11];
+  gpsdata[30] = gpslondata[2];
+  gpsdata[31] = gpslondata[3];
+  gpsdata[32] = gpslondata[4];
+  gpsdata[33] = gpslondata[5];
+  gpsdata[34] = gpslondata[6];	
+  gpsdata[35] = gpslondata[7];
+  gpsdata[36] = gpslondata[8];
+  gpsdata[37] = gpslondata[9];
+  gpsdata[38] = gpslondata[10];	
+  gpsdata[39] = gpslondata[11];	
+  gpsdata[44] =  gpsalt[2];
+  gpsdata[45] =  gpsalt[3];
+  gpsdata[46] =  gpsalt[4];
+  gpsdata[47] =  gpsalt[5];
+  gpsdata[48] =  gpsalt[6]; 
+  gpsdata[49] =  gpsalt[7]; 
+  gpsdata[50] =  gpsalt[8];
+  gpsdata[51] =  gpsalt[9];
+  gpsdata[52] =  gpsalt[10];
+  gpsdata[53] =  gpsalt[11];
 }
