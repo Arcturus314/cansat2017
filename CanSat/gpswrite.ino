@@ -1,3 +1,24 @@
+int gpsdata[53];
+gpsdata[0] = 0x00
+gpsdata[1] = 0x00	
+gpsdata[3] = 0xFF
+gpsdata[4] = 0xFF
+gpsdata[5] = 0x00
+gpsdata[6] = 0x00
+gpsdata[12] = 0xFF
+gpsdata[13] = 0xFF
+gpsdata[14] = 0x00
+gpsdata[15] = 0x00
+gpsdata[26] = 0xFF
+gpsdata[27] = 0xFF
+gpsdata[28] = 0x00
+gpsdata[29] = 0x00
+gpsdata[40] = 0xFF
+gpsdata[41] = 0xFF
+gpsdata[42] = 0x00
+gpsdata[43] = 0x00
+gpsdata[54] = 0xFF
+gpsdata[55] = 0xFF
 if (GPS.fix) {
 	  
   String gpslatdeg = String(GPS.latitudeDegrees);
@@ -69,56 +90,7 @@ if (GPS.fix) {
   gpsvaliditydata[4] = 0xFF
 	
   int gpsdata[52]
-  gpsdata[0] = 
-  gpsdata[1] = 
-  gpsdata[2] = 
-  gpsdata[3] = 
-  gpsdata[4] = 
-  gpsdata[5] = 
-  gpsdata[6] = 
-  gpsdata[7] = 
-  gpsdata[8] = 
-  gpsdata[9] = 
-  gpsdata[10] = 
-  gpsdata[11] = 
-  gpsdata[12] = 
-  gpsdata[13] = 
-  gpsdata[14] = 
-  gpsdata[15] = 
-  gpsdata[16] =
-  gpsdata[17] = 
-  gpsdata[18] = 
-  gpsdata[19] = 
-  gpsdata[20] = 
-  gpsdata[21] = 
-  gpsdata[22] = 
-  gpsdata[23] = 
-  gpsdata[24] = 
-  gpsdata[25] = 
-  gpsdata[26] = 
-  gpsdata[27] = 
-  gpsdata[28] = 
-  gpsdata[29] = 
-  gpsdata[30] = 
-  gpsdata[31] = 
-  gpsdata[32] = 
-  gpsdata[33] = 
-  gpsdata[34] = 
-  gpsdata[35] = 
-  gpsdata[36] = 
-  gpsdata[37] = 
-  gpsdata[38] = 
-  gpsdata[39] = 
-  gpsdata[40] = 
-  gpsdata[41] = 
-  gpsdata[42] = 
-  gpsdata[43] =  
-  gpsdata[44] =
-  gpsdata[45] = 
-  gpsdata[46] = 
-  gpsdata[47] = 
-  gpsdata[48] = 
-  gpsdata[49] = 
-  gpsdata[50] = 
-  gpsdata[51] = 
+  gpsdata[2] = gpsvaliditydata[2]
+  gpsdata[7] = gpsspeeddata[2]
+     
 }
