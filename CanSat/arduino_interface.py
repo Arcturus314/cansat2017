@@ -67,6 +67,8 @@ def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
             read_byte() #to update arduino state
     except IOError, err:
         ard_status = False
+    except ValueError, err:
+        pass
     add_data(gps_data_floats)
     return gps_data_floats
 
