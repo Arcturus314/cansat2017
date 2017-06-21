@@ -70,6 +70,8 @@ def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
     except ValueError, err:
         pass
     add_data(gps_data_floats)
+    if gps_data_floats[0] == 1.0 and -1 in gps_data_floats: #if the GPS has a lock, rest of data must be valid for position to be returned
+        return [0.0,0.0,0.0,0.0,0.0]
     return gps_data_floats
 
     #try:
