@@ -23,12 +23,14 @@ def add_data(data):
 
 def read_byte():
     global ard_status
-    data = -1
+    data = ""
     try:
         data = str(unichr(bus.read_byte(ard_addr)))
         ard_status = True
     except IOError, err:
         ard_status = False
+    except UnicodeEncodeError, err2:
+        pass
     return data
 
 def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
