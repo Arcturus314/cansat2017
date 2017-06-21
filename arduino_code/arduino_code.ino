@@ -151,6 +151,7 @@ String buildList() {
 }
 
 void requestEvent() {
+  Serial.println("requestEvent");
   digitalWrite(13, HIGH);
   if(count = returnList.length()) { //to initialize the list
     returnList = buildList();
@@ -166,6 +167,7 @@ void requestEvent() {
 }
 
 void receiveEvent(int howMany) {
+  Serial.println("receiveEvent");
   int count = 0;
   for (int i = 0; i < howMany; i++) {
     receiveData[i] = Wire.read();
