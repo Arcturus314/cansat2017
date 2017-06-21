@@ -31,25 +31,29 @@ def read_byte():
         ard_status = False
     except UnicodeEncodeError, err2:
         pass
+    print data
     return data
 
 def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
     global ard_status
     gps_data = ["","","","",""]
-    gps_data_floats = [0.0,0.0,0.0,0.0,0.0]
+    gps_data_floats = [-1.0,-1.0,-1.0,-1.0,-1.0]
     count = 0
     try:
         if ard_status == True:
             #need to wait for initial ':'
             in_char = ' '
+
+            print "waiting for initial colon..."
             while in_char != ':': #this loop will break when the initial colon is read
                 in_char = read_byte()
 
+            print "reading data..."
             for i in xrange(5): #as there are 5 data points
                 while in_char != ',': #reading the contents of each byte
                     in_char = read_byte
                     gps_data[i] = gps_data[i] + read_byte()
-
+            print "parsing data..."
             for i in xrange(5):
                 gps_data_floats[i] = float(gps_data[i])
         else:
