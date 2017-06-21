@@ -41,7 +41,7 @@ def add_data():
     try:
         file = open(all_data_fileName, "a")
         data = datastore.read_all_active()
-        sensor_list = ["accel","mag","gyro","imu_temp","env_pres","env_hum","env_temp","temp_array","temp"]
+        sensor_list = ["accel","mag","gyro","imu_temp","env_pres","env_hum","env_temp","temp_array","time"]
         #for element in data:
         #    print element
         for i in xrange(len(data)):
@@ -73,7 +73,7 @@ def add_pos():
             file.write(str(data[i]))
             file.write(",")
             file.write(str(time.time()))
-            file.write('/n')
+            file.write('\n')
         file.close()
     except IOError, err:
         position_file_error = True
