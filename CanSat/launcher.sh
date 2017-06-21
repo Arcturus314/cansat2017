@@ -11,6 +11,6 @@
 
 cd /
 cd /home/chip/cansat2017/CanSat
-sudo python control.py
+python /home/chip/cansat2017/CanSat/control.py
 cd /
 
