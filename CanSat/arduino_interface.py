@@ -37,7 +37,7 @@ def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
     gps_data_floats = [0.0,0.0,0.0,0.0,0.0]
     count = 0
     try:
-        if ard_status = True:
+        if ard_status == True:
             #need to wait for initial ':'
             in_char = ' '
             while in_char != ':': #this loop will break when the initial colon is read
