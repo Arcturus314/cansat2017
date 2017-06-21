@@ -31,7 +31,8 @@ def read_byte():
         ard_status = False
     except UnicodeEncodeError, err2:
         pass
-    print data
+    print data,
+    print " ",
     return data
 
 def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
