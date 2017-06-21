@@ -32,7 +32,6 @@ def read_byte():
     except UnicodeEncodeError, err2:
         pass
     print data,
-    print " ",
     return data
 
 def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
@@ -54,6 +53,7 @@ def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
                 while in_char != ',': #reading the contents of each byte
                     in_char = read_byte
                     gps_data[i] = gps_data[i] + read_byte()
+                print "comma found"
             print "parsing data..."
             for i in xrange(5):
                 gps_data_floats[i] = float(gps_data[i])
