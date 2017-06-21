@@ -34,24 +34,45 @@ def read_byte():
 def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
     global ard_status
     gps_data = ["","","","",""]
-    gps_data_ints = [0,0,0,0,0]
+    gps_data_floats = [0.0,0.0,0.0,0.0,0.0]
+    count = 0
     try:
-        in_char = ' '
-        while in_char != ':' and ard_status == True:
-            in_char = read_byte()
-        for i in xrange(5):
-            while in_char != ',' and in_char != -1:
+        if ard_status = True:
+            #need to wait for initial ':'
+            in_char = ' '
+            while in_char != ':': #this loop will break when the initial colon is read
                 in_char = read_byte()
-                if in_char != -1:
-                    gps_data[i] = gps_data[i]+str(read_byte())
-        for i in xrange(5):
-            if ard_status == True:
-                gps_data_ints[i] = int(gps_data[i])
-        ard_status = True
+
+            for i in xrange(5): #as there are 5 data points
+                while in_char != ',': #reading the contents of each byte
+                    in_char = read_byte
+                    gps_data[i] = gps_data[i] + read_byte()
+
+            for i in xrange(5):
+                gps_data_floats[i] = float(gps_data[i])
+        else:
+            read_byte() #to update arduino state
     except IOError, err:
         ard_status = False
-    add_data(gps_data_ints)
-    return gps_data_ints
+    add_data(gps_data_floats)
+    return gps_data_floats
+
+    #try:
+    #    in_char = ' '
+    #    while in_char != ':' and ard_status == True:
+    #        for i in xrange(5):
+    #            while in_char != ',' and in_char != -1:
+    #                in_char = read_byte()
+    #                if in_char != -1:
+    #                    gps_data[i] = gps_data[i]+str(read_byte())
+    #        for i in xrange(5):
+    #            if ard_status == True:
+    #                gps_data_ints[i] = int(gps_data[i])
+    #        ard_status = True
+    #except IOError, err:
+    #    ard_status = False
+    #add_data(gps_data_ints)
+    #return gps_data_ints
 
 def convert_arduino_data(data_list): #returns list in SI units
     convert_list = [0,0,0,0,0]
