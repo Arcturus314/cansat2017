@@ -25,7 +25,7 @@ def read_byte():
     global ard_status
     data = -1
     try:
-        data = bus.read_byte(ard_addr)
+        data = str(bus.read_byte(ard_addr))
         ard_status = True
     except IOError, err:
         ard_status = False

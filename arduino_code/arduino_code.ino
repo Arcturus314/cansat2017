@@ -158,6 +158,7 @@ void requestEvent() {
   }
   if(count = returnList.length()-1) { //to fill the list after one complete send
     returnList = buildList();
+    count = 0;
   }
 
   Wire.write(returnList.charAt(count));
