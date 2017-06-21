@@ -1,4 +1,4 @@
-int gpsdata[53];
+int gpsdata[56];
 gpsdata[0] = 0x00
 gpsdata[1] = 0x00	
 gpsdata[3] = 0xFF
@@ -89,7 +89,7 @@ if (GPS.fix) {
   gpsvaliditydata[3] = 0xFF
   gpsvaliditydata[4] = 0xFF
 	
-  int gpsdata[54];
+  int gpsdata[56];
   gpsdata[2] = gpsvaliditydata[2];
   gpsdata[7] = gpsspeeddata[2];
   gpsdata[8] = gpsspeeddata[3];
