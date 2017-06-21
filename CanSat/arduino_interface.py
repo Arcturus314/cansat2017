@@ -54,6 +54,7 @@ def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
                     in_char = read_byte()
                     if in_char != ',':
                         gps_data[i] = gps_data[i] + in_char
+                in_char = ' '
                 print "comma found"
             print "data start"
             for element in gps_data:
