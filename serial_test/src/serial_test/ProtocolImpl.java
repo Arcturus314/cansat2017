@@ -20,7 +20,9 @@ public class ProtocolImpl implements Protocol {
 	private void onMessage() {
 		if (tail!=0) {
 			String message = getMessage(buffer,tail);
-			System.out.println("RECEIVED MESSAGE: " + message);
+			//System.out.println("RECEIVED MESSAGE: " + message);
+			Container.getInstance().message = message;
+			Container.getInstance().read    = false;
 			tail = 0;
 		}
 	}
