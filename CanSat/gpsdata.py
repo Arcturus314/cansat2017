@@ -10,7 +10,7 @@ def read_ard():
                 ard_err = True
 	if (ard_data[0] == 0x00 && ard_data[1] == 0x00 && ard_data[3] = 0xFF && ard_data[4] = 0xFF):
 		try:
-			gpsdata[0] = ard_data[2]
+			gpsdata[0] = char(ard_data[2])
 		
         except ValueError, err:
 		ard_err = True
