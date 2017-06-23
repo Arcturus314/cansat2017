@@ -24,7 +24,7 @@ offsets = {0:(-22.5,22.5), 1:(-7.5,22.5), 2:(7.5,22.5), 3:(22.5,22.5), 4:(-22.5,
 #Pixel data will be stored in this list, as raw tuple values
 map_raw = []
 
-position_data = [(0,0,0,0),(0,0,0,0)] 
+position_data = [(0,0,0,0),(0,0,0,0),(0,0,0,0,0,0)] 
 temp_matrix = []
 
 def init_data():
@@ -32,6 +32,7 @@ def init_data():
 
 def get_position():
     global position
+    position.calc_position()
     position_data = position.get_pos_data(False)
 
 def get_temp_matrix():
@@ -40,19 +41,18 @@ def get_temp_matrix():
 
 def calc_size(height,x_tilt,y_tilt,pixel):
     global offsets
-    size = height*math.sqrt(abs((math.tan(dtr*(x_tilt+offsets[pixel][0])))**2 + math.tan((math.tan(dtr*(x_tilt+offsets[pixel][1]))))))
+    size = height*math.sqrt(abs((math.tan(dtr*(x_tilt+offsets[pixel][0])))**2.0 + math.tan((math.tan(dtr*(x_tilt+offsets[pixel][1]))))))
     return size
 
 def calc_coordinate(height,x_pos,y_pos,x_tilt,y_tilt,heading,pixel):
     global offsets,position_data
-    x = height*math.tan(dtr*(y_tilt*math.cos(dtr*heading)+x_tilt*math.cos(dtr*(90-heading))+offsets[pixel][0]*math.cos(dtr*heading)-offsets[pixel][1]*math.sin(dtr*heading))) + x_pos
-    y = height*math.tan(dtr*(y_tilt*math.sin(dtr*heading)+x_tilt*math.sin(dtr*(90-heading))+offsets[pixel][0]*math.sin(dtr*heading)+offsets[pixel][1]*math.cos(dtr*heading))) + y_pos
+    x = height*math.tan(dtr*(y_tilt*math.cos(dtr*heading)+x_tilt*math.cos(dtr*(90.0-heading))+offsets[pixel][0]*math.cos(dtr*heading)-offsets[pixel][1]*math.sin(dtr*heading))) + x_pos
+    y = height*math.tan(dtr*(y_tilt*math.sin(dtr*heading)+x_tilt*math.sin(dtr*(90.0-heading))+offsets[pixel][0]*math.sin(dtr*heading)+offsets[pixel][1]*math.cos(dtr*heading))) + y_pos
     return x,y
 
 def build_frame():
     get_position()
     get_temp_matrix()
-    global position
     for i in xrange(16):
         height  = position_data[0][2]
         x_pos   = position_data[0][0]
@@ -69,5 +69,8 @@ def return_frame(type):
     if type == True:
         return map_raw
     else:
-        return map_raw[len(map_raw)-1]
+        return_vals = []
+        for i in xrange(16):
+            return_vals[i] = map_raw[len(map_raw)-1-i]
+        return return_vals
 

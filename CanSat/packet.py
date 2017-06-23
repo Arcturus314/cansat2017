@@ -193,4 +193,10 @@ def build_footer():
     return checksum_contribution % 251 #as 251 is the largest prime number less than 255
 
 def build_packet():
-    return str(build_header()) + str(build_body()) + str(build_footer()) 
+    full_packet = str(build_header()) + str(build_body()) + str(build_footer()) 
+    full_packet = full_packet.replace("(", "")
+    full_packet = full_packet.replace(")", "")
+    full_packet = full_packet.replace("[", "")
+    full_packet = full_packet.replace("]", "")
+    return full_packet
+  

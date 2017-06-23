@@ -61,10 +61,9 @@ def get_current_accel_data(): #returns second accel_data tuple
 def get_current_mag_data(): #returns second mag_data tuple
     return mag_data[1]
 def get_current_env(): #returns temp,alt from datastore,subtracting initial altitude
-    global init_position
     temperature = datastore.get_env_temp_data(False)[0]
     pressure = datastore.get_env_pressure_data(False)[0]
-    altitude = (init_position[3]/-0.0065)*((pressure/101300)**(0.1901)-1)-init_position[6]
+    altitude = (init_position[3]/-0.0065)*((pressure/101300.0)**(0.1901)-1)-init_position[6]
     return temperature,altitude
 def update_raw_data(): #moves datastore data to raw data lists
     global accel_data,mag_data,gyro_data
@@ -93,6 +92,7 @@ def update_raw_data(): #moves datastore data to raw data lists
 
 def calc_bimu_orientation(): #uses bIMU.py module, appends heading, x, y, time to or_pos, subtracting initial orientation, and compensating for heading- standardizing along x and y vectors
     global init_position
+    global or_pos
     data = bIMU.get_orientation()[0]-init_position[0],bIMU.get_orientation()[1]-init_position[0],bIMU.get_orientation()[2]-init_position[0],time.time()
     or_pos.append(data)
 
