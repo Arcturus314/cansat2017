@@ -34,8 +34,8 @@ def init_data(): #writes initial calculated vales to init_position tuple
     datastore.get_magnetometer_data(False)
     datastore.get_gyroscope_data(False)
     update_raw_data()
-    calc_bimu_orientation()
-    calc_bimu_orientation()
+    calc_bimu_orientation(sample_rate)
+    calc_bimu_orientation(sample_rate)
     calc_trans_pos()
     init_position = make_tuple([get_current_or_pos()[0],get_current_or_pos()[1],get_current_or_pos()[2],get_current_trans_pos()[0],get_current_trans_pos()[1],get_current_env()[1],get_current_env()[0],time.time()])
 
