@@ -191,9 +191,19 @@ def calc_accel_or(): #calculates the cansat orientation given accelerometer valu
     return pitch,roll
 
 def calc_position():
+    t1 = time.time()
     update_raw_data()
+    t2 = time.time()
+    print "update_data: ",
+    print t2-t1
     calc_bimu_orientation()
+    t3 = time.time()
+    print "calc_bimu_orientation: ",
+    print t3-t2
     calc_trans_pos()
+    t4 = time.time()
+    print "calc_trans_pos: ",
+    print t4-t3
 
 def get_pos_data(all_data):
     if all_data == True:
