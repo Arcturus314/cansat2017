@@ -50,7 +50,7 @@ def calc_coordinate(height,x_pos,y_pos,x_tilt,y_tilt,heading,pixel):
     y = height*math.tan(dtr*(y_tilt*math.sin(dtr*heading)+x_tilt*math.sin(dtr*(90.0-heading))+offsets[pixel][0]*math.sin(dtr*heading)+offsets[pixel][1]*math.cos(dtr*heading))) + y_pos
     return x,y
 
-def build_frame():
+def build_frame(): 
     get_position()
     get_temp_matrix()
     for i in xrange(16):
@@ -69,8 +69,9 @@ def return_frame(type):
     if type == True:
         return map_raw
     else:
-        return_vals = []
-        for i in xrange(16):
-            return_vals[i] = map_raw[len(map_raw)-1-i]
+        return_vals = [0,0,0,0]
+        if len(map_raw) > 15:
+            for i in xrange(16):
+                return_vals[i] = map_raw[len(map_raw)-1-i]
         return return_vals
 
