@@ -21,7 +21,7 @@ accel_data = [[0,0,0,0],[0,0,0,0]]#two accelerometer data points ((xVal, yVal, z
 mag_data = [[0,0,0,0],[0,0,0,0]]#two magnetometer data points
 gyro_data = [[0,0,0,0],[0,0,0,0]]#two gyroscope data points
 
-init_position = (0,0,0,0,0,0,0) #(heading,x-or,y-or,x,y,alt,temperature,time)
+init_position = (0,0,0,0,0,0,0,0) #(heading,x-or,y-or,x,y,alt,temperature,time)
 init_gps_pos  = (0,0,0,0,0,0)       #(fix,altitude,latitude,longitude,x_pos,y_postime)
 
 def init_data(): #writes initial calculated vales to init_position tuple
@@ -65,7 +65,7 @@ def get_current_mag_data(): #returns second mag_data tuple
 def get_current_env(): #returns temp,alt from datastore,subtracting initial altitude
     temperature = datastore.get_env_temp_data(False)[0]
     pressure = datastore.get_env_pressure_data(False)[0]
-    altitude = (init_position[3]/-0.0065)*((pressure/101300.0)**(0.1901)-1)-init_position[6]
+    altitude = (init_position[6]/-0.0065)*((pressure/1013.000)**(0.1901)-1)-init_position[5]
     return temperature,altitude
 def update_raw_data(): #moves datastore data to raw data lists
     global accel_data,mag_data,gyro_data
