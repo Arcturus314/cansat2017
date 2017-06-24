@@ -12,6 +12,6 @@ while True:
     position_data[2] = data[0][2]
 
     print "Orientation:",
-    print data[0],
-    print data[1],
-    print data[2]
+    print position_data[0],
+    print position_data[1],
+    print position_data[2]
