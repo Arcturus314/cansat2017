@@ -8,7 +8,7 @@ public class TempValue {
 	public static List<TempValue> tempValues  = new ArrayList<TempValue>();
 	public float temp, xOffset, yOffset, size;
 	
-	public TempValue(float Temp, float XOffset, float YOffset, float Size) {
+	public TempValue(float Temp, float XOffset, float YOffset, float Size){
 		this.temp = Temp;
 		this.xOffset = XOffset;
 		this.yOffset = YOffset;

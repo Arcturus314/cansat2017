@@ -17,45 +17,57 @@ public class Graph extends LineChart{
 	private String[] titles = new String[] {"Temp vs Time ","press","hum","accel magnitude", "xy", "xz", "yz"};
 	
 	private String[][] axis = new String[][]{
-	    {"time","temperature"},{"time","pressure"}, {"time","humidity"},{"time","acceleration magnitude"}, {"x","y"},{"x","z"}, {"y","z"}
+	    {"time(S)","temperature (C)"},{"time (S)","pressure (Pa)"}, {"time (S)","humidity (RH)"},{"time (S)","acceleration magnitude"}, {"x","y"},{"x","z"}, {"y","z"}
 	};
-	
-	ArrayList[][] series;
-	
-	XYChart.Series series1;
 
-	float newXAxis, newYAxis;
+	XYChart.Series series;
 	
-	public Graph(NumberAxis xAxis, NumberAxis yAxis) {
+	public int numOfSeries, index;
+	public float newXAxis, newYAxis;
+	
+	public Graph(NumberAxis xAxis, NumberAxis yAxis, int numOfSeries) {
 		super(xAxis, yAxis);	
-		int index = graphs.size();
+		this.numOfSeries = numOfSeries;
+		this.index = graphs.size();
 		
 		this.setTitle(titles[index]);
 		
 		xAxis.setLabel(axis[index][0]);
 		yAxis.setLabel(axis[index][1]);
 		
-	    series1 = new XYChart.Series();
-	    series1.setName("series1");
-	    this.getData().add(series1);
-	   // lineChart.setId("Chart"+i);
-	    this.setLegendVisible(false);
- 
+		//if(index == 0){numOfSeries = 3;}
+		//	else{numOfSeries = 1;};
+		
+		for(int i = 0; i < this.numOfSeries; i++){
+			series = new XYChart.Series();
+			series.setName("series1");
+			this.getData().add(series);
+		}
+		
+	    
+	   if(this.numOfSeries > 1){
+		   this.setLegendVisible(true);
+	   }else{
+		   this.setLegendVisible(false);
+	   }
 	    
 	    graphs.add(this);
 	    
 	    
 	}
-	
-	public void update(int i){
-	  newXAxis = DecodeData.getAxis(i, 0);
-	  newYAxis = DecodeData.getAxis(i, 1);
-   	  XYChart.Data newData = new XYChart.Data(newXAxis ,newYAxis);
-   	  series1.getData().add(newData);
-	}
+		
+	public void update(){ 
+		  for(int i = 0; i < this.numOfSeries; i++){
+		  newXAxis = DecodeData.getAxis(this.index, 0, i);
+		  newYAxis = DecodeData.getAxis(this.index, 1, i);
+		  XYChart.Data newData = new XYChart.Data(newXAxis ,newYAxis);
+		  series = (Series) this.getData().get(i);
+		  series.getData().add(newData);
+		  	}
+		  } 
 	
 	public void clear(){
-		series1.getData().clear();
+		this.getData().clear();
 		}
 	
 	

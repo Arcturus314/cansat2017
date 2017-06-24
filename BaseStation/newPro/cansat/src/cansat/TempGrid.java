@@ -1,5 +1,6 @@
 package cansat;
 
+import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 import java.util.Random;
 
@@ -19,13 +20,15 @@ public class TempGrid extends Canvas{
 	private static GraphicsContext gc;
 	private static int width, height;
 	static float center;
+	static BufferedImage image;
 	private static float temp, xOffset, yOffset, size, newSize,newScale,
 	newScaleX, newScaleY, fullHeight, fullWidth;
 	
-    public TempGrid(int width, int height){
+    public TempGrid(int width, int height, BufferedImage image){
 	super(width, height);
 	this.width = width;
 	this.height = height;
+	this.image = image;
 	gc = this.getGraphicsContext2D();
 	this.clear();
     }
@@ -48,24 +51,26 @@ public class TempGrid extends Canvas{
 			
 			if(center + xOffset + size  > width || center + yOffset + size > height){
 			
-			System.out.println("full " +(center+yOffset+size) );  
+		//	System.out.println("full " +(center+yOffset+size) );  
 			fullWidth = center + xOffset + size;	
 			fullHeight = center + yOffset + size;	
 			
-			System.out.println(height + " " + fullHeight);
+		//	System.out.println(height + " " + fullHeight);
 			
 			newScaleX = (height / fullWidth);
 			newScaleY = (height / fullHeight);
 			newScale = Math.min(newScaleX, newScaleY);
 			newSize = Math.max(fullWidth, fullHeight);
-			System.out.println(newScaleY);
-			System.out.println(newScaleX); 
+		//	System.out.println(newScaleY);
+		//	System.out.println(newScaleX); 
 			gc.scale(newScale, newScale);
 			height = (int) newSize;
 			width = (int) newSize;
-			   System.out.println("true");
+	//		   System.out.println("true");
 			}
 		}
+		
+		//System.out.println("width " + image.getWidth());
 		
 		for(int i = 0; i < TempValue.tempValues.size(); i++){
 		
@@ -74,10 +79,7 @@ public class TempGrid extends Canvas{
 		yOffset	= TempValue.tempValues.get(i).yOffset;
 		size = TempValue.tempValues.get(i).size;
 		
-		Random rn = new Random();
-		int answer = rn.nextInt(10) ;
-		System.out.println(answer);
-	     gc.setFill(Utils.temptoRGB(answer));
+	     gc.setFill(Utils.getColorByTemp((int)(temp)));
 	     gc.fillRect(center + xOffset, center + yOffset, size, size);
 		}
   }
