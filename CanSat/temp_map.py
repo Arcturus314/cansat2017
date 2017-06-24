@@ -31,8 +31,7 @@ def init_data():
     position.init_data()
 
 def get_position():
-    global position
-    position.calc_position()
+    global position_data
     position_data = position.get_pos_data(False)
 
 def get_temp_matrix():
