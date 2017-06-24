@@ -148,6 +148,7 @@ def parse_body(header,body):
         return -1
 def send_packet(packet):
     print packet
+    time.sleep(0.5)
 def return_ready():
     print "ready"
 def overall_control():
