@@ -4,7 +4,7 @@ class AlarmException(Exception):
     pass
 
 def alarmHandler(signum, frame):
-    raise AlarmException
+    #raise AlarmException
 
 def nonBlockingRawInput(prompt='', timeout=3):
     signal.signal(signal.SIGALRM, alarmHandler)

@@ -69,7 +69,7 @@ def return_frame(type):
     if type == True:
         return map_raw
     else:
-        return_vals = [0,0,0,0]
+        return_vals = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
         if len(map_raw) > 15:
             for i in xrange(16):
                 return_vals[i] = map_raw[len(map_raw)-1-i]
