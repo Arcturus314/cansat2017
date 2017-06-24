@@ -9,8 +9,10 @@ import math
 
 #---------------------------------------------------------------------------------------------------
 # Definitions
+degtorad = 0.017453292519943295
 
-sampleFreq  = 512.0     # sample frequency in Hz
+
+sampleFreq  = 100.0     # sample frequency in Hz
 betaDef     = 0.1       # 2 * proportional gain
 
 #---------------------------------------------------------------------------------------------------
@@ -250,7 +252,7 @@ def get_orientation():
     gyro_vals = datastore.get_gyroscope_data(False)
     mag_vals = datastore.get_magnetometer_data(False)
 
-    MadgwickAHRSupdate(gyro_vals[0],gyro_vals[1],gyro_vals[2],accel_vals[0],accel_vals[1],accel_vals[2],mag_vals[0],mag_vals[1],mag_vals[2])
+    MadgwickAHRSupdate(degtorad*gyro_vals[0],degtorad*gyro_vals[1],degtorad*gyro_vals[2],accel_vals[0],accel_vals[1],accel_vals[2],mag_vals[0],mag_vals[1],mag_vals[2])
 
     return Quaternion_toEulerianAngle(q0,q1,q2,q3)
 
