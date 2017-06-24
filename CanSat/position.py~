@@ -200,7 +200,7 @@ def calc_position():
     calc_bimu_orientation(sample_rate)
     calc_trans_pos()
     t2 = time.time()
-    sample_rate = 1.0/(t2-t1)
+    sample_rate = t2-t1
 
 def get_pos_data(all_data):
     if all_data == True:
