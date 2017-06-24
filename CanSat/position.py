@@ -1,6 +1,6 @@
 import datastore
 import math
-import bIMU 
+import madgwickAHRS as bIMU 
 import time
 import arduino_interface
 
