@@ -65,7 +65,7 @@ def get_current_mag_data(): #returns second mag_data tuple
 def get_current_env(): #returns temp,alt from datastore,subtracting initial altitude
     temperature = datastore.get_env_temp_data(False)[0]
     pressure = datastore.get_env_pressure_data(False)[0]
-    altitude = (1.0-((pressure*1.01325)**(0.190284)))*44307.69396-init_position[5]
+    altitude = (1.0-((pressure*1013.25)**(0.190284)))*44307.69396-init_position[5]
     return temperature,altitude
 def update_raw_data(): #moves datastore data to raw data lists
     global accel_data,mag_data,gyro_data
