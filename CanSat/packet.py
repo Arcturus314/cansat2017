@@ -74,7 +74,7 @@ def create_message(identifier1, identifier2, data):
     message = str(id1_dict[identifier1]) + ',' + str(id2_dict[identifier2]) + ',' + str(data)
     checksum_contribution = checksum_contribution + int(id1_dict[identifier1]) + int(id2_dict[identifier2])
     calc_checksum_contr(data)
-    message = message + ';' + '\n'
+    message = message + ';'
     return message
 
 def init_packet(_inc_data,_inc_all_data,_inc_error,_inc_pos,_inc_mat,_inc_map):
@@ -159,7 +159,7 @@ def build_header():
     if inc_map == True:
         messages = messages + 1        
     
-    header = header + str(messages) + '|\n'
+    header = header + str(messages) + '|'
     return header
 def build_body():        
     body = "" #string to hold body message
@@ -186,7 +186,7 @@ def build_body():
         temp_map.build_frame()
         body = body + create_message('Map','Default',temp_map.return_frame(False))
 
-    body = body + '|\n'
+    body = body + '|'
     return body
 def build_footer():
     global checksum_contribution
