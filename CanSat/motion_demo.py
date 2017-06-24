@@ -6,7 +6,7 @@ position.init_data()
 
 while True:
     global position_data
-    data = position.get_pos_data()
+    data = position.get_pos_data(False)
     data[0] = position_data[0][0]
     data[1] = position_data[0][1]
     data[2] = position_data[0][2]
