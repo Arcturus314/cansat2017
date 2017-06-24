@@ -12,7 +12,7 @@ import math
 degtorad = 0.017453292519943295
 
 
-sampleFreq  = 100.0     # sample frequency in Hz
+sampleFreq  = 10.0     # sample frequency in Hz
 betaDef     = 0.1       # 2 * proportional gain
 
 #---------------------------------------------------------------------------------------------------
@@ -242,7 +242,9 @@ def MadgwickAHRSupdateIMU(gx, gy, gz, ax, ay, az):
 def invSqrt(x):
     return x**(-0.5)
 
-def get_orientation():
+def get_orientation(sample):
+    global sampleFreq
+    sampleFreq = sample
     global q0
     global q1
     global q2

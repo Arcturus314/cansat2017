@@ -24,6 +24,8 @@ gyro_data = [[0,0,0,0],[0,0,0,0]]#two gyroscope data points
 init_position = (0,0,0,0,0,0,0,0) #(heading,x-or,y-or,x,y,alt,temperature,time)
 init_gps_pos  = (0,0,0,0,0,0)       #(fix,altitude,latitude,longitude,x_pos,y_postime)
 
+sample_rate = 10
+
 def init_data(): #writes initial calculated vales to init_position tuple
     global init_position
     global init_gps_pos
@@ -92,10 +94,11 @@ def update_raw_data(): #moves datastore data to raw data lists
  
     return None
 
-def calc_bimu_orientation(): #uses bIMU.py module, appends heading, x, y, time to or_pos, subtracting initial orientation, and compensating for heading- standardizing along x and y vectors
+def calc_bimu_orientation(sample): #uses bIMU.py module, appends heading, x, y, time to or_pos, subtracting initial orientation, and compensating for heading- standardizing along x and y vectors
     global init_position
     global or_pos
-    data = bIMU.get_orientation()[0]-init_position[0],bIMU.get_orientation()[1]-init_position[0],bIMU.get_orientation()[2]-init_position[0],time.time()
+    bIMU_data = bIMU.get_orientation(sample)
+    data = bIMU_data[0]-init_position[0],bIMU_data[1]-init_position[0],bIMU_data[2]-init_position[0],time.time()
     or_pos.append(data)
 
 def trap_int(timenew, timeold, valnew, valold): #trapezoidally finds area within given parameters
@@ -191,19 +194,13 @@ def calc_accel_or(): #calculates the cansat orientation given accelerometer valu
     return pitch,roll
 
 def calc_position():
+    global sample_rate
     t1 = time.time()
     update_raw_data()
-    t2 = time.time()
-    print "update_data: ",
-    print t2-t1
-    calc_bimu_orientation()
-    t3 = time.time()
-    print "calc_bimu_orientation: ",
-    print t3-t2
+    calc_bimu_orientation(sample_rate)
     calc_trans_pos()
-    t4 = time.time()
-    print "calc_trans_pos: ",
-    print t4-t3
+    t2 = time.time()
+    sample_rate = t2-t1
 
 def get_pos_data(all_data):
     if all_data == True:
