@@ -114,7 +114,6 @@ def trap_int(timenew, timeold, valnew, valold): #trapezoidally finds area within
      return (timenew-timeold)*(valold)+0.5*(timenew-timeold)*(valnew-valold)
 
 def calc_trans_pos(): #calculates the translational position given accelerometer values, appends to trans_pos
-    update_raw_data()
     global accel_data, mag_data, trans_pos
 
     #We first need to compensate accel_data with current CanSat position
@@ -141,7 +140,10 @@ def calc_trans_pos(): #calculates the translational position given accelerometer
     
 
     #We still have to consider gps data in order to bound the calculated accelerometer position
+    t = exttime.time()
     gps_data = arduino_interface.get_gps_data()
+    print "gps time",
+    print exttime.time()-t
     gps_pos.append(gps_data)
     if init_gps_pos[0] == 0 and gps_data[0] == 1:
         init_gps_pos[0] = gps_data[0]
@@ -180,7 +182,6 @@ def calc_trans_pos(): #calculates the translational position given accelerometer
     trans_pos.append( (round(newX,dec_places), round(newY,dec_places), round(get_current_env()[1],dec_places), newTime) )
 
 def calc_gyro_or(): #calculates the cansat orientation given gyroscope values, appends to or_pos
-    update_raw_data()
     global gyro_data
     #This calculation can be done via a similar method
     #to accelerometer translational position calc
@@ -196,7 +197,6 @@ def calc_gyro_or(): #calculates the cansat orientation given gyroscope values, a
     
     or_pos.append( (round(newX,dec_places), round(newY,dec_places), round(newZ,dec_places), newTime) )
 def calc_accel_or(): #calculates the cansat orientation given accelerometer values, returns pitch and roll
-    update_raw_data()
     pitch = math.atan((accel_data[1][0])/(accel_data[1][0]**2+accel_data[1][2]**2))
     roll  = math.atan((accel_data[1][1])/(accel_data[1][1]**2+accel_data[1][2]**2))
     return round(pitch,dec_places),round(roll,dec_places)
