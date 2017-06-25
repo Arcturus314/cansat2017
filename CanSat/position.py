@@ -26,6 +26,8 @@ init_gps_pos  = (0,0,0,0,0,0)       #(fix,altitude,latitude,longitude,x_pos,y_po
 
 sample_rate = 10
 
+dec_places = 3
+
 def time():
     return round(exttime.time(),3)
 
@@ -71,7 +73,7 @@ def get_current_env(): #returns temp,alt from datastore,subtracting initial alti
     temperature = datastore.get_env_temp_data(False)[0]
     pressure = datastore.get_env_pressure_data(False)[0]
     altitude = (1.0-((pressure/1013.25)**(0.190284)))*44307.69396-init_position[5]
-    return temperature,altitude
+    return round(temperature,dec_places),round(altitude,dec_places)
 def update_raw_data(): #moves datastore data to raw data lists
     global accel_data,mag_data,gyro_data
     #x-y-z according to the IMU will differ from x-y-z according to the module.
@@ -101,7 +103,7 @@ def calc_bimu_orientation(sample): #uses bIMU.py module, appends heading, x, y, 
     global init_position
     global or_pos
     bIMU_data = bIMU.get_orientation(sample)
-    data = bIMU_data[0]-init_position[0],bIMU_data[1]-init_position[0],bIMU_data[2]-init_position[0],time()
+    data = round(bIMU_data[0]-init_position[0],dec_places),round(bIMU_data[1]-init_position[0],dec_places),round(bIMU_data[2]-init_position[0],dec_places),time()
     or_pos.append(data)
 
 def trap_int(timenew, timeold, valnew, valold): #trapezoidally finds area within given parameters
@@ -172,7 +174,7 @@ def calc_trans_pos(): #calculates the translational position given accelerometer
             if newY < new_gps_y_pos:
                 newY = gps_y_bounds[0]
 
-    trans_pos.append( (newX, newY, get_current_env()[1], newTime) )
+    trans_pos.append( (round(newX,dec_places), round(newY,dec_places), round(get_current_env()[1],dec_places), newTime) )
 
 def calc_gyro_or(): #calculates the cansat orientation given gyroscope values, appends to or_pos
     update_raw_data()
@@ -189,12 +191,12 @@ def calc_gyro_or(): #calculates the cansat orientation given gyroscope values, a
     newY = (get_current_or_pos()[1]+yDiff)%360.0
     newZ = (get_current_or_pos()[2]+zDiff)%360.0
     
-    or_pos.append( (newX, newY, newZ, newTime) )
+    or_pos.append( (round(newX,dec_places), round(newY,dec_places), round(newZ,dec_places), newTime) )
 def calc_accel_or(): #calculates the cansat orientation given accelerometer values, returns pitch and roll
     update_raw_data()
     pitch = math.atan((accel_data[1][0])/(accel_data[1][0]**2+accel_data[1][2]**2))
     roll  = math.atan((accel_data[1][1])/(accel_data[1][1]**2+accel_data[1][2]**2))
-    return pitch,roll
+    return round(pitch,dec_places),round(roll,dec_places)
 
 def calc_position():
     global sample_rate

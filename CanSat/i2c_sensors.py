@@ -275,17 +275,17 @@ class L3GD20_Temp(I2C_Sensor):
 class BME280_Pressure(I2C_Sensor):
     def read(self):
         global bme280
-        return bme280.getPressure()
+        return self.applyCal(bme280.getPressure())
 
 class BME280_Humidity(I2C_Sensor):
     def read(self):
         global bme280
-        return bme280.getHumidity()
+        return self.applyCal(bme280.getHumidity())
 
 class BME280_Temp(I2C_Sensor):
     def read(self):
         global bme280
-        return bme280.getTemp()
+        return self.applyCal(bme280.getTemp())
 
 class D6T_Temp_Array(I2C_Sensor):
     def read(self):
