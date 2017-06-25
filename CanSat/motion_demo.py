@@ -1,9 +1,8 @@
-import position
+import MadgwickAHRS as ahrs
 import time
 
 position_data = [0,0,0] #heading,roll,pitch
 
-position.init_data()
 sample_rate = 100
 
 while True:
@@ -12,8 +11,7 @@ while True:
     
     for i in xrange(10):
         t1 = time.time()
-        position.calc_bimu_orientation(sample_rate)
-        data = position.get_last_or_pos()
+        data = ahrs.get_orientation(sample_rate)
         position_data[0] = data[0]
         position_data[1] = data[1]
         position_data[2] = data[2]
