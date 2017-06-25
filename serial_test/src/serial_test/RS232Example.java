@@ -20,7 +20,7 @@ public class RS232Example extends Thread{
 	}
 	
 	public static void main(String[] args) throws Exception {
-		new RS232Example().connect("COM9");
+		new RS232Example().connect("COM11");
 		while(true) {
 			if(Container.getInstance().read == false && Container.getInstance().message != null) {
 				//System.out.println("New message received: " + Container.getInstance().message) ;
@@ -73,6 +73,7 @@ public class RS232Example extends Thread{
 					float accel_y = tf(messageComponents[3]);
 					float accel_z = tf(messageComponents[4]);
 					float accel_time = tf(messageComponents[5]);
+					System.out.println("Accel_X: " + accel_x);
 				}
 				if(tf(messageComponents[0]) == 2 && tf(messageComponents[1]) == 1) {
 					//single magnetometer value
@@ -155,10 +156,16 @@ public class RS232Example extends Thread{
 				}
 				if(tf(messageComponents[0]) == 11 && tf(messageComponents[1]) == 0) {
 					//single thermal map pixel value
-					float pix_temp = tf(messageComponents[2]);
-					float pix_x    = tf(messageComponents[3]);
-					float pix_y    = tf(messageComponents[4]);
-					float size     = tf(messageComponents[5]);
+					float pix_temp[] = new float[16];
+					float pix_x[] = new float[16];
+					float pix_y[] = new float[16];
+					float size[] = new float[16];
+					for(i=0; i<16; i++) {
+						pix_temp[i] = tf(messageComponents[2+i]);
+						pix_x[i]    = tf(messageComponents[3+i]);
+						pix_y[i]    = tf(messageComponents[4+i]);
+						size[i]     = tf(messageComponents[5+i]);
+					}
 				}
 			}
 			

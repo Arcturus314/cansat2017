@@ -26,6 +26,9 @@ init_gps_pos  = (0,0,0,0,0,0)       #(fix,altitude,latitude,longitude,x_pos,y_po
 
 sample_rate = 10
 
+def time():
+    return round(time.time(),3)
+
 def init_data(): #writes initial calculated vales to init_position tuple
     global init_position
     global init_gps_pos
@@ -37,7 +40,7 @@ def init_data(): #writes initial calculated vales to init_position tuple
     calc_bimu_orientation(sample_rate)
     calc_bimu_orientation(sample_rate)
     calc_trans_pos()
-    init_position = make_tuple([get_current_or_pos()[0],get_current_or_pos()[1],get_current_or_pos()[2],get_current_trans_pos()[0],get_current_trans_pos()[1],get_current_env()[1],get_current_env()[0],time.time()])
+    init_position = make_tuple([get_current_or_pos()[0],get_current_or_pos()[1],get_current_or_pos()[2],get_current_trans_pos()[0],get_current_trans_pos()[1],get_current_env()[1],get_current_env()[0],time()])
 
     gps_data = arduino_interface.get_gps_data()
     if gps_data[0] == 1:
@@ -98,7 +101,7 @@ def calc_bimu_orientation(sample): #uses bIMU.py module, appends heading, x, y, 
     global init_position
     global or_pos
     bIMU_data = bIMU.get_orientation(sample)
-    data = bIMU_data[0]-init_position[0],bIMU_data[1]-init_position[0],bIMU_data[2]-init_position[0],time.time()
+    data = bIMU_data[0]-init_position[0],bIMU_data[1]-init_position[0],bIMU_data[2]-init_position[0],time()
     or_pos.append(data)
 
 def trap_int(timenew, timeold, valnew, valold): #trapezoidally finds area within given parameters

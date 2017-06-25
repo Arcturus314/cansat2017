@@ -1,12 +1,14 @@
 import smbus
 import bme280
 bus = smbus.SMBus(1) #smbus declared on CHIP I2C bus 1
+dec_places = 3 #number of decimal places for data points
 
 class I2C_Sensor: #OR read()
     #Provides a "base" class for 1d sensors to build on
     #override read()
     global smbus
     global bus
+    global dec_places
 
     def __init__(self, addr):
         self.scale = 1
@@ -43,7 +45,7 @@ class I2C_Sensor: #OR read()
         return val
 
     def applyCal(self, val):
-        return float(val)*float(self.scale)+float(self.offset)
+        return round(float(val)*float(self.scale)+float(self.offset)
     def getState(self):
         return self.dev_state
     def setCal(self, s, o):
@@ -62,9 +64,10 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
 
     global smbus
     global bus
+    global dec_places
     def applyCal(self, val, scale, offset):
-        return float(val)*float(scale)+float(offset)
-        return (high << 8) | low
+        return round(float(val)*float(scale)+float(offset),dec_places)
+
     def mergeInts(self, low, high):
         val = (high << 8) | low
         if val >= 2**15:
