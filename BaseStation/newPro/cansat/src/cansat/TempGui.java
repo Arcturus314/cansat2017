@@ -1,12 +1,19 @@
 package cansat;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.chart.XYChart;
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -18,23 +25,28 @@ import javafx.scene.text.Font;
 public class TempGui extends Canvas{
 	private static GraphicsContext gc;
 	private static int width, height;
+	private PixelReader pixelReader;
 	
-	 public TempGui(int width, int height){
+	 public TempGui(int width, int height, BufferedImage image){
 			super(width, height);
 			this.width = width;
 			this.height = height;
 			gc = this.getGraphicsContext2D();
 			this.clear();
 			
-			for(int i = 0; i < 25; i++){
-				 gc.setFill(Utils.temptoRGB(i));
-				 gc.fillRect(0, (height / 25) * i + 10, 20, height / 25);
+			
+			//int maxSize = 50;
+			int maxSize = TempColor.tempColors.size();
+			for(int i = 0; i < maxSize; i++){
+				   gc.setFill(TempColor.tempColors.get(maxSize - i - 1).color);
+				// gc.setFill(Utils.getPixelColor(image, maxSize - i - 1, 0));
+				 gc.fillRect(0, (height / maxSize) * i + 10, 20, height / 25);
 				}
 
 			gc.setFill(Color.WHITE);
 			gc.fillRect(20, 10, 2, 310);
 			
-			int[] nums = new int[]{25, 20, 15, 10, 5 ,0};
+			int[] nums = new int[]{45, 35, 25, 15, 5 ,-4};
 			
 			for(int i = 0; i < 6; i++){
 				gc.fillRect(22, i * 59 + 10, 10, 2);

@@ -1,12 +1,16 @@
 package cansat;
 
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -14,6 +18,8 @@ import javafx.scene.paint.Color;
 
 public class Utils {
 	 
+	public static String newLine = "\n";
+	
 	public static void loopThroughGraphs(List<Graph> graphs) {
 		for(int i =0; i < graphs.size(); i++){
 			graphs.get(i).clear();
@@ -21,98 +27,18 @@ public class Utils {
 		
 	}
 	
-
-    public static Color temptoRGB(double Temperature){
-    	 Temperature = Temperature * 10;
-
-    	// System.out.println(Temperature);
-    	 
-    	 			double Red;
-    	 			double Green;
-    	 			double Blue;
-    			    //Calculate Red:
-
-    			    if(Temperature <= 66){
-
-    			        Red = 255;
-
-    				}else{
-
-    			        Red = Temperature - 60;
-
-    			        Red = 329.698727446 * (Red  -0.1332047592);
-
-    			        if(Red < 0) Red = 0;
-
-    			        if(Red > 255) Red = 255;
-
-    				}
-
-    			    
-
-    			    //Calculate Green:
-
-
-
-    			    if(Temperature <= 66){
-
-    			        Green = Temperature;
-
-    			        Green = 99.4708025861 * Math.log(Green) - 161.1195681661;
-
-    			        if(Green < 0) Green = 0;
-
-    			        if(Green > 255) Green = 255;
-
-    			   }else{
-
-    			        Green = Temperature - 60;
-
-    			        Green = 288.1221695283 * Math.pow(Green, -0.0755148492);
-
-    			        if(Green < 0) Green = 0;
-
-    			        if(Green > 255) Green = 255;
-
-    				}
-
-    			    
-
-    			    //Calculate Blue:
-
-
-
-    			    if(Temperature >= 66){
-
-    			        Blue = 255;
-
-    			    }else{
-
-
-
-    			     if(Temperature <= 19){
-
-    			     Blue = 0;
-
-    			}else{
-
-    			            Blue = Temperature - 10;
-
-    			            Blue = 138.5177312231 * Math.log(Blue) - 305.0447927307;
-
-    			            if(Blue < 0) Blue = 0;
-
-    			            if(Blue > 255) Blue = 255;
-
-    			    }
-    			        	    
-    			 }
-    			  
-    			   // System.out.println(Red + " " + Green + " " + Blue + " " + Temperature);
-    		
-    			    return Color.rgb((int)Red, (int)Green, (int)Blue);
-    }
-    
+	public static Color getPixelColor(BufferedImage image, int x, int y){
+		Color color;
+		
+	     	int clr = image.getRGB(x, y);
+		    int red = (clr & 0x00ff0000) >> 16;
+		    int green = (clr & 0x0000ff00) >> 8;
+		    int blue = clr & 0x000000ff;
+		
+		    color = Color.rgb(red, green, blue);
+		
+		    return color;
+	}    
 	
 	//Get all child nodes of Parent
     public static ArrayList<Node> getAllNodes(Parent root) {
@@ -164,5 +90,29 @@ public class Utils {
 	   return temp;
     }
 
+  
+
+	public static void crateTempRange(BufferedImage image) {
+		// - 5 tp 45
+		int imgI = 0;
+		int startNum = -4;
+		for(int i = 0; i < 50; i++){
+			imgI = i;
+			if(imgI > 0){
+				imgI = imgI * 2;
+			}
+			TempColor tempColor = new TempColor(i + startNum, getPixelColor(image, imgI, 0));
+		}
+	}
+
+	public static Color getColorByTemp(int temp) {
+		for(int i = 0; i < TempColor.tempColors.size(); i++){
+			if(temp == TempColor.tempColors.get(i).temp){
+				return TempColor.tempColors.get(i).color;
+			}
+		}
+		//add for > 45 || < -4
+		return TempColor.tempColors.get(0).color;
+	}
 
 }

@@ -1,9 +1,15 @@
 package cansat;
 
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -48,6 +54,7 @@ import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 
 
 public class Gui implements MapComponentInitializedListener {
+	
 	private int width;
 	private int height;
 	private VBox vBox0;
@@ -61,12 +68,13 @@ public class Gui implements MapComponentInitializedListener {
 	private static StackPane pane;
 	private GridPane grid;
 	private WebView Map; 
-	private static TextArea console;
+	private static Console console;
 	private static Button Btn;
 	private static StatusButton statusBtn;
 	private static WebEngine webEngine;
 	private GoogleMapView mapView;
 	private GoogleMap map;
+	public static String[] StatusButtonNames;
 	
 	public Gui(int width, int height){
 		this.width = width;
@@ -93,9 +101,23 @@ public class Gui implements MapComponentInitializedListener {
 		    vBox2 = (VBox) pane.lookup("#hBox2");
 
 		    //Temperature grid 
-		    TempGrid tempGrid = new TempGrid(300, 300);
-		    TempGui colorGui = new TempGui(60, 310);
 		    
+			String Url = "assets/temp.jpg";
+			File file = new File(Url); 
+			BufferedImage image = null;
+			
+			try {
+				image = ImageIO.read(file);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+			
+			Utils.crateTempRange(image);
+		    TempGrid tempGrid = new TempGrid(300, 300, image);
+		    TempGui colorGui = new TempGui(60, 310, image);
+		  
 		    tempCol0 = new VBox();
 		    tempCol1 = new VBox();
 		    tempCol0.setPadding(new Insets(10, 0, 40, 40));
@@ -122,8 +144,11 @@ public class Gui implements MapComponentInitializedListener {
 	        	  
         	    final NumberAxis xAxis = new NumberAxis();
 		        final NumberAxis yAxis = new NumberAxis();
-        	  
-        	    Graph lineChart =  new Graph(xAxis, yAxis);
+		        int numOfSeries = 1;
+		        
+		        if(i == 0){numOfSeries = 4;}
+		        
+        	    Graph lineChart =  new Graph(xAxis, yAxis, numOfSeries);
 		        
 		        if(i < 4){ vBox0.getChildren().add(lineChart); }
 		        
@@ -134,6 +159,8 @@ public class Gui implements MapComponentInitializedListener {
 	          }
 	       
 	        final String CSS = Utils.readFile("assets/mapStyles.css");              
+	        
+	        
 	        
 		    //Map
 		   /* Map = new WebView();
@@ -177,18 +204,10 @@ public class Gui implements MapComponentInitializedListener {
 	         stackPane.setAlignment(imageView,Pos.CENTER_LEFT);
       
 	        //Console
-	        console = new TextArea();
-	        console.getStyleClass().add("console");
-	        console.prefHeightProperty().bind(pane.heightProperty());
-	        console.setEditable(false);
+	         StatusButtonNames = new String[]{"Searial connection","Data logging","Percent valid packets", "Last packet", "Magnitude of chi^2 location"};
+	         console = new Console();
 	        
-	        String[] buttonName = new String[]{"Searial connection","Data logging","Percent valid packets", "Last packet"};
-	        String[] buttonName2 = new String[]{"True","True","100%", "True", };
-	      
-	        String newLine = "\n";
-	        for(int i = 0; i < buttonName.length; i++){
-      		   console.appendText(String.valueOf(buttonName[i] + " " + buttonName2[i] + newLine));
-	        }
+	        
 	        
 	        //Column 2
 		    vBox1.getChildren().addAll(imageView, stackPane2, console); 
@@ -203,12 +222,10 @@ public class Gui implements MapComponentInitializedListener {
 		    
 		    HBox tempRow = null;
 		    
-		    buttonName = new String[]{"searial connection","data logging","percent valid packets", "last packet", "magnitude of chi^2 location"};
-		    
 		    //Status btn
 		    for(int i = 0; i < 5; i++){
 		    	statusBtn = new StatusButton(true);
-		    	statusBtn.setText(buttonName[i]);
+		    	statusBtn.setText(StatusButtonNames[i]);
 		    	statusBtn.getStyleClass().add("Btn"); 
 		    	
 		    	
@@ -221,13 +238,13 @@ public class Gui implements MapComponentInitializedListener {
 		    }
 		    
 		    
-		    buttonName = new String[]{"Login to chip","Start chip data logging","Clear chip data", "Clear base station data", "Set minimum power", "set all active", "set environmetal logging", "set position tracking", "set heat mapping", "data lists"};
+		    String[] buttonNames = new String[]{"Login to chip","Start chip data logging","Clear chip data", "Clear base station data", "Set minimum power", "set all active", "set environmetal logging", "set position tracking", "set heat mapping", "data lists"};
 		    
 		    //Add Buttons 
 		    for(int i = 0; i < 10; i++){
 		        Btn = new Button("Click Me");
 		        Btn.setId("btn"+i);
-		        Btn.setText(buttonName[i]);
+		        Btn.setText(buttonNames[i]);
 		        Btn.getStyleClass().add("Btn"); 
 		        Btn.prefWidthProperty().bind(pane.widthProperty());
 		        
@@ -345,7 +362,7 @@ public class Gui implements MapComponentInitializedListener {
 		return pane;
 	}
 	
-	public static TextArea getTextField(){
+	public static Console getConsole(){
 		return console;
 	}
 
