@@ -45,9 +45,11 @@ class I2C_Sensor: #OR read()
         return val
 
     def applyCal(self, val):
-        return round(float(val)*float(self.scale)+float(self.offset)
+        return round(float(val)*float(self.scale)+float(self.offset),dec_places)
+
     def getState(self):
         return self.dev_state
+
     def setCal(self, s, o):
         self.scale = s
         self.offset = o 
