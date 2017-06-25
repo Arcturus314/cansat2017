@@ -167,7 +167,7 @@ def add_data_3ax(sensor, dataX, dataY, dataZ):
             data_file_error = True
 def add_temp_matrix(data):
     global temp_file_error, temp_fileName
-        if save_data == True:
+    if save_data == True:
         try:
             file = open(temp_fileName, "a")
             for i in xrange(16):
