@@ -52,7 +52,7 @@ public class RS232Example extends Thread{
 				Container.getInstance().read = true;
 				
 			}
-			Thread.sleep(100);
+			Thread.sleep(100); 
 		}
 	}
 	

@@ -3,6 +3,7 @@ import timed_input
 import packet
 import datalogger
 import multiprocessing
+import position
 import time
 
 start_data = False
