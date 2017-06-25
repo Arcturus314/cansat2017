@@ -204,9 +204,19 @@ def calc_accel_or(): #calculates the cansat orientation given accelerometer valu
 def calc_position():
     global sample_rate
     t1 = exttime.time()
+    t = exttime.time()
     update_raw_data()
+    print "update raw data",
+    print exttime.time()-t
+    t = exttime.time()
     calc_bimu_orientation(sample_rate)
+    print "calc bimu orientation",
+    print exttime.time()-t
+    t = exttime.time()
     calc_trans_pos()
+    print "calc trans pos",
+    print exttime.time()-t
+    t = exttime.time()
     t2 = exttime.time()
     sample_rate = 1.0/(t2-t1)
 
