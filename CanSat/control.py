@@ -10,6 +10,8 @@ input_timeout = 3 #3 seconds to wait for response
 num_packets = 0
 num_failures = 0
 
+init_time = time.time()
+
 in_packet = ("",False)
 
 def t_input(message):
@@ -170,6 +172,8 @@ def overall_control():
 
 #Actual code execution
 return_ready() #ready returned on startup
+datastore.setTime(init_time)
+position.setTime(init_time)
 
 #Control process manages overall packetization / communicatio with the base station
 #Logger process independently manages data logging and recording to files

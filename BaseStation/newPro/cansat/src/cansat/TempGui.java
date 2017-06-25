@@ -1,4 +1,4 @@
-package cansat;
+ package cansat;
 
 import java.awt.image.BufferedImage;
 import javafx.scene.canvas.Canvas;

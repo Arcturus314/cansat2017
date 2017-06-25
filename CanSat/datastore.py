@@ -66,6 +66,9 @@ data_file_error  = False #True when file cannot be opened
 error_file_error = False #True when file cannot be opened
 temp_file_error  = False #True when file cannot be opened
 save_data        = False #True when data should be written to files 
+
+init_time = 0
+
 try:
     file = open(data_fileName, "a")
     file.close()
@@ -90,9 +93,13 @@ except IOError, err:
 #general functions
 def getTuple(a,b,c):
     return a,b,c
+ 
+def setTime(timeVal):
+    global init_time
+    init_time = timeVal
 
 def time():
-    return round(exttime.time(),3)
+    return round(exttime.time()-init_time,3)
 
 def limit_list_len(spec_list):
     if len(spec_list > 500):

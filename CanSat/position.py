@@ -28,8 +28,14 @@ sample_rate = 10
 
 dec_places = 3
 
+init_time = 0
+
+def setTime(timeVal):
+    global init_time
+    init_time = timeVal
+
 def time():
-    return round(exttime.time(),3)
+    return round(exttime.time()-init_time,3)
 
 def init_data(): #writes initial calculated vales to init_position tuple
     global init_position

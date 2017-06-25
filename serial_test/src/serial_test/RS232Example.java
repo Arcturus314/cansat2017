@@ -2,9 +2,28 @@ package serial_test;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
+
+
 
 public class RS232Example extends Thread{
 	int checksumContribution = 0;
+	
+	public static void writeLine(String line) {
+		try {
+		    final Path path = Paths.get("datafile.txt");
+		    Files.write(path, Arrays.asList(line), StandardCharsets.UTF_8,
+		        Files.exists(path) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
+		} catch (final IOException ioe) {
+		    System.out.println("File write failed");
+		}
+	}
 	
 	public void connect(String portName) throws Exception {
 		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
@@ -58,6 +77,11 @@ public class RS232Example extends Thread{
 	}
 	
 	public static void processBody(String bodyString) {
+		float toWrite[] = new float[84];
+		for(int i=0;i<84;i++) {
+			toWrite[i] = 0;
+		}
+		String toWriteStr = ":";
 		try {
 			bodyString = bodyString.replace("(", ""); //removing unnecessary characters
 			bodyString = bodyString.replace(")", "");
@@ -75,6 +99,10 @@ public class RS232Example extends Thread{
 					float accel_z = tf(messageComponents[4]);
 					float accel_time = tf(messageComponents[5]);
 					System.out.println("Accel_X: " + accel_x + " Accel_Y: " + accel_y + " Accel_Z: " + accel_z + " Accel_Time: " + accel_time);
+					
+					float accel_mag = (float) Math.sqrt(accel_x*accel_x+accel_y*accel_y+accel_z*accel_z);
+					toWrite[10] = accel_mag;
+					toWrite[11] = accel_time;
 				}
 				if(tf(messageComponents[0]) == 2 && tf(messageComponents[1]) == 1) {
 					//single magnetometer value
@@ -97,24 +125,33 @@ public class RS232Example extends Thread{
 					float imu_temp = tf(messageComponents[2]);
 					float imu_time = tf(messageComponents[3]);
 					System.out.println("IMU_temp: " + imu_temp + " IMU_time: " + imu_time);
+					toWrite[0] = imu_temp;
+					toWrite[1] = imu_temp;
+					
 				}
 				if(tf(messageComponents[0]) == 5 && tf(messageComponents[1]) == 1) {
 					//single pressure value
 					float env_pres = tf(messageComponents[2]);
 					float env_time = tf(messageComponents[3]);
 					System.out.println("env_pres: " + env_pres + " env_time: " + env_time);
+					toWrite[6] = env_pres;
+					toWrite[7] = env_time;
 				}
 				if(tf(messageComponents[0]) == 6 && tf(messageComponents[1]) == 1) {
 					//single humidity value
 					float env_hum = tf(messageComponents[2]);
 					float env_time = tf(messageComponents[3]);
 					System.out.println("env_hum: " + env_hum + " env_time: " + env_time);
+					toWrite[8] = env_hum;
+					toWrite[9] = env_time;
 				}
 				if(tf(messageComponents[0]) == 7 && tf(messageComponents[1]) == 1) {
 					//single env temp value
 					float env_temp = tf(messageComponents[2]);
 					float env_time = tf(messageComponents[3]);
 					System.out.println("env_temp: " + env_temp + " env_time: " + env_time);
+					toWrite[4] = env_temp;
+					toWrite[5] = env_time;
 				}
 				if(tf(messageComponents[0]) == 8 && tf(messageComponents[1]) == 0) {
 					//single set of error values
@@ -156,6 +193,9 @@ public class RS232Example extends Thread{
 					float gps_x      = tf(messageComponents[13]);
 					float gps_y      = tf(messageComponents[14]);
 					float gps_time   = tf(messageComponents[15]);
+					toWrite[17] = trans_x;
+					toWrite[18] = trans_y;
+					toWrite[19] = trans_alt;
 				}
 				if(tf(messageComponents[0]) == 10 && tf(messageComponents[1]) == 0) {
 					//single thermal camera value
@@ -164,7 +204,9 @@ public class RS232Example extends Thread{
 						pixels[j] = tf(messageComponents[j+2]);
 					}
 					float d6t_temp = tf(messageComponents[18]);
+					toWrite[2] = d6t_temp;
 					float d6t_time = tf(messageComponents[19]);
+					toWrite[3] = d6t_time;
 				}
 				if(tf(messageComponents[0]) == 11 && tf(messageComponents[1]) == 0) {
 					//single thermal map pixel value
@@ -172,13 +214,28 @@ public class RS232Example extends Thread{
 					float pix_x[] = new float[16];
 					float pix_y[] = new float[16];
 					float size[] = new float[16];
+					int index = 20;
 					for(i=0; i<16; i++) {
 						pix_temp[i] = tf(messageComponents[2+i]);
+						toWrite[index] = pix_temp[i];
+						index++;
 						pix_x[i]    = tf(messageComponents[3+i]);
+						toWrite[index] = pix_x[i];
+						index++;
 						pix_y[i]    = tf(messageComponents[4+i]);
+						toWrite[index] = pix_y[i];
+						index++;
 						size[i]     = tf(messageComponents[5+i]);
+						toWrite[index] = size[i];
+						index++;
 					}
 				}
+				
+				toWrite[12] = 1;
+				toWrite[13] = 1;
+				toWrite[14] = 100;
+				toWrite[15] = 1;
+				toWrite[16] = 1;
 			}
 			
 			
@@ -187,6 +244,14 @@ public class RS232Example extends Thread{
 			System.out.println("BODY PROCESSING ERROR");
 		} 
 		finally {
+			for(int i=0;i<84;i++) {
+				toWriteStr += Float.toString(toWrite[i]);
+				if(i!=83)
+					toWriteStr += ",";
+			}
+			toWriteStr += ";";
+			writeLine(toWriteStr);
+			
 		}
 	}
 	
