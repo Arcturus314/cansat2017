@@ -24,47 +24,53 @@ offsets = {0:(-22.5,22.5), 1:(-7.5,22.5), 2:(7.5,22.5), 3:(22.5,22.5), 4:(-22.5,
 #Pixel data will be stored in this list, as raw tuple values
 map_raw = []
 
-position = [(0,0,0,0),(0,0,0,0)] 
+position_data = [(0,0,0,0),(0,0,0,0),(0,0,0,0,0,0)] 
 temp_matrix = []
 
 def init_data():
     position.init_data()
 
 def get_position():
-    global position
-    position = position.get_pos_data(False)
+    global position_data
+    position_data = position.get_pos_data(False)
 
 def get_temp_matrix():
     global temp_matrix
-    temp_matrix = datastore.get_temp_array_data[0][0] #will return only the temperature matrix, not time or internal D6T temperature
+    temp_matrix = datastore.get_temp_array_data(False)[0][0] #will return only the temperature matrix, not time or internal D6T temperature
 
 def calc_size(height,x_tilt,y_tilt,pixel):
     global offsets
-    size = height*math.sqrt((math.tan(dtr*(x_tilt+offsets[pixel][0])))**2 + math.tan((math.tan(dtr*(x_tilt+offsets[pixel][1])))))
+    size = height*math.sqrt(abs((math.tan(dtr*(x_tilt+offsets[pixel][0])))**2.0 + math.tan((math.tan(dtr*(x_tilt+offsets[pixel][1]))))))
     return size
 
 def calc_coordinate(height,x_pos,y_pos,x_tilt,y_tilt,heading,pixel):
-    global offsets,position
-    x = height*tan(dtr*(y_tilt*math.cos(dtr*heading)+x_tilt*math.cos(dtr*(90-heading))+offsets[pixel][0]*math.cos(dtr*heading)-offsets[pixel][1]*math.sin(dtr*heading))) + x_pos
-    y = height*tan(dtr*(y_tilt*math.sin(dtr*heading)+x_tilt*math.sin(dtr*(90-heading))+offsets[pixel][0]*math.sin(dtr*heading)+offsets[pixel][1]*math.cos(dtr*heading))) + y_pos
+    global offsets,position_data
+    x = height*math.tan(dtr*(y_tilt*math.cos(dtr*heading)+x_tilt*math.cos(dtr*(90.0-heading))+offsets[pixel][0]*math.cos(dtr*heading)-offsets[pixel][1]*math.sin(dtr*heading))) + x_pos
+    y = height*math.tan(dtr*(y_tilt*math.sin(dtr*heading)+x_tilt*math.sin(dtr*(90.0-heading))+offsets[pixel][0]*math.sin(dtr*heading)+offsets[pixel][1]*math.cos(dtr*heading))) + y_pos
     return x,y
 
-def build_frame():
+def build_frame(): 
     get_position()
     get_temp_matrix()
-    global position
     for i in xrange(16):
-        height  = position[0][2]
-        x_pos   = position[0][0]
-        y_pos   = position[0][1]
-        heading = position[1][0]
-        x_tilt  = position[1][1]
-        y_tilt  = position[1][2]
+        height  = position_data[0][2]
+        x_pos   = position_data[0][0]
+        y_pos   = position_data[0][1]
+        heading = position_data[1][0]
+        x_tilt  = position_data[1][1]
+        y_tilt  = position_data[1][2]
         size = calc_size(height,x_tilt,y_tilt,i)
         coordinates = calc_coordinate(height,x_pos,y_pos,x_tilt,y_tilt,heading,i)
         temp = temp_matrix[i]
         map_raw.append((temp,coordinates[0],coordinates[1],size))
 
-def return_frame():
-    return map_raw
+def return_frame(type):
+    if type == True:
+        return map_raw
+    else:
+        return_vals = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        if len(map_raw) > 15:
+            for i in xrange(16):
+                return_vals[i] = map_raw[len(map_raw)-1-i]
+        return return_vals
 

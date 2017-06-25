@@ -1,6 +1,7 @@
 import datastore
 import position
 import temp_map
+import time
 
 #filenames
 all_data_fileName = "sensor_data_all.txt"
@@ -40,7 +41,9 @@ def add_data():
     try:
         file = open(all_data_fileName, "a")
         data = datastore.read_all_active()
-        sensor_list = ["accel","mag","gyro","imu_temp","env_pres","env_hum","env_temp","temp_array"]
+        sensor_list = ["accel","mag","gyro","imu_temp","env_pres","env_hum","env_temp","temp_array","time"]
+        #for element in data:
+        #    print element
         for i in xrange(len(data)):
             file.write(sensor_list[i])
             file.write(",")
@@ -61,14 +64,16 @@ def add_pos():
     try:
         file = open(position_fileName, "a")
         data = position.get_pos_data(False)
-        data_list = ["translational position", "orientation"]
+        #for i in data:
+        #    print data
+        data_list = ["translational position", "orientation", "gps_pos"]
         for i in xrange(len(data)):
             file.write(data_list[i])
             file.write(",")
             file.write(str(data[i]))
             file.write(",")
-            file.write(time.time())
-            file.write('/n')
+            file.write(str(time.time()))
+            file.write('\n')
         file.close()
     except IOError, err:
         position_file_error = True
@@ -77,7 +82,7 @@ def add_temp_map():
     try:
         file = open(temp_map_fileName, "a")
         temp_map.build_frame()
-        file.write(str(temp_map.return_frame()))
+        file.write(str(temp_map.return_frame(False)))
         file.write('\n')
         file.close()
     except IOError, err:

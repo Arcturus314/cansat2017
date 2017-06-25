@@ -3,14 +3,27 @@ import timed_input
 import packet
 import datalogger
 import multiprocessing
+import time
 
 start_data = False
 input_timeout = 3 #3 seconds to wait for response
 num_packets = 0
 num_failures = 0
 
+in_packet = ("",False)
+
 def t_input(message):
-    return timed_input(message,input_timeout)
+    global in_packet
+    in_data = ""
+    try:
+        in_data =  str(timed_input.nonBlockingRawInput(message,input_timeout))
+        print "received: ",
+        print in_data
+        in_packet = in_data, True
+        return in_packet
+    except EOFError, err:
+        pass
+    return in_data
 
 #packet takes form
 #":,(id),|(message)|checksum"
@@ -135,16 +148,19 @@ def parse_body(header,body):
         return -1
 def send_packet(packet):
     print packet
+    time.sleep(0.5)
 def return_ready():
     print "ready"
 def overall_control():
+    global in_packet
     while True:
-        in_packet = t_input()
-        if in_packet == -1:
-            send_packet(packet.build_packet())
-        parsed_packet = parse_packet(in_packet)
-        if parsed_packet != -1:
-            build_packet(parsed_packet[0],parsed_packet[1])
+        if in_packet[1] == False:
+            t_input("")
+        if in_packet[1] == True:
+            parsed_packet = parse_packet(in_packet[0])
+            if parsed_packet != -1:
+                build_packet(parsed_packet[0],parsed_packet[1])
+        send_packet(packet.build_packet())
 
 
 #Actual code execution
@@ -154,7 +170,7 @@ return_ready() #ready returned on startup
 #Logger process independently manages data logging and recording to files
 
 if __name__ == '__main__':
-    control = multiprocessing.ProcessError(target=overall_control)
+    control = multiprocessing.Process(target=overall_control)
     logger = multiprocessing.Process(target=datalogger.add_all_inf)
     control.start()
     logger.start()

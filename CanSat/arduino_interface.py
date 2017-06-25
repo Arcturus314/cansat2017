@@ -23,33 +23,73 @@ def add_data(data):
 
 def read_byte():
     global ard_status
-    data = 0
+    data = ""
     try:
-        data = bus.read_byte(ard_addr)
+        data = str(unichr(bus.read_byte(ard_addr)))
         ard_status = True
     except IOError, err:
         ard_status = False
+    except UnicodeEncodeError, err2:
+        pass
+    #print data,
     return data
 
 def read_arduino(): #returns list [fix,speed,altitude,latitude,longitude]
     global ard_status
     gps_data = ["","","","",""]
-    gps_data_ints = [0,0,0,0,0]
+    gps_data_floats = [-1.0,-1.0,-1.0,-1.0,-1.0]
+    count = 0
     try:
-        in_char = ' '
-        while in_char != ':':
-            in_char = read_byte()
-        for i in xrange(5):
-            while in_char != ',':
+        if ard_status == True:
+            #need to wait for initial ':'
+            in_char = ' '
+
+            #print "waiting for initial colon..."
+            while in_char != ':': #this loop will break when the initial colon is read
                 in_char = read_byte()
-                gps_data[i].append(read_byte())
-        for i in xrange(5):
-            gps_data_ints[i] = int(gps_data[i])
-        ard_status = True
+
+            #print "reading data..."
+            for i in xrange(5): #as there are 5 data points
+                while in_char != ',': #reading the contents of each byte
+                    in_char = read_byte()
+                    if in_char != ',':
+                        gps_data[i] = gps_data[i] + in_char
+                in_char = ' '
+                #print "comma found"
+            #print "data start"
+            #for element in gps_data:
+                #print element
+            #print "data end"
+            #print "parsing data..."
+            for i in xrange(5):
+                gps_data_floats[i] = float(gps_data[i])
+        else:
+            read_byte() #to update arduino state
     except IOError, err:
         ard_status = False
-    add_data(gps_data_ints)
-    return gps_data_ints
+    except ValueError, err:
+        pass
+    add_data(gps_data_floats)
+    if gps_data_floats[0] == 1.0 and -1 in gps_data_floats: #if the GPS has a lock, rest of data must be valid for position to be returned
+        return [0.0,0.0,0.0,0.0,0.0]
+    return gps_data_floats
+
+    #try:
+    #    in_char = ' '
+    #    while in_char != ':' and ard_status == True:
+    #        for i in xrange(5):
+    #            while in_char != ',' and in_char != -1:
+    #                in_char = read_byte()
+    #                if in_char != -1:
+    #                    gps_data[i] = gps_data[i]+str(read_byte())
+    #        for i in xrange(5):
+    #            if ard_status == True:
+    #                gps_data_ints[i] = int(gps_data[i])
+    #        ard_status = True
+    #except IOError, err:
+    #    ard_status = False
+    #add_data(gps_data_ints)
+    #return gps_data_ints
 
 def convert_arduino_data(data_list): #returns list in SI units
     convert_list = [0,0,0,0,0]

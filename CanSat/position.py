@@ -21,10 +21,13 @@ accel_data = [[0,0,0,0],[0,0,0,0]]#two accelerometer data points ((xVal, yVal, z
 mag_data = [[0,0,0,0],[0,0,0,0]]#two magnetometer data points
 gyro_data = [[0,0,0,0],[0,0,0,0]]#two gyroscope data points
 
-init_position = (0,0,0,0,0,0,0) #(heading,x-or,y-or,x,y,alt,temperature,time)
+init_position = (0,0,0,0,0,0,0,0) #(heading,x-or,y-or,x,y,alt,temperature,time)
 init_gps_pos  = (0,0,0,0,0,0)       #(fix,altitude,latitude,longitude,x_pos,y_postime)
 
 def init_data(): #writes initial calculated vales to init_position tuple
+    global init_position
+    global init_gps_pos
+    #initializing data
     datastore.get_accelerometer_data(False)    
     datastore.get_magnetometer_data(False)
     datastore.get_gyroscope_data(False)
@@ -32,7 +35,7 @@ def init_data(): #writes initial calculated vales to init_position tuple
     calc_bimu_orientation()
     calc_bimu_orientation()
     calc_trans_pos()
-    init_position = make_tuple(get_bimu_orientation()[0],get_current_or_pos()[1],get_current_or_pos()[2],get_current_trans_pos()[0],get_current_trans_pos()[1],get_current_env()[1],get_current_env()[0],time.time())
+    init_position = make_tuple([get_current_or_pos()[0],get_current_or_pos()[1],get_current_or_pos()[2],get_current_trans_pos()[0],get_current_trans_pos()[1],get_current_env()[1],get_current_env()[0],time.time()])
 
     gps_data = arduino_interface.get_gps_data()
     if gps_data[0] == 1:
@@ -44,6 +47,8 @@ def make_tuple(in_arr): #returns a tuple of length 3 or 4 with the same data as 
         return in_arr[0],in_arr[1],in_arr[2]
     if len(in_arr) == 4:
         return in_arr[0],in_arr[1],in_arr[2],in_arr[3]
+    if len(in_arr) == 8:
+        return in_arr[0],in_arr[1],in_arr[2],in_arr[3],in_arr[4],in_arr[5],in_arr[6],in_arr[7]
 
 def get_current_trans_pos(): #returns last element in trans_pos list
     return trans_pos[len(trans_pos)-1]
@@ -58,10 +63,9 @@ def get_current_accel_data(): #returns second accel_data tuple
 def get_current_mag_data(): #returns second mag_data tuple
     return mag_data[1]
 def get_current_env(): #returns temp,alt from datastore,subtracting initial altitude
-    global init_position
-    temperature = datastore.get_env_temp_data(False)
-    pressure = datastore.get_env_pressure_data(False)
-    altitude = (init_position[3]/-0.0065)*((pressure/101300)**(0.1901)-1)-init_position[6]
+    temperature = datastore.get_env_temp_data(False)[0]
+    pressure = datastore.get_env_pressure_data(False)[0]
+    altitude = (1.0-((pressure/1013.25)**(0.190284)))*44307.69396-init_position[5]
     return temperature,altitude
 def update_raw_data(): #moves datastore data to raw data lists
     global accel_data,mag_data,gyro_data
@@ -90,6 +94,7 @@ def update_raw_data(): #moves datastore data to raw data lists
 
 def calc_bimu_orientation(): #uses bIMU.py module, appends heading, x, y, time to or_pos, subtracting initial orientation, and compensating for heading- standardizing along x and y vectors
     global init_position
+    global or_pos
     data = bIMU.get_orientation()[0]-init_position[0],bIMU.get_orientation()[1]-init_position[0],bIMU.get_orientation()[2]-init_position[0],time.time()
     or_pos.append(data)
 
@@ -102,15 +107,15 @@ def calc_trans_pos(): #calculates the translational position given accelerometer
     global accel_data, mag_data, trans_pos
 
     #We first need to compensate accel_data with current CanSat position
-    accel_data_comp = [(0,0,0,0),(0,0,0,0)]
+    accel_data_comp = [[0,0,0,0],[0,0,0,0]]
     accel_data_comp[0][3] = accel_data[0][3]
     accel_data_comp[1][3] = accel_data[1][3]
 
-    accel_data_comp[0][0] = (accel_data[0][1]*math.cos(dtr*get_last_or_pos[0])+accel_data[0][0]*math.cos(dtr*(90-get_last_or_pos[0])))*math.sin(dtr*get_last_or_pos[1])
-    accel_data_comp[0][1] = (accel_data[0][1]*math.sin(dtr*get_last_or_pos[0])+accel_data[0][0]*math.sin(dtr*(90-get_last_or_pos[0])))*math.sin(dtr*get_last_or_pos[2])
+    accel_data_comp[0][0] = (accel_data[0][1]*math.cos(dtr*get_last_or_pos()[0])+accel_data[0][0]*math.cos(dtr*(90-get_last_or_pos()[0])))*math.sin(dtr*get_last_or_pos()[1])
+    accel_data_comp[0][1] = (accel_data[0][1]*math.sin(dtr*get_last_or_pos()[0])+accel_data[0][0]*math.sin(dtr*(90-get_last_or_pos()[0])))*math.sin(dtr*get_last_or_pos()[2])
 
-    accel_data_comp[0][0] = (accel_data[0][1]*math.cos(dtr*get_current_or_pos[0])+accel_data[0][0]*math.cos(dtr*(90-get_current_or_pos[0])))*math.sin(dtr*get_current_or_pos[1])
-    accel_data_comp[0][1] = (accel_data[0][1]*math.sin(dtr*get_current_or_pos[0])+accel_data[0][0]*math.sin(dtr*(90-get_current_or_pos[0])))*math.sin(dtr*get_current_or_pos[2])
+    accel_data_comp[0][0] = (accel_data[0][1]*math.cos(dtr*get_current_or_pos()[0])+accel_data[0][0]*math.cos(dtr*(90-get_current_or_pos()[0])))*math.sin(dtr*get_current_or_pos()[1])
+    accel_data_comp[0][1] = (accel_data[0][1]*math.sin(dtr*get_current_or_pos()[0])+accel_data[0][0]*math.sin(dtr*(90-get_current_or_pos()[0])))*math.sin(dtr*get_current_or_pos()[2])
 
     #now we need to calculate the difference in accelerometer data
     #can be done by considering reimann sums

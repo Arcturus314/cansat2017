@@ -58,15 +58,22 @@ position.init_data() #initializing data lists
 # --footer--
 # (checksum)
 
+def calc_checksum_contr(data):
+    global checksum_contribution
+    if type(data) != tuple and type(data) != list:
+        checksum_contribution = checksum_contribution + int(data)
+    else:
+        for element in data:
+            calc_checksum_contr(element)
 
 def create_message(identifier1, identifier2, data):
+    #print identifier1
+    #print identifier2
+
     global checksum_contribution
-    message = id1_dict[identifier1] + ',' + id2_dict[identifier2] + ','
+    message = str(id1_dict[identifier1]) + ',' + str(id2_dict[identifier2]) + ',' + str(data)
     checksum_contribution = checksum_contribution + int(id1_dict[identifier1]) + int(id2_dict[identifier2])
-    if type(data) == tuple:
-        for i in xrange(data.len()):
-            message = message + data[i] + ','
-            checksum_contribution = checksum_contribution + int(data[i])
+    calc_checksum_contr(data)
     message = message + ';'
     return message
 
@@ -152,38 +159,44 @@ def build_header():
     if inc_map == True:
         messages = messages + 1        
     
-    header = header + str(messages) + '|\n'
+    header = header + str(messages) + '|'
     return header
 def build_body():        
     body = "" #string to hold body message
-    for i in xrange(inc_data.len()):
+    for i in xrange(len(inc_data)):
         if inc_data[i] == True:
-            body = body + create_message(id1_dict[index_names[i]],'Single',getattr(datastore.method_names[i])(False))
-        body = body + ';\n'
-    for i in xrange(inc_all_data.len()):
+            #print "id1_dict,index names,i "
+            #print id1_dict[index_names[i]]
+            #print index_names[i]
+            #print i
+            body = body + create_message(index_names[i],'Single',getattr(datastore,method_names[i])(False))
+            #print "data",
+            #print str(getattr(datastore,method_names[i])(False))
+    for i in xrange(len(inc_all_data)):
         if inc_all_data[i] == True:
-            body = body + create_message(id1_dict[index_names[i]],'All',getattr(datastore.method_names[i])(True))
-        body = body + ';\n'
+            body = body + create_message(index_names[i],'All',getattr(datastore,method_names[i])(True))
 
     if inc_error == True:
-        body = body + create_message(id1_dict['Error'],id2_dict['Default'],datastore.get_errors())
-        body = body + ';\n'
+        body = body + create_message('Error','Default',datastore.get_errors())
     if inc_pos == True:
-        body = body + create_message(id1_dict['Pos'],id2_dict['Default'],position.get_pos_data(False))
-        body = body + ';\n'
+        body = body + create_message('Pos','Default',position.get_pos_data(False))
     if inc_mat == True:
-        body = body + create_message(id_dict['Mat'],id2_dict['Default'],datastore.get_temp_array_data())
-        body = body + ';\n'
+        body = body + create_message('Mat','Default',datastore.get_temp_array_data(False))
     if inc_map == True:
         temp_map.build_frame()
-        body = body + create_message(id_dict['Map'],id2_dict['Default'],temp_map.return_frame())
-        body = body + ';\n'
+        body = body + create_message('Map','Default',temp_map.return_frame(False))
 
-    body = body + '|\n'
+    body = body + '|'
     return body
 def build_footer():
     global checksum_contribution
     return checksum_contribution % 251 #as 251 is the largest prime number less than 255
 
 def build_packet():
-    return build_header() + build_body() + build_footer() 
+    full_packet = str(build_header()) + str(build_body()) + str(build_footer()) 
+    full_packet = full_packet.replace("(", "")
+    full_packet = full_packet.replace(")", "")
+    full_packet = full_packet.replace("[", "")
+    full_packet = full_packet.replace("]", "")
+    return full_packet
+  
