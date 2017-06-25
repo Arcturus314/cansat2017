@@ -1,8 +1,6 @@
 package cansat;
 
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class Window {

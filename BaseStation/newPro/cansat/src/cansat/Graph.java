@@ -2,13 +2,10 @@ package cansat;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javafx.collections.ObservableList;
-import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.chart.XYChart.Series;
+
 
 
 public class Graph extends LineChart{
@@ -19,7 +16,10 @@ public class Graph extends LineChart{
 	private String[][] axis = new String[][]{
 	    {"time(S)","temperature (C)"},{"time (S)","pressure (Pa)"}, {"time (S)","humidity (RH)"},{"time (S)","acceleration magnitude"}, {"x","y"},{"x","z"}, {"y","z"}
 	};
-
+	
+	private String[] seriesNames = new String[]{"Averag", "Imu", "D6t", "Env"};
+	
+	
 	XYChart.Series series;
 	
 	public int numOfSeries, index;
@@ -31,17 +31,19 @@ public class Graph extends LineChart{
 		this.index = graphs.size();
 		
 		this.setTitle(titles[index]);
-		
 		xAxis.setLabel(axis[index][0]);
 		yAxis.setLabel(axis[index][1]);
 		
-		//if(index == 0){numOfSeries = 3;}
-		//	else{numOfSeries = 1;};
-		
 		for(int i = 0; i < this.numOfSeries; i++){
 			series = new XYChart.Series();
-			series.setName("series1");
-			this.getData().add(series);
+			
+			 if(this.numOfSeries > 1){
+				 series.setName(seriesNames[i]);
+			 }else{
+				 series.setName("series");
+			 }
+			 
+			 this.getData().add(series);
 		}
 		
 	    

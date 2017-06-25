@@ -4,56 +4,29 @@ package cansat;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.Random;
-
 import javax.imageio.ImageIO;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import javafx.stage.Stage;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
-
-import com.lynden.gmapsfx.GoogleMapView;
-import com.lynden.gmapsfx.MapComponentInitializedListener;
-import com.lynden.gmapsfx.javascript.object.GoogleMap;
-import com.lynden.gmapsfx.javascript.object.LatLong;
-import com.lynden.gmapsfx.javascript.object.MapOptions;
-import com.lynden.gmapsfx.javascript.object.Marker;
-import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 
 
-public class Gui implements MapComponentInitializedListener {
+
+
+
+
+public class Gui {
 	
 	private int width;
 	private int height;
@@ -72,8 +45,7 @@ public class Gui implements MapComponentInitializedListener {
 	private static Button Btn;
 	private static StatusButton statusBtn;
 	private static WebEngine webEngine;
-	private GoogleMapView mapView;
-	private GoogleMap map;
+
 	public static String[] StatusButtonNames;
 	
 	public Gui(int width, int height){
@@ -158,37 +130,7 @@ public class Gui implements MapComponentInitializedListener {
 	        	  	  
 	          }
 	       
-	        final String CSS = Utils.readFile("assets/mapStyles.css");              
-	        
-	        
-	        
-		    //Map
-		   /* Map = new WebView();
-	        Map.setContextMenuEnabled(false);
-	        Map.prefHeightProperty().bind(pane.heightProperty());
-	        
-	        
-	        //Load google Maps (Lite mode)
-	        webEngine = Map.getEngine();
-	        webEngine.load("https://www.google.com/lochp");
-	    
-	        //Remove google maps G.u.i.
-	        webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-	            if (newState == State.SUCCEEDED) {
-	                Document doc = webEngine.getDocument();
-	                Element styleNode = doc.createElement("style");
-	                Text styleContent = doc.createTextNode(CSS);
-	                styleNode.appendChild(styleContent);
-	                doc.getDocumentElement().getElementsByTagName("head").item(0).appendChild(styleNode);
-	           }
-	        }); 
-	        */
-	        StackPane stackPane2 = new StackPane();
-	        stackPane2.prefWidthProperty().bind(pane.widthProperty());
-	        stackPane2.prefHeightProperty().bind(pane.heightProperty());
-	        mapView = new GoogleMapView();
-	        mapView.addMapInializedListener(this);
-	        stackPane2.setAlignment(mapView,Pos.CENTER_LEFT);
+	         Map map = new Map();
 	        
 	        //image
 	         StackPane stackPane = new StackPane();
@@ -210,7 +152,7 @@ public class Gui implements MapComponentInitializedListener {
 	        
 	        
 	        //Column 2
-		    vBox1.getChildren().addAll(imageView, stackPane2, console); 
+		    vBox1.getChildren().addAll(imageView, map, console); 
 		  
 		    //Add VBoxs 
 		    for(int i = 0; i < 3; i++){
@@ -238,7 +180,8 @@ public class Gui implements MapComponentInitializedListener {
 		    }
 		    
 		    
-		    String[] buttonNames = new String[]{"Login to chip","Start chip data logging","Clear chip data", "Clear base station data", "Set minimum power", "set all active", "set environmetal logging", "set position tracking", "set heat mapping", "data lists"};
+		    String[] buttonNames = new String[]{"Login to chip","Start chip data logging","Clear chip data", "Clear base station data", "Set minimum power",
+		    		"set all active", "set environmetal logging", "set position tracking", "set heat mapping", "data lists"};
 		    
 		    //Add Buttons 
 		    for(int i = 0; i < 10; i++){
@@ -368,32 +311,6 @@ public class Gui implements MapComponentInitializedListener {
 
 
 
-	@Override
-	public void mapInitialized() {
-		  //Set the initial properties of the map.
-	    MapOptions mapOptions = new MapOptions();
 
-	    mapOptions.center(new LatLong(47.6097, -500.3331))
-	            .overviewMapControl(false)
-	            .panControl(false)
-	            .rotateControl(false)
-	            .scaleControl(false)
-	            .streetViewControl(false)
-	            .zoomControl(false)
-	            .zoom(12);
 
-	    map = mapView.createMap(mapOptions);
-
-	    //Add a marker to the map
-	    MarkerOptions markerOptions = new MarkerOptions();
-
-	    markerOptions.position( new LatLong(47.6097, -500.3331) )
-	                .visible(Boolean.TRUE)
-	                .title("My Marker");
-
-	    Marker marker = new Marker( markerOptions );
-
-	    map.addMarker(marker);
-
-	}
 }

@@ -5,11 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 public class DecodeData {
-	private String newFile;
-	private String[] newDocSplit;
-	private int newNumberOfDataSets;
-	private int oldNumberOfDataSets;
-	private String header, body, footer;
 	public static String[] Status;
 	
 	private String[][] axis = new String[][]{
@@ -37,18 +32,22 @@ public class DecodeData {
 	public static List<Float> y = new ArrayList<Float>();
 	public static List<Float> z = new ArrayList<Float>();
 	public static List<Float> time = new ArrayList<Float>();
+	
+	public static List<Double> lat = new ArrayList<Double>();
+	public static List<Double> lon = new ArrayList<Double>();
 	private int tick;
 
 	public DecodeData(String path){
 		
+
 		//Change status of status 0
 		//StatusButton.statusButtons.get(0).toggle(true);
 		
-		//add data set
+		//Add data set
 		DataSet dataSet1 = new DataSet("header1", "body1", "footer1");
 		DataSet dataSet2 = new DataSet("header2", "body2", "footer2");
-
-		//add vales
+		
+		//Add vales to TempMap
 		for(int i = 0; i < 5; i++){
 			Random rn = new Random();
 			float answer0 = (float)rn.nextInt(50) -5  ;
@@ -57,6 +56,7 @@ public class DecodeData {
 			float answer3 = (float)rn.nextInt(300+300) -300  ;
 			TempValue tempValue = new TempValue(answer0, answer1, answer2, answer3);
 		}
+		
 		//TempValue tempValue = new TempValue(5.5f, -150, -20, 100);
 		
 		tick = MainLoop.getTick();
@@ -64,11 +64,14 @@ public class DecodeData {
 		//Status Values 
 		Status = new String[]{"True","True","100%", "True", "?"};
 		
-		//Add to main values for Graphs
+		//Gps
+		lat.add((55.9573845 + (tick / 1000.0)));
+		lon.add((-3.1860419 + (tick / 1000.0)));
+		
 		time.add((float) tick);
 		float timeLastValue = time.get(time.size() - 1);
-		
-	
+
+		//Graph
 		tempAverageTime.add(timeLastValue);
 		tempImuTime.add(timeLastValue);
 		tempD6tTime.add(timeLastValue);

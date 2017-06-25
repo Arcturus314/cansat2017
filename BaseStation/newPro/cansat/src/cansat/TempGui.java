@@ -1,24 +1,10 @@
 package cansat;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Random;
-
-import javax.imageio.ImageIO;
-
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.chart.XYChart;
-import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
 
@@ -39,7 +25,6 @@ public class TempGui extends Canvas{
 			int maxSize = TempColor.tempColors.size();
 			for(int i = 0; i < maxSize; i++){
 				   gc.setFill(TempColor.tempColors.get(maxSize - i - 1).color);
-				// gc.setFill(Utils.getPixelColor(image, maxSize - i - 1, 0));
 				 gc.fillRect(0, (height / maxSize) * i + 10, 20, height / 25);
 				}
 

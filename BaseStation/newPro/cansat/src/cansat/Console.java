@@ -2,7 +2,6 @@ package cansat;
 
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 
 public class Console extends TextArea{
 	
@@ -19,6 +18,7 @@ public class Console extends TextArea{
 		
 		this.clear();
 		
+		//Load Data titles and values
         for(int i = 0; i < Gui.StatusButtonNames.length; i++){
   		  this.appendText(String.valueOf(Gui.StatusButtonNames[i] + " " + DecodeData.Status[i] + Utils.newLine));
         }
