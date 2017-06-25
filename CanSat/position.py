@@ -84,21 +84,26 @@ def update_raw_data(): #moves datastore data to raw data lists
     #   xpos: towards front of module, viewed from top
     #   ypos: towards right of module, viewed from top
     #   zpos: towards top of module
+
+    get_accelerometer_diff = datastore.get_accelerometer_diff()
+    get_magnetometer_diff = datastore.get_magnetometer_diff()
+    get_gyroscope_diff = datastore.get_gyroscope_diff()
+
     for i in xrange(2):
-        accel_data[i][0] = -1*datastore.get_accelerometer_diff()[i][2] #x
-        accel_data[i][1] = -1*datastore.get_accelerometer_diff()[i][0] #y 
-        accel_data[i][2] = datastore.get_accelerometer_diff()[i][1] #z
-        accel_data[i][3] = datastore.get_accelerometer_diff()[i][3] #time
+        accel_data[i][0] = -1*get_accelerometer_diff[i][2] #x
+        accel_data[i][1] = -1*get_accelerometer_diff[i][0] #y 
+        accel_data[i][2] = get_accelerometer_diff[i][1] #z
+        accel_data[i][3] = get_accelerometer_diff[i][3] #time
 
-        mag_data[i][0]   = -1*datastore.get_magnetometer_diff()[i][2]
-        mag_data[i][1]   = -1*datastore.get_magnetometer_diff()[i][0]
-        mag_data[i][2]   = datastore.get_magnetometer_diff()[i][1]
-        mag_data[i][3]   = datastore.get_magnetometer_diff()[i][3]
+        mag_data[i][0]   = -1*get_magnetometer_diff[i][2]
+        mag_data[i][1]   = -1*get_magnetometer_diff[i][0]
+        mag_data[i][2]   = get_magnetometer_diff[i][1]
+        mag_data[i][3]   = get_magnetometer_diff[i][3]
 
-        gyro_data[i][0]   = -1*datastore.get_gyroscope_diff()[i][2]
-        gyro_data[i][1]   = -1*datastore.get_gyroscope_diff()[i][0]
-        gyro_data[i][2]   = datastore.get_gyroscope_diff()[i][1]
-        gyro_data[i][3]   = datastore.get_gyroscope_diff()[i][3]
+        gyro_data[i][0]   = -1*get_gyroscope_diff[i][2]
+        gyro_data[i][1]   = -1*get_gyroscope_diff[i][0]
+        gyro_data[i][2]   = get_gyroscope_diff[i][1]
+        gyro_data[i][3]   = get_gyroscope_diff[i][3]
  
     return None
 
