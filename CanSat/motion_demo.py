@@ -6,7 +6,6 @@ sample_rate = 100
 
 while True:
     global sample_rate
-    global position_data
     
     t1 = time.time()
     data = ahrs.get_orientation(sample_rate)
