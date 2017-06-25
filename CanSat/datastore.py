@@ -65,6 +65,7 @@ temp_camera   = i2c_sensors.D6T_Temp_Array(D6T_addr)
 data_file_error  = False #True when file cannot be opened
 error_file_error = False #True when file cannot be opened
 temp_file_error  = False #True when file cannot be opened
+save_data        = False #True when data should be written to files 
 try:
     file = open(data_fileName, "a")
     file.close()
@@ -93,6 +94,32 @@ def getTuple(a,b,c):
 def time():
     return round(time.time(),3)
 
+def limit_list_len(spec_list):
+    if len(spec_list > 500):
+        return spec_list[500:len(spec_list)]
+    return spec_list
+
+def check_list_lengths(): #to minimize total stored amount of data
+    global accel_data
+    global mag_data
+    global gyro_data
+    global gyro_temp_data
+    global pressure_data
+    global humidity_data
+    global pres_temp_data
+    global temp_array_data
+    global temp_ref_data
+
+    accel_data = limit_list_len(accel_data)
+    mag_data = limit_list_len(mag_data)
+    gyro_data = limit_list_len(gyro_data)
+    gyro_temp_data = limit_list_len(gyro_temp_data)
+    pressure_data = limit_list_len(pressure_data)
+    humidity_data = limit_list_len(humidity_data)
+    pres_temp_data = limit_list_len(pres_temp_data)
+    temp_array_data = limit_list_len(temp_array_data)
+    temp_ref_data = limit_list_len(temp_ref_data)
+
 #general file handling methods
 def report_error(sensor):
     global error_file_error, error_fileName
@@ -108,46 +135,49 @@ def report_error(sensor):
         error_file_error = True 
 def add_data(sensor, data):
     global data_file_error, data_fileName
-    try:
-        file = open(data_fileName, "a")
-        file.write(sensor)
-        file.write(",")
-        file.write(str(data))
-        file.write(",")
-        file.write(str(time()))
-        file.write('\n')
-        file.close()
-    except IOError, err:
-        data_file_error = True
+    if save_data == True:
+        try:
+            file = open(data_fileName, "a")
+            file.write(sensor)
+            file.write(",")
+            file.write(str(data))
+            file.write(",")
+            file.write(str(time()))
+            file.write('\n')
+            file.close()
+        except IOError, err:
+            data_file_error = True
 def add_data_3ax(sensor, dataX, dataY, dataZ):
     global data_file_error, data_fileName
-    try:
-        file = open(data_fileName, "a")
-        file.write(sensor)
-        file.write(",")
-        file.write(str(dataX))
-        file.write(",")
-        file.write(str(dataY))
-        file.write(",")
-        file.write(str(dataZ))
-        file.write(",")
-        file.write(str(time()))
-        file.write('\n')
-        file.close()
-    except IOError, err:
-        data_file_error = True
+    if save_data == True:
+        try:
+            file = open(data_fileName, "a")
+            file.write(sensor)
+            file.write(",")
+            file.write(str(dataX))
+            file.write(",")
+            file.write(str(dataY))
+            file.write(",")
+            file.write(str(dataZ))
+            file.write(",")
+            file.write(str(time()))
+            file.write('\n')
+            file.close()
+        except IOError, err:
+            data_file_error = True
 def add_temp_matrix(data):
     global temp_file_error, temp_fileName
-    try:
-        file = open(temp_fileName, "a")
-        for i in xrange(16):
-            file.write(str(data[0][i]))
-            file.write(",")
-        file.write(str(data[1]))
-        file.write('\n')
-        file.close()
-    except IOError, err:
-        temp_file_error = True
+        if save_data == True:
+        try:
+            file = open(temp_fileName, "a")
+            for i in xrange(16):
+                file.write(str(data[0][i]))
+                file.write(",")
+            file.write(str(data[1]))
+            file.write('\n')
+            file.close()
+        except IOError, err:
+            temp_file_error = True
         
 #general get methods
 def get_data_file_status():

@@ -149,8 +149,8 @@ def calc_trans_pos(): #calculates the translational position given accelerometer
         #This means that we have a valid GPS lock
         #Now we can calculate Dx and Dy from initial GPS lock 
         lat_mid = (init_gps_pos[2]+gps_data[3])/2.0
-        m_per_deg_lat = 111132.954 - 559.822 * math.cos( 2 * lat_mid ) + 1.175 * cos( 4 * latMid);
-        m_per_deg_lon = 111132.954 * math.cos ( lat_mid );
+        m_per_deg_lat = 111132.954 - 559.822 * math.cos( 2 * lat_mid ) + 1.175 * cos( 4 * latMid)
+        m_per_deg_lon = 111132.954 * math.cos ( lat_mid )
 
         #We need to assume a certain level of precision in our gps readings.
         #I will assime GPS values are accurate +- 5m along x and y axes
