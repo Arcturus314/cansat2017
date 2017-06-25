@@ -270,7 +270,7 @@ class L3GD20_Temp(I2C_Sensor):
         else:
             temp = 25 - temp
         return self.applyCal(temp) 
-        print bin(self.read_byte_data(0x26))
+        #print bin(self.read_byte_data(0x26))
 
 class BME280_Pressure(I2C_Sensor):
     def read(self):

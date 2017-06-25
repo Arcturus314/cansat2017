@@ -153,19 +153,19 @@ def return_ready():
 def overall_control():
     global in_packet
     while True:
-        tall = time.time()
+        #tall = time.time()
         if in_packet[1] == False:
             t_input("")
         if in_packet[1] == True:
             parsed_packet = parse_packet(in_packet[0])
             if parsed_packet != -1:
-                t = time.time()
+                #t = time.time()
                 build_packet(parsed_packet[0],parsed_packet[1])
-                print "build packet time",
-                print time.time()-t
+                #print "build packet time",
+                #print time.time()-t
         send_packet(packet.build_packet())
-        print "total time",
-        print time.time()-tall
+        #print "total time",
+        #print time.time()-tall
 
 
 #Actual code execution

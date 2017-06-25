@@ -44,10 +44,10 @@ def init_data(): #writes initial calculated vales to init_position tuple
     calc_trans_pos()
     init_position = make_tuple([get_current_or_pos()[0],get_current_or_pos()[1],get_current_or_pos()[2],get_current_trans_pos()[0],get_current_trans_pos()[1],get_current_env()[1],get_current_env()[0],time()])
 
-    t = exttime.time()
+    #t = exttime.time()
     gps_data = arduino_interface.get_gps_data()
-    print "gps time",
-    print exttime.time()-t
+    #print "gps time",
+    #print exttime.time()-t
     if gps_data[0] == 1:
         init_gps_pos = gps_data
 
@@ -145,10 +145,10 @@ def calc_trans_pos(): #calculates the translational position given accelerometer
     
 
     #We still have to consider gps data in order to bound the calculated accelerometer position
-    t = exttime.time()
+    #t = exttime.time()
     gps_data = arduino_interface.get_gps_data()
-    print "gps time",
-    print exttime.time()-t
+    #print "gps time",
+    #print exttime.time()-t
     gps_pos.append(gps_data)
     if init_gps_pos[0] == 0 and gps_data[0] == 1:
         init_gps_pos[0] = gps_data[0]
@@ -209,19 +209,19 @@ def calc_accel_or(): #calculates the cansat orientation given accelerometer valu
 def calc_position():
     global sample_rate
     t1 = exttime.time()
-    t = exttime.time()
+    #t = exttime.time()
     update_raw_data()
-    print "update raw data",
-    print exttime.time()-t
-    t = exttime.time()
+    #print "update raw data",
+    #print exttime.time()-t
+    #t = exttime.time()
     calc_bimu_orientation(sample_rate)
-    print "calc bimu orientation",
-    print exttime.time()-t
-    t = exttime.time()
+    #print "calc bimu orientation",
+    #print exttime.time()-t
+    #t = exttime.time()
     calc_trans_pos()
-    print "calc trans pos",
-    print exttime.time()-t
-    t = exttime.time()
+    #print "calc trans pos",
+    #print exttime.time()-t
+    #t = exttime.time()
     t2 = exttime.time()
     sample_rate = 1.0/(t2-t1)
 
