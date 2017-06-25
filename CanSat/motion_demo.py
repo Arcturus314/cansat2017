@@ -10,7 +10,7 @@ while True:
     t1 = time.time()
     data = ahrs.get_orientation(sample_rate)
     t2 = time.time()
-    sample_rate = t2-t1
+    sample_rate = 1.0/(t2-t1)
 
 
     print "Orientation:",
