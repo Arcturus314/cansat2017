@@ -1,7 +1,7 @@
 import datastore
 import math
 import MadgwickAHRS as bIMU 
-import time
+import time as exttime
 import arduino_interface
 
 #In order to track position, we need to find differences in time and position over short periods of time
@@ -27,7 +27,7 @@ init_gps_pos  = (0,0,0,0,0,0)       #(fix,altitude,latitude,longitude,x_pos,y_po
 sample_rate = 10
 
 def time():
-    return round(time.time(),3)
+    return round(exttime.time(),3)
 
 def init_data(): #writes initial calculated vales to init_position tuple
     global init_position
