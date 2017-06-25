@@ -1,4 +1,4 @@
-import time
+import time as exttime
 import i2c_sensors
 
 #This class will:
@@ -92,7 +92,7 @@ def getTuple(a,b,c):
     return a,b,c
 
 def time():
-    return round(time.time(),3)
+    return round(exttime.time(),3)
 
 def limit_list_len(spec_list):
     if len(spec_list > 500):
