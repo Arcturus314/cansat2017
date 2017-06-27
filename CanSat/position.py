@@ -117,7 +117,8 @@ def calc_bimu_orientation(sample): #uses bIMU.py module, appends heading, x, y, 
     global init_position
     global or_pos
     bIMU_data = bIMU.get_orientation(sample)
-    data = round(bIMU_data[0]-init_position[0],dec_places),round(bIMU_data[1]-init_position[0],dec_places),round(bIMU_data[2]-init_position[0],dec_places),time()
+    #data = round(bIMU_data[0]-init_position[0],dec_places),round(bIMU_data[1]-init_position[0],dec_places),round(bIMU_data[2]-init_position[0],dec_places),time()
+    data = round(bIMU_data[0],dec_places),round(bIMU_data[1],dec_places),round(bIMU_data[2],dec_places),time()
     or_pos.append(data)
 
 def trap_int(timenew, timeold, valnew, valold): #trapezoidally finds area within given parameters
