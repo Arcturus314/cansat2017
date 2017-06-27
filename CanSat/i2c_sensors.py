@@ -265,8 +265,12 @@ class L3GD20_Gyro(I2C_3Axis_Sensor):
 class L3GD20_Temp(I2C_Sensor):
     def read(self):
         temp = self.read_byte_data(0x26)
-        if temp > 255:
-            temp = 25 + (255-temp)
+        #if temp > 255:
+        #    temp = 25 + (255-temp)
+        #else:
+        #    temp = 25 - temp
+        if temp < 0:
+            temp = 255 - temp
         else:
             temp = 25 - temp
         return self.applyCal(temp) 

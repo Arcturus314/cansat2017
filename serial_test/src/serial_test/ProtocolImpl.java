@@ -1,7 +1,7 @@
 package serial_test;
 
 public class ProtocolImpl implements Protocol {
-	byte[] buffer = new byte[1024];
+	byte[] buffer = new byte[4096];
 	int tail = 0;
 	
 	public void onReceive(byte b) {
