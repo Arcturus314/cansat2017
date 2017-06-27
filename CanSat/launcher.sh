@@ -8,6 +8,7 @@
 #   2. sudo apt-get install cron
 #   3. sudo crontab -e
 #   4. add this line: @reboot  sleep 10 && /usr/bin/python /home/chip/cansat2017/CanSat/control.py >/dev/ttyGS0 2>&1
+#   5. add this line: @reboot stty /dev/ttyS0 9600 to change XBEE serial port to 9600 baud
 
 cd /
 cd /home/chip/cansat2017/CanSat

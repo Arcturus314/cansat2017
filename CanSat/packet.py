@@ -1,6 +1,7 @@
 import datastore
 import position
 import temp_map
+import time
 
 #this module will serve to facilitate the building of packets for transmission to the base station
 
@@ -163,6 +164,7 @@ def build_header():
     return header
 def build_body():        
     body = "" #string to hold body message
+    #t = time.time()
     for i in xrange(len(inc_data)):
         if inc_data[i] == True:
             #print "id1_dict,index names,i "
@@ -172,19 +174,36 @@ def build_body():
             body = body + create_message(index_names[i],'Single',getattr(datastore,method_names[i])(False))
             #print "data",
             #print str(getattr(datastore,method_names[i])(False))
+    #print "datastore single get time: ",
+    #print time.time()-t
+    #t = time.time()
     for i in xrange(len(inc_all_data)):
         if inc_all_data[i] == True:
             body = body + create_message(index_names[i],'All',getattr(datastore,method_names[i])(True))
-
+    #print "datastore all get time: ",
+    #print time.time()-t
+    #t = time.time()
     if inc_error == True:
         body = body + create_message('Error','Default',datastore.get_errors())
+    #print "datastore error get time: ",
+    #print time.time()-t
+    #t = time.time()
     if inc_pos == True:
         body = body + create_message('Pos','Default',position.get_pos_data(False))
+    #print "pos get time: ",
+    #print time.time()-t
+    #t = time.time()
     if inc_mat == True:
         body = body + create_message('Mat','Default',datastore.get_temp_array_data(False))
+    #print "mat get time: ",
+    #print time.time()-t
+    #t = time.time()
     if inc_map == True:
         temp_map.build_frame()
         body = body + create_message('Map','Default',temp_map.return_frame(False))
+    #print "map get time: ",
+    #print time.time()-t
+    #t = time.time()
 
     body = body + '|'
     return body

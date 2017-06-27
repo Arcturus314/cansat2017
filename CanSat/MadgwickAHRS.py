@@ -240,7 +240,10 @@ def MadgwickAHRSupdateIMU(gx, gy, gz, ax, ay, az):
 # See: http:#en.wikipedia.org/wiki/Fast_inverse_square_root
 
 def invSqrt(x):
-    return x**(-0.5)
+    try:
+        return x**(-0.5)
+    except:
+        return 1
 
 def get_orientation(sample):
     global sampleFreq

@@ -1,4 +1,4 @@
-import time
+import time as exttime
 import i2c_sensors
 
 #This class will:
@@ -65,6 +65,10 @@ temp_camera   = i2c_sensors.D6T_Temp_Array(D6T_addr)
 data_file_error  = False #True when file cannot be opened
 error_file_error = False #True when file cannot be opened
 temp_file_error  = False #True when file cannot be opened
+save_data        = False #True when data should be written to files 
+
+init_time = 0
+
 try:
     file = open(data_fileName, "a")
     file.close()
@@ -89,6 +93,39 @@ except IOError, err:
 #general functions
 def getTuple(a,b,c):
     return a,b,c
+ 
+def setTime(timeVal):
+    global init_time
+    init_time = timeVal
+
+def time():
+    return round(exttime.time()-init_time,3)
+
+def limit_list_len(spec_list):
+    if len(spec_list > 500):
+        return spec_list[500:len(spec_list)]
+    return spec_list
+
+def check_list_lengths(): #to minimize total stored amount of data
+    global accel_data
+    global mag_data
+    global gyro_data
+    global gyro_temp_data
+    global pressure_data
+    global humidity_data
+    global pres_temp_data
+    global temp_array_data
+    global temp_ref_data
+
+    accel_data = limit_list_len(accel_data)
+    mag_data = limit_list_len(mag_data)
+    gyro_data = limit_list_len(gyro_data)
+    gyro_temp_data = limit_list_len(gyro_temp_data)
+    pressure_data = limit_list_len(pressure_data)
+    humidity_data = limit_list_len(humidity_data)
+    pres_temp_data = limit_list_len(pres_temp_data)
+    temp_array_data = limit_list_len(temp_array_data)
+    temp_ref_data = limit_list_len(temp_ref_data)
 
 #general file handling methods
 def report_error(sensor):
@@ -97,7 +134,7 @@ def report_error(sensor):
         file = open(error_fileName, "a")
         file.write(sensor)
         file.write(",")
-        file.write(str(time.time()))
+        file.write(str(time()))
         file.write('\n')
         file.close()
         error_file_error = False
@@ -105,46 +142,49 @@ def report_error(sensor):
         error_file_error = True 
 def add_data(sensor, data):
     global data_file_error, data_fileName
-    try:
-        file = open(data_fileName, "a")
-        file.write(sensor)
-        file.write(",")
-        file.write(str(data))
-        file.write(",")
-        file.write(str(time.time()))
-        file.write('\n')
-        file.close()
-    except IOError, err:
-        data_file_error = True
+    if save_data == True:
+        try:
+            file = open(data_fileName, "a")
+            file.write(sensor)
+            file.write(",")
+            file.write(str(data))
+            file.write(",")
+            file.write(str(time()))
+            file.write('\n')
+            file.close()
+        except IOError, err:
+            data_file_error = True
 def add_data_3ax(sensor, dataX, dataY, dataZ):
     global data_file_error, data_fileName
-    try:
-        file = open(data_fileName, "a")
-        file.write(sensor)
-        file.write(",")
-        file.write(str(dataX))
-        file.write(",")
-        file.write(str(dataY))
-        file.write(",")
-        file.write(str(dataZ))
-        file.write(",")
-        file.write(str(time.time()))
-        file.write('\n')
-        file.close()
-    except IOError, err:
-        data_file_error = True
+    if save_data == True:
+        try:
+            file = open(data_fileName, "a")
+            file.write(sensor)
+            file.write(",")
+            file.write(str(dataX))
+            file.write(",")
+            file.write(str(dataY))
+            file.write(",")
+            file.write(str(dataZ))
+            file.write(",")
+            file.write(str(time()))
+            file.write('\n')
+            file.close()
+        except IOError, err:
+            data_file_error = True
 def add_temp_matrix(data):
     global temp_file_error, temp_fileName
-    try:
-        file = open(temp_fileName, "a")
-        for i in xrange(16):
-            file.write(str(data[0][i]))
-            file.write(",")
-        file.write(str(data[1]))
-        file.write('\n')
-        file.close()
-    except IOError, err:
-        temp_file_error = True
+    if save_data == True:
+        try:
+            file = open(temp_fileName, "a")
+            for i in xrange(16):
+                file.write(str(data[0][i]))
+                file.write(",")
+            file.write(str(data[1]))
+            file.write('\n')
+            file.close()
+        except IOError, err:
+            temp_file_error = True
         
 #general get methods
 def get_data_file_status():
@@ -215,78 +255,78 @@ def get_accelerometer_data(data):
     xVal = accelerometer.readX()
     yVal = accelerometer.readY()
     zVal = accelerometer.readZ()
-    accel_data.append([xVal, yVal, zVal, time.time()])
+    accel_data.append([xVal, yVal, zVal, time()])
     add_data_3ax("accelerometer", xVal, yVal, zVal)
     if data == True:
         return accel_data
-    return xVal, yVal, zVal, time.time()
+    return xVal, yVal, zVal, time()
 def get_magnetometer_data(data):
     global magnetometer
     global mag_data
     xVal = magnetometer.readX()
     yVal = magnetometer.readY()
     zVal = magnetometer.readZ()
-    mag_data.append([xVal,yVal,zVal,time.time()])
+    mag_data.append([xVal,yVal,zVal,time()])
     add_data_3ax("magnetometer", xVal, yVal, zVal)
     if data == True:
         return mag_data
-    return xVal, yVal, zVal, time.time()
+    return xVal, yVal, zVal, time()
 def get_gyroscope_data(data):
     global gyroscope
     global gyro_data
     xVal = gyroscope.readX()
     yVal = gyroscope.readY()
     zVal = gyroscope.readZ()
-    gyro_data.append([xVal,yVal,zVal,time.time()])
+    gyro_data.append([xVal,yVal,zVal,time()])
     add_data_3ax("gyroscope", xVal, yVal, zVal)
     if data == True:
         return gyro_data
-    return xVal, yVal, zVal, time.time()
+    return xVal, yVal, zVal, time()
 def get_imu_temp_data(data):
     global imu_temp
     global gyro_temp_data
     val = imu_temp.read()
-    gyro_temp_data.append([val, time.time()])
+    gyro_temp_data.append([val, time()])
     add_data("imu_temp", val)
     if data == True:
         return gyro_temp_data
-    return val, time.time()
+    return val, time()
 def get_env_pressure_data(data):
     global env_pressure
     global pressure_data
     val = env_pressure.read()
-    pressure_data.append([val, time.time()])
+    pressure_data.append([val, time()])
     add_data("pressure", val)
     if data == True:
         return pressure_data
-    return val, time.time()
+    return val, time()
 def get_env_humidity_data(data):
     global env_humidity
     global humidity_data
     val = env_humidity.read()
-    humidity_data.append([val, time.time()])
+    humidity_data.append([val, time()])
     add_data("humidity", val)
     if data == True:
         return humidity_data
-    return val, time.time()
+    return val, time()
 def get_env_temp_data(data):
     global env_temp
     global pres_temp_data
     val = env_temp.read()
-    pres_temp_data.append([val, time.time()])
+    pres_temp_data.append([val, time()])
     add_data("env_temp", val)
     if data == True:
         return pres_temp_data
-    return val, time.time()
+    return val, time()
 def get_temp_array_data(data):
     global temp_camera
     global temp_array_data
     val = temp_camera.read()
-    temp_array_data.append([val, time.time()])
+    temp_array_data.append([val, time()])
     add_temp_matrix(val)
     if data == True:
         return temp_array_data
-    return val,time.time()
+    return val,time()
 
 #position tracking methods that allow integration via trapezoidal method
 def get_accelerometer_diff():
@@ -304,16 +344,16 @@ def get_gyroscope_diff():
     return data
 #overall control and read methods
 def read_all_active(): #accel, mag, gyro, imu_temp, pres, hum, temp, tarr
-    all_val = get_accelerometer_data(False)[0:3],get_magnetometer_data(False)[0:3],get_gyroscope_data(False)[0:3],get_imu_temp_data(False)[0],get_env_pressure_data(False)[0],get_env_humidity_data(False)[0],get_env_temp_data(False),get_temp_array_data(False)[0],time.time()
+    all_val = get_accelerometer_data(False)[0:3],get_magnetometer_data(False)[0:3],get_gyroscope_data(False)[0:3],get_imu_temp_data(False)[0],get_env_pressure_data(False)[0],get_env_humidity_data(False)[0],get_env_temp_data(False),get_temp_array_data(False)[0],time()
     return all_val
 def read_envir_log(): #env_temp, pressure, humidity 
-    env_data = get_env_temp_data(False)[0], get_env_pressure_data(False)[0], get-env_humidity_data(False)[0], time.time()
+    env_data = get_env_temp_data(False)[0], get_env_pressure_data(False)[0], get-env_humidity_data(False)[0], time()
     return env_data
 def read_track_pos(): #pressure, accelerometer, magnetometer, gyroscope
-    pos_data = get_env_pressure_data(False)[0],get_accelerometer_data(False)[0:2], get_magnetometer_data(False)[0:2], time.time()
+    pos_data = get_env_pressure_data(False)[0],get_accelerometer_data(False)[0:2], get_magnetometer_data(False)[0:2], time()
     return pos_data
 def read_heat_map(): #pressure, accelerometer, magnetometer, gyroscope, tarr
-    heat_map_data = get_env_pressure_data(False)[0],get_accelerometer_data(False)[0:2], get_magnetometer_data(False)[0:2],get_temp_array_data(False)[0],time.time()
+    heat_map_data = get_env_pressure_data(False)[0],get_accelerometer_data(False)[0:2], get_magnetometer_data(False)[0:2],get_temp_array_data(False)[0],time()
     return heat_map_data
 
 def get_errors(): #accelerometer, magnetometer, gyroscope, env, temp_camera

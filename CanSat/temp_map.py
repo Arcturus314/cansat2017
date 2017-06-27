@@ -27,6 +27,8 @@ map_raw = []
 position_data = [(0,0,0,0),(0,0,0,0),(0,0,0,0,0,0)] 
 temp_matrix = []
 
+dec_places = 3
+
 def init_data():
     position.init_data()
 
@@ -41,13 +43,13 @@ def get_temp_matrix():
 def calc_size(height,x_tilt,y_tilt,pixel):
     global offsets
     size = height*math.sqrt(abs((math.tan(dtr*(x_tilt+offsets[pixel][0])))**2.0 + math.tan((math.tan(dtr*(x_tilt+offsets[pixel][1]))))))
-    return size
+    return round(size,dec_places)
 
 def calc_coordinate(height,x_pos,y_pos,x_tilt,y_tilt,heading,pixel):
     global offsets,position_data
     x = height*math.tan(dtr*(y_tilt*math.cos(dtr*heading)+x_tilt*math.cos(dtr*(90.0-heading))+offsets[pixel][0]*math.cos(dtr*heading)-offsets[pixel][1]*math.sin(dtr*heading))) + x_pos
     y = height*math.tan(dtr*(y_tilt*math.sin(dtr*heading)+x_tilt*math.sin(dtr*(90.0-heading))+offsets[pixel][0]*math.sin(dtr*heading)+offsets[pixel][1]*math.cos(dtr*heading))) + y_pos
-    return x,y
+    return round(x,dec_places),round(y,dec_places)
 
 def build_frame(): 
     get_position()

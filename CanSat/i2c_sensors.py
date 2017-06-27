@@ -1,12 +1,14 @@
 import smbus
 import bme280
 bus = smbus.SMBus(1) #smbus declared on CHIP I2C bus 1
+dec_places = 3 #number of decimal places for data points
 
 class I2C_Sensor: #OR read()
     #Provides a "base" class for 1d sensors to build on
     #override read()
     global smbus
     global bus
+    global dec_places
 
     def __init__(self, addr):
         self.scale = 1
@@ -43,9 +45,11 @@ class I2C_Sensor: #OR read()
         return val
 
     def applyCal(self, val):
-        return float(val)*float(self.scale)+float(self.offset)
+        return round(float(val)*float(self.scale)+float(self.offset),dec_places)
+
     def getState(self):
         return self.dev_state
+
     def setCal(self, s, o):
         self.scale = s
         self.offset = o 
@@ -62,9 +66,10 @@ class I2C_3Axis_Sensor: #OR setParam(p,u,d) readX() readY() readZ()
 
     global smbus
     global bus
+    global dec_places
     def applyCal(self, val, scale, offset):
-        return float(val)*float(scale)+float(offset)
-        return (high << 8) | low
+        return round(float(val)*float(scale)+float(offset),dec_places)
+
     def mergeInts(self, low, high):
         val = (high << 8) | low
         if val >= 2**15:
@@ -265,22 +270,22 @@ class L3GD20_Temp(I2C_Sensor):
         else:
             temp = 25 - temp
         return self.applyCal(temp) 
-        print bin(self.read_byte_data(0x26))
+        #print bin(self.read_byte_data(0x26))
 
 class BME280_Pressure(I2C_Sensor):
     def read(self):
         global bme280
-        return bme280.getPressure()
+        return self.applyCal(bme280.getPressure())
 
 class BME280_Humidity(I2C_Sensor):
     def read(self):
         global bme280
-        return bme280.getHumidity()
+        return self.applyCal(bme280.getHumidity())
 
 class BME280_Temp(I2C_Sensor):
     def read(self):
         global bme280
-        return bme280.getTemp()
+        return self.applyCal(bme280.getTemp())
 
 class D6T_Temp_Array(I2C_Sensor):
     def read(self):

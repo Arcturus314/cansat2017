@@ -6,13 +6,11 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.chart.LineChart;
 
 
 public class MainLoop extends Application{
 
 	private Scene scene;
-	private LineChart lineChart;
 	private Window window;
 	private DecodeData decodeData;
 	private static int tick;
@@ -54,8 +52,6 @@ public class MainLoop extends Application{
 		                			 System.err.println(e.getMessage());
 		                		 } 
 		                		
-		                		
-		                	
 		                	}
 		                
 		                //Update tempMap
@@ -70,14 +66,12 @@ public class MainLoop extends Application{
 		                	//}
 		                
 		                //Update map
-		                for(int i = 0; i < 7; i++){ 
 		                	try{
-		                		  
-		                		   
+		                		
+                			   Map.update();
+		                			
 		                		 } catch (IndexOutOfBoundsException  e) {
-		                			 System.err.println(e.getMessage());
-		                		 }
-		                				 
+		                			 System.err.println(e.getMessage());	 
 		                	}
 		                
 		                //Update console

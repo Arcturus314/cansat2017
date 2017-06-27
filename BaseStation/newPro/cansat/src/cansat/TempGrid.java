@@ -1,20 +1,10 @@
 package cansat;
 
 import java.awt.image.BufferedImage;
-import java.text.DecimalFormat;
-import java.util.Random;
-
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.chart.XYChart;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Rectangle;
+
 
 public class TempGrid extends Canvas{
 	private static GraphicsContext gc;

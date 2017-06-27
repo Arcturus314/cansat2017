@@ -2,15 +2,13 @@ package cansat;
 
 
 import java.awt.image.BufferedImage;
+
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.imageio.ImageIO;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -39,21 +37,6 @@ public class Utils {
 		
 		    return color;
 	}    
-	
-	//Get all child nodes of Parent
-    public static ArrayList<Node> getAllNodes(Parent root) {
-        ArrayList<Node> nodes = new ArrayList<Node>();
-        addAllDescendents(root, nodes);
-        return nodes;
-    }
-    
-    private static void addAllDescendents(Parent parent, ArrayList<Node> nodes) {
-        for (Node node : parent.getChildrenUnmodifiable()) {
-            nodes.add(node);
-            if (node instanceof Parent)
-                addAllDescendents((Parent)node, nodes);
-        }
-    }
     
     //Load File(String)
     public static String readFile(String file){
@@ -80,17 +63,6 @@ public class Utils {
 		}
     return null;
     }
-
-   
-    public static String[] removeArrayFirstElement(String[] array){
-    String[] temp = new String[array.length - 1];
-	   for (int i = 0; i < array.length - 1; i++) {
-	     temp[i] = array[i+1];
-	   }
-	   return temp;
-    }
-
-  
 
 	public static void crateTempRange(BufferedImage image) {
 		// - 5 tp 45
