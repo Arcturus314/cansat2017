@@ -273,6 +273,8 @@ class L3GD20_Temp(I2C_Sensor):
         #    temp = 255 - temp
         #else:
         #    temp = 25 - temp
+        if temp > 200:
+            temp = 25 + (255-temp)
         return self.applyCal(temp) 
         #print bin(self.read_byte_data(0x26))
 
