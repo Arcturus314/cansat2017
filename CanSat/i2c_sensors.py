@@ -312,7 +312,7 @@ class D6T_Temp_Array(I2C_Sensor):
                 return_data[i] = self.applyCal((float(D6T_data[2*i]) + 256.0*float(D6T_data[2*i+1]))/10.0)
                 if i>0:
                     sumt = sumt + return_data[i]
-            return_data[16] = sumt / 15.0
+            return_data[16] = round(sumt / 15.0, 1)
         return return_data[1:17], return_data[0]
 
 
