@@ -309,7 +309,7 @@ class D6T_Temp_Array(I2C_Sensor):
         if self.dev_state == True:
             sumt = 0 #sum of temperatures for 16th element calc
             for i in xrange(16):
-                return_data[i] = self.applyCal((float(D6T_data[2*i]) + 256.0*float(D6T_data[2*i+1])/10.0))
+                return_data[i] = self.applyCal((float(D6T_data[2*i]) + 256.0*float(D6T_data[2*i+1]))/10.0))
                 if i>0:
                     sumt = sumt + return_data[i]
             return_data[16] = sumt / 15.0
