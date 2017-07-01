@@ -1,0 +1,1 @@
+:imu_temp,imu_temp_time,d6t_temp,d6t_temp_time,env_temp,env_temp_time,pres,pres_time,hum,hum_time.accel,accel_time,serial_bool,data_logging_bool,%_valid_packets,last_packet_boolean,chi^2,x,y,z,temp,temp_x,temp_y,size;

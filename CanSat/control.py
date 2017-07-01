@@ -12,6 +12,8 @@ num_packets = 0
 num_failures = 0
 
 init_time = time.time()
+print "init_time: ",
+print init_time
 
 in_packet = ("",False)
 

@@ -67,7 +67,6 @@ error_file_error = False #True when file cannot be opened
 temp_file_error  = False #True when file cannot be opened
 save_data        = False #True when data should be written to files 
 
-init_time = 0
 
 try:
     file = open(data_fileName, "a")

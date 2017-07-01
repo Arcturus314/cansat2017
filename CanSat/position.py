@@ -28,8 +28,6 @@ sample_rate = 10
 
 dec_places = 3
 
-init_time = 0
-
 def setTime(timeVal):
     global init_time
     init_time = timeVal
