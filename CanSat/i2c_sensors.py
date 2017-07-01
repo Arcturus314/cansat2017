@@ -265,10 +265,16 @@ class L3GD20_Gyro(I2C_3Axis_Sensor):
 class L3GD20_Temp(I2C_Sensor):
     def read(self):
         temp = self.read_byte_data(0x26)
-        if temp > 255:
+        #if temp > 255:
+        #    temp = 25 + (255-temp)
+        #else:
+        #    temp = 25 - temp
+        #if temp < 0:
+        #    temp = 255 - temp
+        #else:
+        #    temp = 25 - temp
+        if temp > 200:
             temp = 25 + (255-temp)
-        else:
-            temp = 25 - temp
         return self.applyCal(temp) 
         #print bin(self.read_byte_data(0x26))
 
@@ -303,10 +309,10 @@ class D6T_Temp_Array(I2C_Sensor):
         if self.dev_state == True:
             sumt = 0 #sum of temperatures for 16th element calc
             for i in xrange(16):
-                return_data[i] = self.applyCal((float(D6T_data[2*i]) + 256.0*float(D6T_data[2*i+1])/10.0))
+                return_data[i] = self.applyCal((float(D6T_data[2*i]) + 256.0*float(D6T_data[2*i+1]))/10.0)
                 if i>0:
                     sumt = sumt + return_data[i]
-            return_data[16] = sumt / 15.0
+            return_data[16] = round(sumt / 15.0, 1)
         return return_data[1:17], return_data[0]
 
 

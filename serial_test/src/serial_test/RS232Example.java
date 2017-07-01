@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
+import java.util.Scanner;
 
 
 
@@ -32,27 +33,32 @@ public class RS232Example extends Thread{
 			System.out.println("Port in use");
 		} else {
 			SerialPort serialPort = (SerialPort) portIdentifier.open("RS232Example", 2000);
-			serialPort.setSerialPortParams(115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+			serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 			CommPortSender.setWriterStream(serialPort.getOutputStream());
 			new CommPortReceiver(serialPort.getInputStream()).start();
 		}
 	}
 	
 	public static void main(String[] args) throws Exception {
-		new RS232Example().connect("COM11");
+		Scanner keyboard = new Scanner(System.in);
+		System.out.println("Please input CanSat serial port: ");
+		String port = keyboard.nextLine();
+		new RS232Example().connect(port);
+		CommPortSender.send("sudo python control.py".getBytes());
+		System.out.println("sending 'sudo python control.py'");
 		while(true) {
 			if(Container.getInstance().read == false && Container.getInstance().message != null) {
-				//System.out.println("New message received: " + Container.getInstance().message) ;
+				System.out.println("New message received: " + Container.getInstance().message) ;
 				String[] processed_message = {" "," "," "};
 				processed_message = processMessage(Container.getInstance().message);
-				//for(int i = 0; i < 3; i++) {
-					//System.out.println(i + " " + processed_message[i]);
-				//}
+				for(int i = 0; i < 3; i++) {
+					System.out.println(i + " " + processed_message[i]);
+				}
 				processBody(processed_message[1]);
 				Container.getInstance().read = true;
 				
 			}
-			Thread.sleep(100); 
+			Thread.sleep(50); 
 		}
 	}
 	
@@ -77,8 +83,8 @@ public class RS232Example extends Thread{
 	}
 	
 	public static void processBody(String bodyString) {
-		float toWrite[] = new float[84];
-		for(int i=0;i<84;i++) {
+		float toWrite[] = new float[86];
+		for(int i=0;i<86;i++) {
 			toWrite[i] = 0;
 		}
 		String toWriteStr = ":";
@@ -88,9 +94,12 @@ public class RS232Example extends Thread{
 			bodyString = bodyString.replace("[", "");
 			bodyString = bodyString.replace("]", "");
 			String[] messages = bodyString.split("\\;");
+			System.out.println("Messages length: " + messages.length);
 			
-			for(int i = 0; i < messages.length-1; i++) {
-				String[] messageComponents = messages[i].split(",");
+			for(String message : messages) {
+				//System.out.println("i " + i + " message " + messages[i]);
+				//String[] messageComponents = messages[i].split(",");
+				String[] messageComponents = message.split(",");
 				//going through individual packet types
 				if(tf(messageComponents[0]) == 1 && tf(messageComponents[1]) == 1) {
 					//single accelerometer value
@@ -126,7 +135,7 @@ public class RS232Example extends Thread{
 					float imu_time = tf(messageComponents[3]);
 					System.out.println("IMU_temp: " + imu_temp + " IMU_time: " + imu_time);
 					toWrite[0] = imu_temp;
-					toWrite[1] = imu_temp;
+					toWrite[1] = imu_time;
 					
 				}
 				if(tf(messageComponents[0]) == 5 && tf(messageComponents[1]) == 1) {
@@ -196,12 +205,14 @@ public class RS232Example extends Thread{
 					toWrite[17] = trans_x;
 					toWrite[18] = trans_y;
 					toWrite[19] = trans_alt;
+					toWrite[20] = gps_x;
+					toWrite[21] = gps_y;
 				}
 				if(tf(messageComponents[0]) == 10 && tf(messageComponents[1]) == 0) {
 					//single thermal camera value
 					float[] pixels = new float[16];
-					for(int j = 0; i < 16; i++) {
-						pixels[j] = tf(messageComponents[j+2]);
+					for(int i = 0; i < 16; i++) {
+						pixels[i] = tf(messageComponents[i+2]);
 					}
 					float d6t_temp = tf(messageComponents[18]);
 					toWrite[2] = d6t_temp;
@@ -209,28 +220,37 @@ public class RS232Example extends Thread{
 					toWrite[3] = d6t_time;
 				}
 				if(tf(messageComponents[0]) == 11 && tf(messageComponents[1]) == 0) {
+					//System.out.println("messagecomponents");
+					//for(int i=0;i<messageComponents.length;i++) {
+					//	System.out.println("index " + i + " value " + messageComponents[i]);
+					//}
 					//single thermal map pixel value
 					float pix_temp[] = new float[16];
 					float pix_x[] = new float[16];
 					float pix_y[] = new float[16];
 					float size[] = new float[16];
-					int index = 20;
-					for(i=0; i<16; i++) {
-						pix_temp[i] = tf(messageComponents[2+i]);
+					int index = 22;
+					for(int i=0; i<16; i++) {
+						System.out.print("pixel " + i + " temp " + messageComponents[2+4*i] + " x " + messageComponents[3+4*i] + " y " + messageComponents[4+4*i] + " z " + messageComponents[5+4*i] + "; ");
+						pix_temp[i] = tf(messageComponents[2+4*i]);
 						toWrite[index] = pix_temp[i];
+						//System.out.println("pixel index " + index);
 						index++;
-						pix_x[i]    = tf(messageComponents[3+i]);
+						pix_x[i]    = tf(messageComponents[3+4*i]);
 						toWrite[index] = pix_x[i];
+						//System.out.println("x index " + index);
 						index++;
-						pix_y[i]    = tf(messageComponents[4+i]);
+						pix_y[i]    = tf(messageComponents[4+4*i]);
 						toWrite[index] = pix_y[i];
+						//System.out.println("y index " + index);
 						index++;
-						size[i]     = tf(messageComponents[5+i]);
+						size[i]     = tf(messageComponents[5+4*i]);
 						toWrite[index] = size[i];
+						//System.out.println("size index " + index);
 						index++;
 					}
+					System.out.println();
 				}
-				
 				toWrite[12] = 1;
 				toWrite[13] = 1;
 				toWrite[14] = 100;
@@ -244,14 +264,14 @@ public class RS232Example extends Thread{
 			System.out.println("BODY PROCESSING ERROR");
 		} 
 		finally {
-			for(int i=0;i<84;i++) {
+			for(int i=0;i<86;i++) {
 				toWriteStr += Float.toString(toWrite[i]);
-				if(i!=83)
+				if(i!=86)
 					toWriteStr += ",";
 			}
 			toWriteStr += ";";
 			writeLine(toWriteStr);
-			
+		
 		}
 	}
 	

@@ -13,7 +13,7 @@ degtorad = 0.017453292519943295
 
 
 sampleFreq  = 10.0     # sample frequency in Hz
-betaDef     = 0.1       # 2 * proportional gain
+betaDef     = 0.0001       # 2 * proportional gain
 
 #---------------------------------------------------------------------------------------------------
 # Variable definitions

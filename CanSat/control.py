@@ -17,7 +17,7 @@ print init_time
 
 in_packet = ("",False)
 
-def t_input(message):
+def t_input_actual(message):
     global in_packet
     in_data = ""
     try:
@@ -29,6 +29,9 @@ def t_input(message):
     except EOFError, err:
         pass
     return in_data
+
+def t_input(message):
+    return ""
 
 #packet takes form
 #":,(id),|(message)|checksum"
